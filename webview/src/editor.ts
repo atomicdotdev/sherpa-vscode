@@ -1,4 +1,4 @@
-import { EditorState, Compartment, Prec, Transaction, StateEffect, StateField, RangeSetBuilder, type ChangeSpec } from '@codemirror/state';
+import { EditorState, Compartment, Prec, Transaction, StateEffect, StateField, RangeSetBuilder, type ChangeSet, type ChangeSpec } from '@codemirror/state';
 import { EditorView, keymap, lineNumbers, scrollPastEnd, Decoration, type ViewUpdate } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap, indentMore, indentLess, undo, redo } from '@codemirror/commands';
 import { markdown, markdownKeymap, markdownLanguage } from '@codemirror/lang-markdown';
@@ -940,7 +940,7 @@ export function createEditor({
     }
 
     const withMarkers = state.update({ changes });
-    const renumberChanges = collectOrderedListRenumberChanges(withMarkers.state);
+    const renumberChanges = collectOrderedListRenumberChanges(withMarkers.state, collectChangedRanges(withMarkers.changes));
     if (!renumberChanges.length) {
       view.dispatch(withMarkers);
       return;
@@ -1832,7 +1832,7 @@ export function createEditor({
           return;
         }
 
-        const renumberChanges = collectOrderedListRenumberChanges(update.state);
+        const renumberChanges = collectOrderedListRenumberChanges(update.state, collectChangedRanges(update.changes));
         if (renumberChanges.length) {
           applyingRenumber = true;
           view.dispatch({
@@ -2093,7 +2093,10 @@ export function createEditor({
         view.dispatch({
           changes: syncChange,
           selection: { anchor: mappedAnchor, head: mappedHead },
-          annotations: externalSyncAnnotation.of(true)
+          annotations: [
+            externalSyncAnnotation.of(true),
+            Transaction.addToHistory.of(false)
+          ]
         });
         pendingExternalUndoSelectionPreserve = true;
       } finally {
@@ -2965,6 +2968,14 @@ function hasBlockedInlineAncestor(state, position) {
     node = node.parent;
   }
   return false;
+}
+
+function collectChangedRanges(changes: ChangeSet): Array<{ fromB: number; toB: number }> {
+  const ranges: Array<{ fromB: number; toB: number }> = [];
+  changes.iterChangedRanges((_fromA, _toA, fromB, toB) => {
+    ranges.push({ fromB, toB });
+  });
+  return ranges;
 }
 
 function getLatexSelectionBlockRanges(state) {

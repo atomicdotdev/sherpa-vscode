@@ -77,7 +77,7 @@ test('Mermaid treats bracket equations as math diagrams in live and export rende
     hasMermaid: true,
     hasMath: false
   });
-  const runtime = html.match(/<script data-meo-export-runtime>([\s\S]*?)<\/script>/)?.[1];
+  const runtime = html.match(/<script data-meo-export-runtime\b[^>]*>([\s\S]*?)<\/script>/)?.[1];
   expect(runtime).toBeDefined();
   const runtimePrefix = runtime.slice(0, runtime.indexOf('  const trimDisplayMathSvg'));
   const normalizeExportSource = new Function(

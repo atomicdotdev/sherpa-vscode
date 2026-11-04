@@ -8,6 +8,7 @@ import { setGitDiffLineHighlightsEnabled } from './helpers/gitDiffLineHighlights
 import { applyThemeSettings } from './helpers/theme';
 import { setShikiTheme, setShikiEnabled } from './helpers/shikiHighlighter';
 import { createFailureNoticeManager, getErrorMessage, isTransientMermaidRuntimeError, shouldAutoFallbackToSourceForLiveError, logWebviewRenderError, type EditorNotice, type FailureNoticeManager } from './helpers/errors';
+import { createApplyWatchdog } from './helpers/applyWatchdog';
 import { isPrimaryModifier, isShortcutKey, normalizeEol, handleEditorShortcut, type ShortcutHandlerContext } from './helpers/shortcuts';
 import { collectUserKeymapKeys } from './helpers/userKeymap';
 import { keyEventToNormalizedKey, type NormalizedKeymapBinding } from '../../src/shared/keymapConfig';
@@ -639,6 +640,9 @@ let pendingText: string | null = null;
 let syncedText = '';
 let inFlight = false;
 let inFlightText: string | null = null;
+let inFlightRecoveryNoticeShown = false;
+const APPLY_IN_FLIGHT_TIMEOUT_MS = 3000;
+const APPLY_IN_FLIGHT_MAX_RETRIES = 1;
 let saveAfterSync = false;
 /** Last host text/version we know about when setText adopt fails (for Reload). */
 let hostAuthoritativeText: string | null = null;
@@ -710,7 +714,7 @@ toolbarAlignmentResizeObserver.observe(editorWrapper);
 toolbarAlignmentResizeObserver.observe(editorHost);
 window.addEventListener('resize', scheduleSingleToolbarTextAlignment);
 
-const setEditorNotice = (message: string, kind = 'info', options?: { showReload?: boolean }) => {
+const setEditorNotice = (message: string, kind = 'info', options?: { showReload?: boolean; showRestore?: boolean; onRestore?: () => void }) => {
   const normalizedMessage = `${message ?? ''}`.trim();
   if (!normalizedMessage) {
     clearEditorNotice();
@@ -721,6 +725,20 @@ const setEditorNotice = (message: string, kind = 'info', options?: { showReload?
   messageEl.className = 'editor-notice-message';
   messageEl.textContent = normalizedMessage;
   editorNoticeBanner.appendChild(messageEl);
+  if (options?.showRestore && options.onRestore) {
+    const restoreBtn = document.createElement('button');
+    restoreBtn.type = 'button';
+    restoreBtn.className = 'editor-notice-action';
+    restoreBtn.textContent = 'Restore draft';
+    restoreBtn.title = 'Replace the host content with your discarded local draft';
+    restoreBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      clearEditorNotice();
+      options.onRestore?.();
+    });
+    editorNoticeBanner.appendChild(restoreBtn);
+  }
   if (options?.showReload) {
     const reloadBtn = document.createElement('button');
     reloadBtn.type = 'button';
@@ -738,7 +756,7 @@ const setEditorNotice = (message: string, kind = 'info', options?: { showReload?
   editorNoticeBanner.hidden = false;
   editorNoticeBanner.classList.add('is-visible');
   // Allow clicking Reload; keep the banner non-blocking for the rest of the UI.
-  editorNoticeBanner.style.pointerEvents = options?.showReload ? 'auto' : 'none';
+  editorNoticeBanner.style.pointerEvents = options?.showReload || options?.showRestore ? 'auto' : 'none';
 };
 
 const clearEditorNotice = () => {
@@ -1099,6 +1117,45 @@ const openGitWorktreeForLine = ({ lineNumber }: { lineNumber: number }) => {
   gitClient?.openWorktreeForLine({ lineNumber });
 };
 
+const settleInFlight = () => {
+  inFlight = false;
+  inFlightText = null;
+  applyWatchdog.settle();
+  if (inFlightRecoveryNoticeShown) {
+    failureNotice.clearFailureNotice();
+    inFlightRecoveryNoticeShown = false;
+  }
+};
+
+const applyWatchdog = createApplyWatchdog({
+  timeoutMs: APPLY_IN_FLIGHT_TIMEOUT_MS,
+  maxRetries: APPLY_IN_FLIGHT_MAX_RETRIES,
+  timers: {
+    setTimeout: (callback, timeoutMs) => window.setTimeout(callback, timeoutMs),
+    clearTimeout: (handle) => window.clearTimeout(handle as number)
+  },
+  onRetry: () => {
+    if (!inFlight) {
+      return;
+    }
+    inFlight = false;
+    inFlightText = null;
+    inFlightRecoveryNoticeShown = true;
+    failureNotice.setFailureNotice('The editor did not receive confirmation from the extension host. Retrying the pending edit…', 'warning');
+    flushChanges();
+  },
+  onReload: () => {
+    if (!inFlight) {
+      return;
+    }
+    inFlight = false;
+    inFlightText = null;
+    inFlightRecoveryNoticeShown = true;
+    failureNotice.setFailureNotice('The editor could not confirm the pending edit with the extension host. Reload from the host document or reopen the file.', 'warning', { showReload: true });
+    vscode.postMessage({ type: 'requestReload' });
+  }
+});
+
 const flushChanges = () => {
   commitEditorTransientEdits();
   if (!editor || inFlight || pendingText === null || normalizeEol(pendingText) === syncedText) {
@@ -1120,6 +1177,7 @@ const flushChanges = () => {
 
   inFlight = true;
   inFlightText = nextText;
+  applyWatchdog.start();
   syncPendingDraftState();
   vscode.postMessage(message);
 };
@@ -1239,8 +1297,7 @@ const adoptHostText = (rawText: string, version: number, context: string): boole
   documentVersion = version;
   syncedText = normalizeEol(rawText);
   pendingText = null;
-  inFlight = false;
-  inFlightText = null;
+  settleInFlight();
   saveAfterSync = false;
   clearHostAuthoritative();
   failureNotice.clearFailureNotice();
@@ -1625,8 +1682,7 @@ window.addEventListener('message', (event) => {
       documentVersion = message.version;
       syncedText = normalizeEol(message.text);
       pendingText = null;
-      inFlight = false;
-      inFlightText = null;
+      settleInFlight();
       saveAfterSync = false;
       syncPendingDraftState();
 
@@ -1721,8 +1777,7 @@ window.addEventListener('message', (event) => {
       }
 
       if (inFlight && inFlightNormalized === incomingText) {
-        inFlight = false;
-        inFlightText = null;
+        settleInFlight();
       }
 
       clearHostAuthoritative();
@@ -1736,8 +1791,7 @@ window.addEventListener('message', (event) => {
     if (inFlight && inFlightNormalized === incomingText) {
       documentVersion = hostVersion;
       syncedText = incomingText;
-      inFlight = false;
-      inFlightText = null;
+      settleInFlight();
       clearHostAuthoritative();
       flushChanges();
       maybeSaveAfterSync();
@@ -1749,8 +1803,7 @@ window.addEventListener('message', (event) => {
       documentVersion = hostVersion;
       syncedText = incomingText;
       pendingText = null;
-      inFlight = false;
-      inFlightText = null;
+      settleInFlight();
       clearHostAuthoritative();
       flushChanges();
       maybeSaveAfterSync();
@@ -1766,9 +1819,24 @@ window.addEventListener('message', (event) => {
         window.clearTimeout(pendingDebounce);
         pendingDebounce = null;
       }
+      const restoreText = localDraftText;
+      const conflictVersion = hostVersion;
       const adopted = adoptHostText(message.text, hostVersion, 'docChanged.external-over-local');
       if (adopted) {
-        failureNotice.setFailureNotice(failureNotice.externalSyncConflictMessage, 'warning');
+        failureNotice.setFailureNotice(failureNotice.externalSyncConflictMessage, 'warning', {
+          showRestore: true,
+          onRestore: () => {
+            if (!editor) {
+              return;
+            }
+            if (documentVersion !== conflictVersion) {
+              failureNotice.setFailureNotice('The host document changed again. Reload before restoring the draft.', 'warning', { showReload: true });
+              return;
+            }
+            pendingText = restoreText;
+            flushChanges();
+          }
+        });
       }
       return;
     }
@@ -1780,8 +1848,7 @@ window.addEventListener('message', (event) => {
 
   if (message.type === 'appliedFailed') {
     // Host rejected applyEdit — drop inFlight and re-sync from host payload if provided.
-    inFlight = false;
-    inFlightText = null;
+    settleInFlight();
     if (typeof message.text === 'string' && typeof message.version === 'number') {
       adoptHostText(message.text, message.version, 'appliedFailed');
       return;
@@ -1798,8 +1865,7 @@ window.addEventListener('message', (event) => {
     if (pendingText !== null && normalizeEol(pendingText) === syncedText) {
       pendingText = null;
     }
-    inFlight = false;
-    inFlightText = null;
+    settleInFlight();
     flushChanges();
     maybeSaveAfterSync();
     syncPendingDraftState();

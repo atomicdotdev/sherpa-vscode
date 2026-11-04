@@ -1,5 +1,7 @@
+import { lstat, realpath } from 'node:fs/promises';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
+import { decodePastedImageData, isPathInside, resolvePastedImagePath } from './imageSave';
 import type { AgentReviewHandoffController } from '../agents/reviewHandoff';
 import type { MarkdownCustomDocument } from './markdownCustomDocument';
 import {
@@ -1179,6 +1181,9 @@ export function createPanelSessionController(params: PanelSessionControllerParam
               noteOwnAppliedText
             );
           });
+        } catch (error) {
+          reportBackgroundError('applyChanges', error);
+          await sendAppliedFailed();
         } finally {
           if (applyGen === applyGeneration) {
             isApplyingOwnChange = false;
@@ -1766,25 +1771,55 @@ async function handleSaveImageFromClipboard(
   }
 
   const workspaceRoot = (vscode.workspace.getWorkspaceFolder(documentUri) ?? workspaceFolders[0]).uri;
+  if (workspaceRoot.scheme !== 'file') {
+    return {
+      type: 'savedImagePath',
+      requestId: message.requestId,
+      success: false,
+      error: 'Pasted images require a local workspace'
+    };
+  }
+
   const config = vscode.workspace.getConfiguration(EXTENSION_CONFIG_SECTION);
   const imageFolder = config.get<string>('imageFolder', 'assets');
+  const decoded = decodePastedImageData(message.imageData);
+  const filePath = resolvePastedImagePath(workspaceRoot.fsPath, imageFolder, message.fileName);
+  if (!decoded || !filePath) {
+    return {
+      type: 'savedImagePath',
+      requestId: message.requestId,
+      success: false,
+      error: !decoded ? 'Clipboard data is not a supported image' : 'Invalid image destination'
+    };
+  }
 
   try {
-    const base64Data = message.imageData.replace(/^data:image\/[^;]+;base64,/, '');
-    const imageBuffer = Buffer.from(base64Data, 'base64');
-
-    const assetsFolderUri = vscode.Uri.joinPath(workspaceRoot, imageFolder);
-
+    const assetsFolderPath = path.dirname(filePath);
+    const assetsFolderUri = vscode.Uri.file(assetsFolderPath);
     try {
       await vscode.workspace.fs.stat(assetsFolderUri);
     } catch {
       await vscode.workspace.fs.createDirectory(assetsFolderUri);
     }
 
-    const filePath = vscode.Uri.joinPath(assetsFolderUri, message.fileName);
-    await vscode.workspace.fs.writeFile(filePath, imageBuffer);
+    const [canonicalRoot, canonicalFolder] = await Promise.all([
+      realpath(workspaceRoot.fsPath),
+      realpath(assetsFolderPath)
+    ]);
+    if (!isPathInside(canonicalRoot, canonicalFolder)) {
+      throw new Error('Image folder escapes the workspace');
+    }
+    try {
+      if ((await lstat(filePath)).isSymbolicLink()) {
+        throw new Error('Image destination is a symbolic link');
+      }
+    } catch (error) {
+      if (!(error instanceof Error && 'code' in error && error.code === 'ENOENT')) throw error;
+    }
 
-    const relativePath = path.relative(path.dirname(documentUri.fsPath), filePath.fsPath);
+    await vscode.workspace.fs.writeFile(vscode.Uri.file(filePath), decoded.bytes);
+
+    const relativePath = path.relative(path.dirname(documentUri.fsPath), filePath);
 
     return {
       type: 'savedImagePath',

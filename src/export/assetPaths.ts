@@ -24,11 +24,15 @@ const IMAGE_MIME_BY_EXTENSION: Record<string, string> = {
 
 export type RewriteExportImageSrcOptions = {
   markdownFilePath: string;
+  workspaceRoot?: string;
   target: ExportImageTarget;
   outputFilePath?: string;
   htmlImageMode: ExportHtmlImageMode;
   embeddedImageDataUrlCache?: Map<string, string | null>;
 };
+
+const MAX_EMBEDDED_IMAGE_BYTES = 8 * 1024 * 1024;
+const MAX_TOTAL_EMBEDDED_IMAGE_BYTES = 24 * 1024 * 1024;
 
 export function rewriteExportImageSrc(rawSrc: string, options: RewriteExportImageSrcOptions): string {
   const input = (rawSrc ?? '').trim();
@@ -52,6 +56,11 @@ export function rewriteExportImageSrc(rawSrc: string, options: RewriteExportImag
   const filePath = resolveLocalLikePath(pathPart, options.markdownFilePath);
   if (!filePath) {
     return input;
+  }
+
+  const workspaceRoot = path.resolve(options.workspaceRoot ?? path.dirname(options.markdownFilePath));
+  if (!isInsideWorkspace(workspaceRoot, filePath)) {
+    return '';
   }
 
   if (options.target === 'pdf') {
@@ -134,16 +143,84 @@ function toEmbeddedImageDataUrl(filePath: string, cache?: Map<string, string | n
   }
 
   let embedded: string | null = null;
-  try {
-    const content = fs.readFileSync(filePath);
-    const mimeType = IMAGE_MIME_BY_EXTENSION[path.extname(filePath).toLowerCase()] ?? 'application/octet-stream';
-    embedded = `data:${mimeType};base64,${content.toString('base64')}`;
-  } catch {
-    embedded = null;
+  const mimeType = IMAGE_MIME_BY_EXTENSION[path.extname(filePath).toLowerCase()];
+  if (mimeType) {
+    try {
+      const stat = fs.statSync(filePath);
+      if (stat.isFile() && stat.size <= MAX_EMBEDDED_IMAGE_BYTES) {
+        const content = fs.readFileSync(filePath);
+        if (sniffImageMime(content) === mimeType) {
+          const dataUrl = `data:${mimeType};base64,${content.toString('base64')}`;
+          let used = 0;
+          for (const value of cache?.values() ?? []) used += value?.length ?? 0;
+          if (used + dataUrl.length <= MAX_TOTAL_EMBEDDED_IMAGE_BYTES) {
+            embedded = dataUrl;
+          }
+        }
+      }
+    } catch {
+      embedded = null;
+    }
   }
 
   cache?.set(filePath, embedded);
   return embedded;
+}
+
+function isInsideWorkspace(workspaceRoot: string, filePath: string): boolean {
+  const canonicalRoot = canonicalPath(workspaceRoot);
+  const canonicalFile = canonicalPath(filePath);
+  const relative = path.relative(canonicalRoot, canonicalFile);
+  return Boolean(relative) && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+}
+
+function canonicalPath(filePath: string): string {
+  try {
+    return fs.realpathSync(filePath);
+  } catch {
+    return path.resolve(filePath);
+  }
+}
+
+export function sniffImageMime(content: Buffer): string | null {
+  if (content.length >= 8 && content.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
+    return 'image/png';
+  }
+  if (content.length >= 3 && content[0] === 0xff && content[1] === 0xd8 && content[2] === 0xff) {
+    return 'image/jpeg';
+  }
+  if (content.length >= 6) {
+    const signature = content.subarray(0, 6).toString('ascii');
+    if (signature === 'GIF87a' || signature === 'GIF89a') {
+      return 'image/gif';
+    }
+  }
+  if (content.length >= 12 && content.subarray(0, 4).toString('ascii') === 'RIFF' && content.subarray(8, 12).toString('ascii') === 'WEBP') {
+    return 'image/webp';
+  }
+  if (content.length >= 2 && content[0] === 0x42 && content[1] === 0x4d) {
+    return 'image/bmp';
+  }
+  if (content.length >= 4) {
+    const tiffLittle = content[0] === 0x49 && content[1] === 0x49 && content[2] === 0x2a && content[3] === 0;
+    const tiffBig = content[0] === 0x4d && content[1] === 0x4d && content[2] === 0 && content[3] === 0x2a;
+    if (tiffLittle || tiffBig) {
+      return 'image/tiff';
+    }
+    if (content[0] === 0 && content[1] === 0 && content[2] === 1 && content[3] === 0) {
+      return 'image/x-icon';
+    }
+  }
+  if (content.length >= 12 && content.subarray(4, 8).toString('ascii') === 'ftyp') {
+    const brand = content.subarray(8, 12).toString('ascii');
+    if (brand === 'avif' || brand === 'avis') {
+      return 'image/avif';
+    }
+  }
+  if (/<svg[\s>]/i.test(content.subarray(0, 1024).toString('utf8'))) {
+    return 'image/svg+xml';
+  }
+  return null;
 }
 
 function safeDecodeURIComponent(value: string): string {

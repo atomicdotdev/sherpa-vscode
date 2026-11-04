@@ -108,6 +108,7 @@ type ExportRuntimeModule = {
   renderExportHtmlDocument: (options: {
     markdownText: string;
     sourceDocumentPath: string;
+    workspaceRoot?: string;
     outputFilePath: string;
     target: ExportFormat;
     htmlImageMode: ExportHtmlImageMode;
@@ -1028,9 +1029,12 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       vscode.Uri.joinPath(this.context.extensionUri, 'webview', 'dist', 'katex', 'katex.min.css').fsPath
     ).toString();
     const baseHref = pathToFileURL(`${path.dirname(params.outputFileUri.fsPath)}${path.sep}`).toString();
+    const workspaceRoot = vscode.workspace.getWorkspaceFolder(params.sourceDocumentUri)?.uri.fsPath
+      ?? path.dirname(params.sourceDocumentUri.fsPath);
     return exportRuntime.renderExportHtmlDocument({
       markdownText: params.markdownText,
       sourceDocumentPath: params.sourceDocumentUri.fsPath,
+      workspaceRoot,
       outputFilePath: params.outputFileUri.fsPath,
       target: params.target,
       htmlImageMode: params.htmlImageMode,

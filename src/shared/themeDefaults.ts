@@ -581,7 +581,7 @@ export const defaultThemeSettings: ThemeSettings = themePresets[0] as ThemeSetti
 const hexColorRegex = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 const rgbColorRegex = /^rgba?\(\s*(?:\d{1,3}\s*,\s*){2}\d{1,3}(?:\s*,\s*(?:0(?:\.\d+)?|1(?:\.0+)?|\d*\.?\d+))?\s*\)$/;
 const hslColorRegex = /^hsla?\(\s*[+\-]?\d+(?:\.\d+)?(?:deg|rad|grad|turn)?\s*,\s*\d+(?:\.\d+)?%\s*,\s*\d+(?:\.\d+)?%(?:\s*,\s*(?:0(?:\.\d+)?|1(?:\.0+)?|\d*\.?\d+))?\s*\)$/;
-const cssVarColorRegex = /^var\(\s*--[A-Za-z0-9_-]+\s*(?:,\s*[^)]+)?\)$/;
+const cssVarColorRegex = /^var\(\s*--[A-Za-z0-9_-]+\s*(?:,\s*[A-Za-z0-9#%.,\s_-]+)?\)$/;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -637,7 +637,7 @@ const sanitizeThemeFont = (value: unknown, fallback: string): string => {
   if (!trimmed) {
     return fallback;
   }
-  return trimmed.replace(/[\n\r;{}]/g, ' ');
+  return trimmed.replace(/[\n\r;{}<>]/g, ' ');
 };
 
 const sanitizeThemeOptionalPositiveNumber = (value: unknown, fallback: number | null): number | null => {

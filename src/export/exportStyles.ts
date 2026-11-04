@@ -6,7 +6,7 @@ import {
   type ThemeSettings
 } from '../shared/themeDefaults';
 
-const styleValueInjectionPattern = /[\n\r;{}]/g;
+const styleValueInjectionPattern = /[\n\r;{}<>]/g;
 
 export type ExportStyleEnvironment = {
   editorFontFamily?: string;

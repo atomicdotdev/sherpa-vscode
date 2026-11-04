@@ -33,7 +33,7 @@ export function dependentCounts(edges: readonly ImpactEdge[]): ReadonlyMap<strin
 }
 
 export function reasonsFor(path: string, edges: readonly ImpactEdge[]): string[] {
-  return edges.filter((edge) => edge.fromPath === path).map((edge) => `${edge.relation === 'CALLS' ? 'calls' : 'includes'} ${edge.toPath}`);
+  return edges.filter((edge) => edge.fromPath === path).map((edge) => `${edge.relation.toLowerCase() === 'calls' ? 'calls' : 'includes'} ${edge.toPath}`);
 }
 
 /** "2 dependents" for an edited file, or nothing when no caller/importer was recorded. */

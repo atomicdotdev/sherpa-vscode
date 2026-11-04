@@ -54,6 +54,11 @@ export async function runGit(args: string[], options: RunGitOptions): Promise<Ru
       }));
     });
 
+    // Git may exit before reading stdin (missing path, bad range, spawn failure).
+    // The close/error handlers report the real result; an EPIPE here must not
+    // become an uncaught stream error in the extension host.
+    child.stdin.on('error', () => undefined);
+
     child.stdout.on('data', (chunk: Buffer | string) => {
       const buffer = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
       stdoutSize += buffer.length;
@@ -95,10 +100,10 @@ export async function runGit(args: string[], options: RunGitOptions): Promise<Ru
       succeed({ stdout, stderr });
     });
 
-    if (typeof options.stdin === 'string') {
-      child.stdin.end(options.stdin);
-    } else {
-      child.stdin.end();
+    try {
+      child.stdin.end(typeof options.stdin === 'string' ? options.stdin : undefined);
+    } catch {
+      // The child already exited; close/error owns the failure result.
     }
   });
 }

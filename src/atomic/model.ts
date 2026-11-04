@@ -38,6 +38,21 @@ export function resolveRepositoryPath(root: string, file: string): string {
   return resolved;
 }
 
+function identityPart(value: unknown): string {
+  if (value instanceof Uint8Array) return Buffer.from(value).toString('hex');
+  if (value && typeof value === 'object' && 'value' in value) {
+    const nested = (value as { value?: unknown }).value;
+    if (nested instanceof Uint8Array) return Buffer.from(nested).toString('hex');
+  }
+  return value == null ? '' : String(value);
+}
+
+/** Recorded view identity only: an ordinary file save must not invalidate selected evidence. */
+export function statusIdentity(status?: Status): string | undefined {
+  if (!status) return undefined;
+  return `${status.view ?? ''}\u0000${identityPart(status.snapshot)}\u0000${identityPart(status.viewMerkle)}`;
+}
+
 export const statusLabels: Record<number, string> = {
   0: 'Unknown', 1: 'Modified', 2: 'Deleted', 3: 'Untracked', 4: 'Added', 5: 'Conflicted'
 };

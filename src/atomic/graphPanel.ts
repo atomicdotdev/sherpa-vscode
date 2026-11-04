@@ -51,6 +51,7 @@ export class AtomicGraphPanel implements vscode.Disposable {
         } else if (message?.action === 'openDiff' && typeof message.id === 'string' && typeof message.path === 'string') {
           const diff = this.explorer.fileDiff(message.id, message.path);
           if (diff) void diffs.change(diff, message.id).catch((error) => vscode.window.showErrorMessage(`Atomic: ${String(error)}`));
+          else void vscode.window.showWarningMessage('Atomic: the selected change is no longer available. Select the change again or refresh.');
         } else {
           void this.explorer.handle(message);
         }

@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import { stat, lstat, realpath } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
-import { RepositorySession, resolveRepositoryPath, statusLabels, summarizeView, viewTreeDescription, type History } from './model';
+import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, type History } from './model';
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
 import { displayChangeHash } from '../shared/atomicHash';
@@ -294,6 +294,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
 
   private async update(owner: RepositoryUI): Promise<void> {
     if (!this.isOwner(owner)) return;
+    const previousIdentity = statusIdentity(owner.session.status);
     await owner.session.refresh();
     if (!this.isOwner(owner)) return;
     const status = owner.session.status!;
@@ -315,8 +316,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     owner.scm.count = resources.length;
     owner.scm.statusBarCommands = [{ command: 'catalystAtomic.switchView', title: `$(versions) Atomic: ${status.view}`,
       arguments: [{ owner }], tooltip: status.needsReindex ? 'Atomic index needs reindexing; automatic reindex is not supported.' : 'Switch Atomic view' }];
-    owner.graph?.invalidate();
-    owner.viewHistory = undefined;
+    if (previousIdentity !== statusIdentity(status)) {
+      owner.graph?.invalidate();
+      owner.viewHistory = undefined;
+    }
     this.changed.fire(undefined);
   }
 

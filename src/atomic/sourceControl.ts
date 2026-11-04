@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import { stat, lstat, realpath } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
-import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, type History } from './model';
+import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
 import { displayChangeHash } from '../shared/atomicHash';
@@ -300,8 +300,13 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     const status = owner.session.status!;
     owner.issue = undefined;
     owner.scm.inputBox.enabled = true;
-    const resources: Resource[] = status.files.map((file) => {
-      const uri = vscode.Uri.file(resolveRepositoryPath(owner.session.root, file.path!));
+    const { valid, invalid } = partitionRepositoryFiles(owner.session.root, status.files);
+    if (invalid.length) {
+      this.output.appendLine(`Skipped ${invalid.length} invalid Atomic path(s) in ${owner.session.root}: ${invalid
+        .map((entry) => `${entry.path || '(empty)'}: ${entry.error}`).join('; ')}`);
+    }
+    const resources: Resource[] = valid.map(({ file, absolutePath }) => {
+      const uri = vscode.Uri.file(absolutePath);
       const label = statusLabels[file.status ?? 0] ?? 'Unknown';
       return { resourceUri: uri, atomicPath: file.path!, owner,
         contextValue: file.status === 3 ? 'atomicUntracked' : 'atomicTracked',

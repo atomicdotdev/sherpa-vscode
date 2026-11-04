@@ -1,7 +1,7 @@
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import type { ChangeEvidence, DraftIntent, ExplorerEvent, ExplorerState, SignedSnapshot } from '../shared/atomicEvidence';
 import { resolveRepositoryPath, summarizeView, type History } from './model';
-import { changeEvidence, dependencyGraph, hashHex, intentEvidence } from './evidence';
+import { changeEvidence, hashHex, intentEvidence } from './evidence';
 import { recordedFileDiff, diffBytes, MAX_DIFF_CACHE_BYTES, type RecordedFileDiff } from './fileDiff';
 import { intentReferences } from '../shared/changeIntentContext';
 
@@ -22,7 +22,6 @@ export class EvidenceExplorer {
   private changes = new Map<string, ChangeEvidence>();
   private intents = new Map<string, DraftIntent>();
   private intentPaths = new Map<string, string>();
-  private warnings: string[] = [];
   private diffs = new Map<string, Map<string, RecordedFileDiff>>();
   private diffSize = 0;
   private diffCount = 0;
@@ -56,7 +55,7 @@ export class EvidenceExplorer {
   }
 
   /** Host tree navigation is inspected, never a working-copy switch. */
-  async inspectView(name: string, detailOnly = false): Promise<void> { this.detailOnly = detailOnly; this.requestedView = name; await this.handle({ action: 'refresh' }); }
+  async inspectView(name: string, detailOnly = false): Promise<void> { this.detailOnly = detailOnly; this.requestedView = name; await this.handle({ action: 'refresh', keepDetailOnly: detailOnly }); }
   intentFile(id: string): string | undefined { return !this.stale ? this.intentPaths.get(id) : undefined; }
 
   async inspectHistoryHash(hash: string): Promise<void> {
@@ -72,10 +71,10 @@ export class EvidenceExplorer {
         if (token !== this.generation) return;
         const change = changeEvidence(detail, hash); this.rememberDiffs(detail, change);
         this.changes = new Map([[hash, change]]);
-        this.intents = new Map(); this.intentPaths = new Map(); this.warnings = [];
+        this.intents = new Map(); this.intentPaths = new Map();
         await this.readIntents(token);
         if (token !== this.generation) return;
-        this.publish({ type: 'state', state: { ...this.state!, draft: { changes: [...this.changes.values()], intents: [...this.intents.values()], warnings: this.warnings } } });
+        this.publish({ type: 'state', state: this.publishedState() });
         this.selectedChange = hash;
         this.publish({ type: 'selection', selection: this.changes.get(hash)! });
       });
@@ -95,7 +94,7 @@ export class EvidenceExplorer {
         const change = changeEvidence(detail, id); this.rememberDiffs(detail, change); this.changes.set(id, change);
       } catch (error) {
         if (token !== this.generation) return;
-        this.warnings.push(`Change ${id.slice(0, 12)} unavailable: ${error instanceof Error ? error.message : String(error)}`);
+        console.warn(`[Atomic] Change ${id.slice(0, 12)} unavailable: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
     await this.readIntents(token);
@@ -104,7 +103,7 @@ export class EvidenceExplorer {
   private async readIntents(token: number): Promise<void> {
     const references = [...this.changes.values()].flatMap(intentReferences);
     const ids = [...new Set(references.map((reference) => reference.id))];
-    if (ids.length > 30) this.warnings.push('Only the first 30 referenced intents are loaded.');
+    if (ids.length > 30) console.warn('[Atomic] Only the first 30 referenced intents are loaded.');
     for (const id of ids.slice(0, 30)) {
       if (token !== this.generation) return;
       if (this.intents.has(id)) continue;
@@ -127,18 +126,21 @@ export class EvidenceExplorer {
     }
   }
 
+  private publishedState(): ExplorerState {
+    return {
+      view: this.state?.view ?? '',
+      workingCopyView: this.state?.workingCopyView ?? '',
+      draft: {
+        intents: [...this.intents.values()].map(({ id, title, body, canOpenSource, notice }) => ({
+          id, title, canOpenSource, notice, body: body?.slice(0, 64 * 1024)
+        }))
+      }
+    };
+  }
+
   private publishDraft(): void {
     if (!this.state || !this.history) return;
-    const warnings = [...new Set(this.warnings)];
-    const own = this.state.viewInfo?.ownChangeCount;
-    if (own != null && own > this.history.entries.length && !this.history.nextCursor) {
-      warnings.push(`Loaded ${this.history.entries.length} of ${own} own changes; the backend did not provide a continuation cursor. This is partial coverage.`);
-    }
-    this.state = { ...this.state, ...dependencyGraph(this.history.entries),
-      intents: [...this.intents.values()].map(({ id, title }) => ({ id, title })),
-      more: Boolean(this.history.nextCursor) && this.history.entries.length < MAX_HISTORY,
-      draft: { changes: [...this.changes.values()], intents: [...this.intents.values()], warnings } };
-    this.publish({ type: 'state', state: this.state });
+    this.publish({ type: 'state', state: this.publishedState() });
   }
 
   async handle(message: unknown): Promise<void> {
@@ -146,12 +148,14 @@ export class EvidenceExplorer {
     const input = message as Record<string, unknown>, action = input.action;
     if (action === 'openSigned') { if (this.snapshot && !this.stale) this.openSigned({ ...this.snapshot }); return; }
     if (!['ready', 'refresh', 'view', 'more', 'change', 'intent'].includes(String(action))) return;
-    if (action === 'view' && (typeof input.view !== 'string' || !this.state?.views.includes(input.view))) return;
+    if (action === 'view' && (typeof input.view !== 'string' || !this.state?.views?.includes(input.view))) return;
     if (action === 'change' && (typeof input.id !== 'string' || !this.changes.has(input.id))) return;
     if (action === 'intent' && (typeof input.id !== 'string' || !this.intents.has(input.id))) return;
     if (this.stale && !['ready', 'refresh', 'view'].includes(String(action))) return;
     if (action === 'more' && this.state?.viewInfo?.scope !== 'draft') return;
     const preferred = action === 'view' ? String(input.view) : this.requestedView ?? this.state?.view;
+    const detailOnly = input.keepDetailOnly === true || this.detailOnly;
+    this.detailOnly = false;
     this.requestedView = undefined;
     const token = ++this.generation;
     if (['ready', 'refresh', 'view'].includes(String(action))) { this.stale = true; this.clearDiffs(); }
@@ -170,17 +174,17 @@ export class EvidenceExplorer {
           const view = preferred || status.view;
           const viewInfo = summaries.find((item) => item.name === view);
           if (!viewInfo) throw new Error(`View “${view}” is no longer available. Refresh the left views pane.`);
-          this.changes = new Map(); this.intents = new Map(); this.intentPaths = new Map(); this.warnings = []; this.history = undefined;
+          this.changes = new Map(); this.intents = new Map(); this.intentPaths = new Map(); this.history = undefined;
           this.state = { repository: this.repository, view, views: summaries.map((view) => view.name), viewSummaries: summaries, viewInfo,
             nodes: [], edges: [], intents: [], more: false, workingCopyView: status.view, workingCopyFiles: status.files.length };
-          if (viewInfo.scope !== 'draft' || this.detailOnly) {
+          if (viewInfo.scope !== 'draft' || detailOnly) {
             this.stale = false;
             this.publish({ type: 'state', state: this.state });
             return; // Shared and unknown views never issue draft history/detail/vault queries.
           }
           const history = await this.client.log({ view, allViews: false, budget: { maxItems: PAGE_SIZE } });
           if (token !== this.generation) return;
-          if (history.entries.length > PAGE_SIZE) this.warnings.push('Backend exceeded the requested page size; only the first 30 entries are displayed.');
+          if (history.entries.length > PAGE_SIZE) console.warn('[Atomic] Backend exceeded the requested page size; only the first 30 entries are displayed.');
           this.history = { ...history, entries: history.entries.slice(0, PAGE_SIZE) };
           await this.readChanges(this.history.entries, token);
           if (token !== this.generation) return;
@@ -191,7 +195,7 @@ export class EvidenceExplorer {
           const next = await this.client.log({ view: this.state.view, allViews: false, cursor: this.history.nextCursor,
             budget: { maxItems: limit } });
           if (token !== this.generation) return;
-          if (next.entries.length > limit) this.warnings.push('Backend exceeded the requested page size; excess entries were not loaded.');
+          if (next.entries.length > limit) console.warn('[Atomic] Backend exceeded the requested page size; excess entries were not loaded.');
           const entries = next.entries.slice(0, limit);
           this.history.entries.push(...entries); this.history.nextCursor = next.nextCursor;
           await this.readChanges(entries, token);

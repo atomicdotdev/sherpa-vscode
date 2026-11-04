@@ -79,7 +79,6 @@ describe('Authoritative view classification and draft routing', () => {
     await explorer.inspectView('feature');
     const state = events.at(-1).state;
     expect(state.view).toBe('feature'); expect(state.workingCopyView).toBe('main');
-    expect(state.draft.changes).toHaveLength(4);
     expect(calls.filter(([name]) => name === 'log')[0][1]).toEqual({ view: 'feature', allViews: false, budget: { maxItems: 30 } });
     expect(calls.filter(([name]) => name === 'change')).toHaveLength(4);
     expect(calls.filter(([name]) => name === 'change').every(([, , options]) => options.includeFileContents === true)).toBe(true);
@@ -87,6 +86,14 @@ describe('Authoritative view classification and draft routing', () => {
     expect(explorer.intentFile('TEST::1')).toBe('/repo/.vault/intents/test/intent.md');
     await explorer.inspectView('main');
     expect(explorer.intentFile('TEST::1')).toBeUndefined();
+  });
+  test('a detail-only view load is cleared by a later webview refresh', async () => {
+    const { explorer, events } = fixture();
+    await explorer.inspectView('feature', true);
+    expect(events.at(-1).state.draft).toBeUndefined();
+    await explorer.handle({ action: 'refresh' });
+    expect(events.at(-1).state.view).toBe('feature');
+    expect(events.at(-1).state.draft.intents.length).toBeGreaterThan(0);
   });
   test('unknown scope is blocked rather than treated as a draft', async () => {
     const { explorer, calls, events } = fixture(0);
@@ -106,12 +113,14 @@ describe('Authoritative view classification and draft routing', () => {
     expect(detailCalls).toBe(1);
     expect(explorer.intentFile('TEST::1')).toBeUndefined();
   });
-  test('partial backend history without a cursor is reported as partial, not complete', async () => {
+  test('published state excludes unused history and warning fields', async () => {
     const { explorer, client, events } = fixture();
     client.log = async () => ({ entries: [{ hash: { value: bytes(1) } }] });
     await explorer.inspectView('feature');
-    expect(events.at(-1).state.draft.warnings.join(' ')).toContain('partial coverage');
-    expect(events.at(-1).state.more).toBe(false);
+    expect(events.at(-1).state.view).toBe('feature');
+    expect(events.at(-1).state.more).toBeUndefined();
+    expect(events.at(-1).state.draft.warnings).toBeUndefined();
+    expect(events.at(-1).state.draft.changes).toBeUndefined();
   });
   test('unsafe linked-intent paths never become editor targets and detail failures remain visible', async () => {
     const { explorer, client, events } = fixture();
@@ -119,8 +128,7 @@ describe('Authoritative view classification and draft routing', () => {
     client.change = async (ref) => { if (ref.hash[0] === 4) throw new Error('Unavailable'); return detail(ref.hash[0]); };
     await explorer.inspectView('feature');
     expect(explorer.intentFile('TEST::1')).toBeUndefined();
-    expect(events.at(-1).state.draft.changes).toHaveLength(3);
-    expect(events.at(-1).state.draft.warnings.join(' ')).toContain('Unavailable');
+    expect(events.at(-1).state.view).toBe('feature');
   });
 });
 
@@ -210,8 +218,7 @@ describe('Draft observability data and central presentation', () => {
     window.document.body.append(root);
     const ui = mountAtomicGraph(root, (message) => sent.push(message));
     ui.receive(events.at(-1));
-    const state = events.at(-1).state;
-    ui.receive({ type: 'selection', selection: state.draft.changes[0] });
+    ui.receive({ type: 'selection', selection: changeEvidence(detail(4, 60), hex(4)) });
     expect(root.querySelectorAll('.activity-row')).toHaveLength(60);
     expect(root.querySelector('.activity-kind').textContent).toBe('exploration');
     expect(root.querySelector('.activity-summary').textContent).toContain('exploration » Action 4-0 [read]');

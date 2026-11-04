@@ -6,7 +6,7 @@ export type IntentSummary = { id: string; title: string };
 export type ViewSummary = { name: string; scope: 'draft' | 'shared' | 'unknown'; parent?: string;
   current: boolean; changeCount?: number; ownChangeCount?: number; inheritedChangeCount?: number };
 export type DraftIntent = IntentSummary & { body?: string; canOpenSource: boolean; notice?: string };
-export type DraftObservation = { changes: ChangeEvidence[]; intents: DraftIntent[]; warnings: string[] };
+export type DraftObservation = { changes?: ChangeEvidence[]; intents: DraftIntent[]; warnings?: string[] };
 // Decimal strings preserve native uint64 counters across the webview boundary.
 export type RecordedTokens = { input: string; output: string; total: string; cacheRead: string; cacheWrite: string; reasoning: string };
 export type RecordedUsage = { index: number; vendor: string; model: string; modelVersion?: string; tool: string;
@@ -24,15 +24,15 @@ export type ChangeIntentContext = { status: 'recorded' | 'missing' | 'ambiguous'
 export type ChangeMetadataEvidence = { status: 'available' | 'unavailable' | 'unsupported' | 'invalid';
   usage: RecordedUsage[]; affectedPaths: string[]; graphSummary?: ChangeGraphSummary; warnings: string[] };
 export type ExplorerState = {
-  repository: string;
+  repository?: string;
   view: string;
-  views: string[];
-  nodes: EvidenceNode[];
-  edges: EvidenceEdge[];
-  intents: IntentSummary[];
+  views?: string[];
+  nodes?: EvidenceNode[];
+  edges?: EvidenceEdge[];
+  intents?: IntentSummary[];
   intentError?: string;
-  more: boolean;
-  workingCopyFiles: number;
+  more?: boolean;
+  workingCopyFiles?: number;
   workingCopyView: string;
   viewInfo?: ViewSummary;
   viewSummaries?: ViewSummary[];

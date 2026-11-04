@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { getGitBlameForLine } from './blame';
 import { runGit } from './cli';
 import { GitDocumentState } from './documentState';
+import { selectBlameSnapshotText } from './blameSnapshot';
 import type { GitBaselinePayload, GitBlameLineResult } from './types';
 import { buildCurrentToBaselineLineMap as buildCurrentToBaselineLineMapShared } from '../shared/gitDiffCore';
 import { resolveWorktreeUriFromGitUri } from '../agents/resourceMatching';
@@ -33,7 +34,6 @@ function resolveBlameUnavailableReason(reason: GitBaselinePayload['reason']): Ex
 // bounded chunks, so these are chunk limits rather than global failure caps.
 const MAX_BLAME_LINE_MAP_EXACT_CHUNK_LINES = 6000;
 const MAX_BLAME_LINE_MAP_EXACT_CHUNK_CELLS = 4_000_000;
-const MAX_BLAME_SNAPSHOT_TEXT_CHARS = 500 * 1024;
 const blameLineMapCache = new Map<string, Int32Array | null>();
 
 export function normalizeTrailingEofVisualLineForGitBlame(
@@ -100,12 +100,15 @@ export async function resolveGitBlameForRequest(
     };
   }
 
-  const snapshotText = typeof request.text === 'string'
-    ? request.text
-    : typeof currentDocumentText === 'string' && currentDocumentText.length <= MAX_BLAME_SNAPSHOT_TEXT_CHARS
-      ? currentDocumentText
-      : undefined;
-  const lineResolutionText = typeof request.text === 'string' ? request.text : currentDocumentText;
+  const snapshot = selectBlameSnapshotText(request.text, currentDocumentText);
+  if (!snapshot.snapshotText) {
+    return {
+      baseline,
+      result: { kind: 'unavailable', reason: 'error' }
+    };
+  }
+  const snapshotText = snapshot.snapshotText;
+  const lineResolutionText = snapshot.lineResolutionText;
   const normalizedRequestedLineNumber = Math.max(1, Math.floor(request.lineNumber));
   const lineNumberForBlame = normalizeTrailingEofVisualLineForGitBlame(
     request.lineNumber,

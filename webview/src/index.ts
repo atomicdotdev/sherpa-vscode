@@ -9,6 +9,7 @@ import { applyThemeSettings } from './helpers/theme';
 import { setShikiTheme, setShikiEnabled } from './helpers/shikiHighlighter';
 import { createFailureNoticeManager, getErrorMessage, isTransientMermaidRuntimeError, shouldAutoFallbackToSourceForLiveError, logWebviewRenderError, type EditorNotice, type FailureNoticeManager } from './helpers/errors';
 import { createApplyWatchdog } from './helpers/applyWatchdog';
+import { acceptHostDocumentVersion, isHostDocumentVersion } from './helpers/hostMessage';
 import { isPrimaryModifier, isShortcutKey, normalizeEol, handleEditorShortcut, type ShortcutHandlerContext } from './helpers/shortcuts';
 import { collectUserKeymapKeys } from './helpers/userKeymap';
 import { keyEventToNormalizedKey, type NormalizedKeymapBinding } from '../../src/shared/keymapConfig';
@@ -1653,11 +1654,17 @@ const exportHandlerContext: ExportHandlerContext = {
 
 const exportHandler = createExportHandler(exportHandlerContext);
 
+const reportHostMessageFailure = (context: string, error: unknown): void => {
+  console.error(`[MEO webview] ${context}`, error);
+  failureNotice.setFailureNotice('The editor could not process an extension-host update. Reloading the editor is the safest recovery.', 'error', { showReload: true });
+  vscode.postMessage({ type: 'requestReload' });
+};
+
 const withMessageErrorBoundary = (context: string, action: () => void): void => {
   try {
     action();
   } catch (error) {
-    console.error(`[MEO webview] ${context}`, error);
+    reportHostMessageFailure(context, error);
   }
 };
 
@@ -1668,7 +1675,13 @@ window.addEventListener('message', (event) => {
     return;
   }
 
+  try {
+
   if (message.type === 'init') {
+    if (!isHostDocumentVersion(message.version) || typeof message.text !== 'string') {
+      reportHostMessageFailure('init handler', new Error('Invalid init payload'));
+      return;
+    }
     acknowledgeReadyHandshake();
     withMessageErrorBoundary('init handler', () => {
       applyThemeSettings(message.theme);
@@ -1747,6 +1760,16 @@ window.addEventListener('message', (event) => {
   if (message.type === 'readOnlyChanged') {
     setReadOnlyEnabled(message.enabled === true, { post: false });
     return;
+  }
+
+  if (message.type === 'docChanged') {
+    if (typeof message.text !== 'string' || !isHostDocumentVersion(message.version)) {
+      reportHostMessageFailure('docChanged handler', new Error('Invalid docChanged payload'));
+      return;
+    }
+    if (!acceptHostDocumentVersion(message.version, documentVersion)) {
+      return;
+    }
   }
 
   if (message.type === 'docChanged' && !editor && pendingInitialText !== null) {
@@ -1849,15 +1872,22 @@ window.addEventListener('message', (event) => {
   if (message.type === 'appliedFailed') {
     // Host rejected applyEdit — drop inFlight and re-sync from host payload if provided.
     settleInFlight();
-    if (typeof message.text === 'string' && typeof message.version === 'number') {
+    if (typeof message.text === 'string' && isHostDocumentVersion(message.version)) {
       adoptHostText(message.text, message.version, 'appliedFailed');
       return;
     }
-    vscode.postMessage({ type: 'requestReload' });
+    reportHostMessageFailure('appliedFailed handler', new Error('Invalid appliedFailed payload'));
     return;
   }
 
   if (message.type === 'applied') {
+    if (!isHostDocumentVersion(message.version)) {
+      reportHostMessageFailure('applied handler', new Error('Invalid applied payload'));
+      return;
+    }
+    if (!acceptHostDocumentVersion(message.version, documentVersion)) {
+      return;
+    }
     documentVersion = message.version;
     if (inFlightText !== null) {
       syncedText = normalizeEol(inFlightText);
@@ -1904,9 +1934,11 @@ window.addEventListener('message', (event) => {
   }
 
   if (message.type === 'vimKeybindingsChanged') {
-    vimKeybindingsState = message.keybindings;
-    vimLeaderState = message.leaderKey;
-    editor?.setVimKeybindings(vimKeybindingsState, vimLeaderState);
+    if (Array.isArray(message.keybindings)) {
+      vimKeybindingsState = message.keybindings;
+      vimLeaderState = typeof message.leaderKey === 'string' ? message.leaderKey : '';
+      editor?.setVimKeybindings(vimKeybindingsState, vimLeaderState);
+    }
     return;
   }
 
@@ -1997,6 +2029,9 @@ window.addEventListener('message', (event) => {
       return;
     }
     void exportHandler.handleExportSnapshotRequest(message.requestId);
+  }
+  } catch (error) {
+    reportHostMessageFailure('message handler', error);
   }
 });
 

@@ -1,10 +1,8 @@
-import { createElement, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, List, ListOrdered, ListTodo, ListTree, Hash, Code, Terminal, Quote, Minus, Table2, Link, Brackets, Image, Bold, Italic, Strikethrough, Search, Share, GitCompare, PanelLeftRightDashed, SpellCheck2, PencilOff } from 'lucide';
+import { createElement, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, List, ListOrdered, ListTodo, ListTree, Hash, Code, Terminal, Quote, Minus, Table2, Link, Brackets, Image, Bold, Italic, Strikethrough, Search, Share, PanelLeftRightDashed, SpellCheck2, PencilOff } from 'lucide';
 import { setImageSrcResolver, initializeImageHandling, resolveImageSrc, settleImageSrcRequest, handleSavedImagePath, handleImagePaste } from './helpers/images';
-import { createGitClient } from './helpers/gitClient';
 import { createOutlineController } from './helpers/outline';
 import { normalizeWikiTarget, replaceWikiLinkStatuses, initializeWikiLinkHandling, collectWikiLinkTargets, requestWikiLinkStatuses, scheduleWikiLinkStatusRefresh, setWikiLinkRefreshContext, cancelPendingWikiStatusRefresh, handleResolvedWikiLinks } from './helpers/wikiLinks';
 import { initializeLocalLinkHandling, requestLocalLinkStatuses, scheduleLocalLinkStatusRefresh, setLocalLinkRefreshContext, cancelPendingLocalLinkStatusRefresh, handleResolvedLocalLinks } from './helpers/localLinks';
-import { setGitDiffLineHighlightsEnabled } from './helpers/gitDiffLineHighlights';
 import { applyThemeSettings } from './helpers/theme';
 import { setShikiTheme, setShikiEnabled } from './helpers/shikiHighlighter';
 import { createFailureNoticeManager, getErrorMessage, isTransientMermaidRuntimeError, shouldAutoFallbackToSourceForLiveError, logWebviewRenderError, type EditorNotice, type FailureNoticeManager } from './helpers/errors';
@@ -157,8 +155,6 @@ let userKeymapKeys = new Set<string>();
 
 let lineNumbersVisible = true;
 let readOnlyEnabled = false;
-let gitChangesGutterVisible = true;
-let gitDiffLineHighlightsEnabled = true;
 let spellCheckEnabled = true;
 let contentMaxWidthEnabled = false;
 
@@ -187,13 +183,6 @@ lineNumbersBtn.dataset.action = 'lineNumbers';
 lineNumbersBtn.title = 'Hide Line Numbers';
 lineNumbersBtn.appendChild(createElement(Hash, { width: 18, height: 18 }));
 
-const gitChangesGutterBtn = document.createElement('button');
-gitChangesGutterBtn.type = 'button';
-gitChangesGutterBtn.className = 'format-button toggle-button is-active';
-gitChangesGutterBtn.dataset.action = 'gitChangesGutter';
-gitChangesGutterBtn.title = 'Hide Git Changes Gutter';
-gitChangesGutterBtn.appendChild(createElement(GitCompare, { width: 18, height: 18 }));
-
 const spellCheckBtn = document.createElement('button');
 spellCheckBtn.type = 'button';
 spellCheckBtn.className = 'format-button toggle-button is-active';
@@ -207,12 +196,6 @@ const updateLineNumbersUI = () => {
   lineNumbersBtn.title = lineNumbersVisible ? 'Hide Line Numbers' : 'Show Line Numbers';
 };
 
-const updateGitChangesGutterUI = () => {
-  gitChangesGutterBtn.classList.toggle('is-active', gitChangesGutterVisible);
-  gitChangesGutterBtn.setAttribute('aria-pressed', gitChangesGutterVisible ? 'true' : 'false');
-  gitChangesGutterBtn.title = gitChangesGutterVisible ? 'Hide Git Changes' : 'Show Git Changes';
-};
-
 const updateSpellCheckUI = () => {
   spellCheckBtn.classList.toggle('is-active', spellCheckEnabled);
   spellCheckBtn.setAttribute('aria-pressed', spellCheckEnabled ? 'true' : 'false');
@@ -223,16 +206,6 @@ const updateContentMaxWidthUI = () => {
   contentMaxWidthBtn.classList.toggle('is-active', contentMaxWidthEnabled);
   contentMaxWidthBtn.setAttribute('aria-pressed', contentMaxWidthEnabled ? 'true' : 'false');
   contentMaxWidthBtn.title = contentMaxWidthEnabled ? 'Use Full Content Width' : 'Constrain Content Width';
-};
-
-const syncGitDiffLineHighlights = () => {
-  if (!editor) {
-    return;
-  }
-  setGitDiffLineHighlightsEnabled(
-    editor,
-    currentMode === 'source' && gitChangesGutterVisible && gitDiffLineHighlightsEnabled
-  );
 };
 
 const setLineNumbersVisible = (visible, { post = true } = {}) => {
@@ -284,20 +257,6 @@ const setReadOnlyEnabled = (enabled: boolean, { post = true } = {}) => {
   updateModeUI();
   if (post && changed) {
     vscode.postMessage({ type: 'setReadOnly', enabled: readOnlyEnabled });
-  }
-};
-
-const setGitChangesGutterVisible = (visible, { post = true } = {}) => {
-  const nextVisible = visible !== false;
-  const changed = nextVisible !== gitChangesGutterVisible;
-  if (changed) {
-    gitChangesGutterVisible = nextVisible;
-    editor?.setGitGutterVisible(gitChangesGutterVisible);
-    syncGitDiffLineHighlights();
-  }
-  updateGitChangesGutterUI();
-  if (post && changed) {
-    vscode.postMessage({ type: 'setGitChangesGutter', visible: gitChangesGutterVisible });
   }
 };
 
@@ -374,10 +333,6 @@ const syncKeymapBindings = (bindings: NormalizedKeymapBinding[]) => {
 
 const toggleLineNumbers = () => {
   setLineNumbersVisible(!lineNumbersVisible);
-};
-
-const toggleGitChangesGutter = () => {
-  setGitChangesGutterVisible(!gitChangesGutterVisible);
 };
 
 const toggleSpellCheck = () => {
@@ -554,7 +509,7 @@ const exportWrapper = document.createElement('div');
 exportWrapper.className = 'export-wrapper';
 exportWrapper.append(exportBtn, exportDropdownWrapper);
 
-rightGroup.append(findToggleBtn, contentMaxWidthBtn, outlineBtn, lineNumbersBtn, gitChangesGutterBtn, spellCheckBtn, exportWrapper);
+rightGroup.append(findToggleBtn, contentMaxWidthBtn, outlineBtn, lineNumbersBtn, spellCheckBtn, exportWrapper);
 
 const modeGroup = document.createElement('div');
 modeGroup.className = 'mode-group';
@@ -654,7 +609,6 @@ let pendingInitialText: string | null = null;
 let initialEditorMountQueued = false;
 let initialMountRecoveryAttempted = false;
 let modeToggleShouldRestoreEditorFocus = false;
-let gitClient: any = null;
 let pendingEditorFocus = false;
 let pendingDiagnostics: any[] = [];
 let diagnosticSuggestionRequestCounter = 0;
@@ -775,14 +729,6 @@ const editorNotice: EditorNotice = {
 };
 
 const failureNotice = createFailureNoticeManager(editorNotice);
-
-const clearGitBlameCache = ({ hideTooltip = true } = {}) => {
-  gitClient?.clearBlameCache({ hideTooltip });
-};
-
-const bumpLocalEditGeneration = () => {
-  gitClient?.bumpLocalEditGeneration();
-};
 
 const loadCreateEditorFactory = async (): Promise<CreateEditorFactory> => {
   if (!createEditorFactoryPromise) {
@@ -1096,28 +1042,6 @@ const requestDiagnosticSuggestions = (diagnostic: {
   return requestId;
 };
 
-gitClient = createGitClient({
-  vscode,
-  getCurrentEditorText: () => getCurrentEditorText(),
-  getSyncedText: () => syncedText,
-  clearTransientUi: () => editor?.clearGitUiTransientState?.()
-});
-
-const requestGitBlameForLine = ({ lineNumber }: { lineNumber: number }) => {
-  if (!gitClient) {
-    return Promise.resolve({ kind: 'unavailable', reason: 'error' });
-  }
-  return gitClient.requestBlameForLine({ lineNumber });
-};
-
-const openGitRevisionForLine = ({ lineNumber }: { lineNumber: number }) => {
-  gitClient?.openRevisionForLine({ lineNumber });
-};
-
-const openGitWorktreeForLine = ({ lineNumber }: { lineNumber: number }) => {
-  gitClient?.openWorktreeForLine({ lineNumber });
-};
-
 const settleInFlight = () => {
   inFlight = false;
   inFlightText = null;
@@ -1341,7 +1265,6 @@ const queueChanges = (nextText: string) => {
   if (isReadOnly()) {
     return;
   }
-  bumpLocalEditGeneration();
   pendingText = nextText;
   syncPendingDraftState();
 
@@ -1384,7 +1307,6 @@ const applyMode = (mode: 'live' | 'source', { post = true, persist = true, userT
   const shouldRestoreEditorFocus = modeToggleShouldRestoreEditorFocus;
   modeToggleShouldRestoreEditorFocus = false;
   currentMode = mode;
-  clearGitBlameCache();
   if (userTriggered) {
     hasLocalModePreference = true;
   }
@@ -1393,7 +1315,6 @@ const applyMode = (mode: 'live' | 'source', { post = true, persist = true, userT
   if (editor) {
     try {
       editor.setMode(mode);
-      syncGitDiffLineHighlights();
       if (shouldRestoreEditorFocus && !(readOnlyEnabled)) {
         editor.focus();
       }
@@ -1472,7 +1393,6 @@ const mountInitialEditor = async () => {
       initialTopLineOffset,
       initialLineNumbers: lineNumbersVisible,
       initialReadOnly: readOnlyEnabled,
-      initialGitGutter: gitChangesGutterVisible,
       initialVimMode: vimModeEnabled,
       initialVimKeybindings: vimKeybindingsState,
       initialVimLeader: vimLeaderState,
@@ -1487,12 +1407,7 @@ const mountInitialEditor = async () => {
       onSelectionChange: (state: any) => selectionMenuController.update(state),
       onRequestDiagnosticSuggestions: requestDiagnosticSuggestions,
       onViewportChange: () => scheduleViewPositionCapture(),
-      onRequestGitBlame: requestGitBlameForLine,
-      onOpenGitRevisionForLine: openGitRevisionForLine,
-      onOpenGitWorktreeForLine: openGitWorktreeForLine
     });
-    gitClient?.applyBaselineToEditor(editor);
-    syncGitDiffLineHighlights();
     if (initialTopLine !== null) {
       pendingRestoreTopLine = null;
       pendingRestoreTopLineOffset = 0;
@@ -1600,15 +1515,8 @@ const handleInit = (message: any) => {
   if (typeof message.readOnly === 'boolean') {
     setReadOnlyEnabled(message.readOnly, { post: false });
   }
-  if (typeof message.gitChangesGutter === 'boolean') {
-    setGitChangesGutterVisible(message.gitChangesGutter, { post: false });
-  }
   if (typeof message.spellCheckEnabled === 'boolean') {
     setSpellCheckEnabled(message.spellCheckEnabled, { post: false });
-  }
-  if (typeof message.gitDiffLineHighlights === 'boolean') {
-    gitDiffLineHighlightsEnabled = message.gitDiffLineHighlights;
-    syncGitDiffLineHighlights();
   }
   if (typeof message.vimMode === 'boolean') {
     setVimModeEnabled(message.vimMode);
@@ -1690,7 +1598,6 @@ window.addEventListener('message', (event) => {
       initialMountRecoveryAttempted = false;
       failureNotice.clearFailureNotice();
       clearHostAuthoritative();
-      gitClient?.resetForInit({ hideTooltip: false });
       const nextMode = hasLocalModePreference ? currentMode : message.mode;
       documentVersion = message.version;
       syncedText = normalizeEol(message.text);
@@ -1773,7 +1680,6 @@ window.addEventListener('message', (event) => {
   }
 
   if (message.type === 'docChanged' && !editor && pendingInitialText !== null) {
-    clearGitBlameCache({ hideTooltip: false });
     documentVersion = message.version;
     syncedText = normalizeEol(message.text);
     pendingInitialText = message.text;
@@ -1781,8 +1687,7 @@ window.addEventListener('message', (event) => {
   }
 
   if (message.type === 'docChanged' && editor) {
-    clearGitBlameCache();
-    const incomingText = normalizeEol(message.text);
+      const incomingText = normalizeEol(message.text);
     const currentText = normalizeEol(editor.getText());
     const pendingNormalized = pendingText === null ? null : normalizeEol(pendingText);
     const inFlightNormalized = inFlightText === null ? null : normalizeEol(inFlightText);
@@ -1907,17 +1812,6 @@ window.addEventListener('message', (event) => {
     return;
   }
 
-  if (message.type === 'gitChangesGutterChanged') {
-    setGitChangesGutterVisible(message.enabled, { post: false });
-    return;
-  }
-
-  if (message.type === 'gitDiffLineHighlightsChanged') {
-    gitDiffLineHighlightsEnabled = message.enabled;
-    syncGitDiffLineHighlights();
-    return;
-  }
-
   if (message.type === 'spellCheckChanged') {
     setSpellCheckEnabled(message.enabled, { post: false });
     return;
@@ -1959,19 +1853,6 @@ window.addEventListener('message', (event) => {
 
   if (message.type === 'outlineVisibilityChanged') {
     setOutlineVisible(message.visible, { post: false });
-    return;
-  }
-
-  if (message.type === 'gitBaselineChanged') {
-    if (typeof message.version === 'number' && message.version < documentVersion) {
-      return;
-    }
-    gitClient?.handleMessage(message, { editor });
-    return;
-  }
-
-  if (message.type === 'gitBlameResult') {
-    gitClient?.handleMessage(message, { editor });
     return;
   }
 
@@ -2097,7 +1978,6 @@ window.addEventListener('beforeunload', () => {
   clearReadyRetryTimers();
   cancelPendingWikiStatusRefresh();
   cancelPendingLocalLinkStatusRefresh();
-  clearGitBlameCache({ hideTooltip: false });
 
   if (initialEditorMountFallbackTimer !== null) {
     window.clearTimeout(initialEditorMountFallbackTimer);
@@ -2139,7 +2019,6 @@ if (typeof state?.contentMaxWidthEnabled === 'boolean') {
 }
 outlineController.setPosition('right');
 updateLineNumbersUI();
-updateGitChangesGutterUI();
 
 liveButton.addEventListener('click', () => {
   applyMode('live', { userTriggered: true });
@@ -2291,7 +2170,6 @@ contentMaxWidthBtn.addEventListener('click', () => {
   setContentMaxWidthEnabled(!contentMaxWidthEnabled);
 });
 lineNumbersBtn.addEventListener('click', toggleLineNumbers);
-gitChangesGutterBtn.addEventListener('click', toggleGitChangesGutter);
 spellCheckBtn.addEventListener('click', toggleSpellCheck);
 
 persistUiState();

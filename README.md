@@ -40,9 +40,9 @@ Status suggestions are editing conveniences, not a schema. Setting a criterion t
 
 Open a **trusted, local filesystem** workspace in an Atomic repository, then open **Source Control**:
 
-- **Atomic: <repository>** shows tracked changes and untracked files separately, alongside any Git provider. Workspace folders inside a repository are supported; multiple repositories get separate providers.
+- **Atomic: <repository>** shows tracked changes and untracked files separately, alongside other SCM providers. Workspace folders inside a repository are supported; multiple repositories get separate providers.
 - Click a **Tracked Changes** file to open VS Code's native diff editor: the recorded view baseline on the left and the live working file (including its editor buffer) on the right. Adds use an empty recorded side; deletions use an empty working side. Untracked files still open normally. Opening a diff never restores or writes files.
-- Use **+ / Atomic: Add File** on an untracked file to track it. This is not Git staging; there is no invented staging/index layer.
+- Use **+ / Atomic: Add File** on an untracked file to track it. This is not a staging layer; there is no invented index.
 - Enter a message and choose **✓ / Atomic: Record Tracked Changes** (or accept the input box). This records the displayed tracked paths, not untracked files, using the displayed status's concurrency fence. Save or close unsaved repository documents first. Backend fence failures are surfaced, not retried automatically.
 - **Atomic History & Views** lists typed **Draft / Shared** views. Expand a view to see its change hashes, then click a hash to inspect the change without switching the working copy. **Load more changes…** pages through that view's history.
 - Right-click a repository in that panel for **Create View**, **Switch View**, or **Delete View**. New views derive from the displayed current view. Deletion requires confirmation and excludes the current view. Switching never bypasses Atomic's dirty-working-copy check and also refuses unsaved editor documents.
@@ -82,7 +82,7 @@ This explicitly writes/rebuilds derived database indexes from repository authori
 
 All repository calls run in the extension host through `nodeatomic` → the separately installed Node-enabled `libatomic.dylib`, `libatomic.so`, or `libatomic.dll`. nodeatomic selects the host OS/CPU, validates release metadata/checksums and its exact generated protobuf descriptor, then loads the library in-process. It follows the active Atomic executable on PATH (including executable symlinks), or explicit `ATOMIC_RUNTIME_DIR`, `LIBATOMIC_ADDON`, or `ATOMIC_BIN` configuration. Do not set `ATOMIC_RUNTIME_DIR` together with `LIBATOMIC_ADDON`; paths must be absolute. Automatic discovery excludes empty/relative PATH entries and the current working directory. Use a trusted installation PATH, not workspace-controlled executables.
 
-There is no daemon startup, CLI subprocess for repository operations, socket, direct database access, or webview native access. Missing/incompatible runtimes fail with installation/recovery guidance, not an automatic download, compiler invocation, schema repair, or fallback to another installation. Native editor diffs use read-only backend content; no repository initialization, untracking, restore mutation, pull/push, signing, or attestation creation is added by this panel. The existing Git-specific editor gutter/blame features remain Git-specific.
+There is no daemon startup, CLI subprocess for repository operations, socket, direct database access, or webview native access. Missing/incompatible runtimes fail with installation/recovery guidance, not an automatic download, compiler invocation, schema repair, or fallback to another installation. Native editor diffs use read-only backend content; no repository initialization, untracking, restore mutation, pull/push, signing, or attestation creation is added by this panel.
 
 ## Develop and package
 

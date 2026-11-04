@@ -2,19 +2,21 @@
 author: bradley
 created_by: bradley <bradley.hilton@atomic.dev>
 goals: []
+icebox_reason: Git integration removed by product decision; the Git stdin path no longer exists.
+iceboxed_at: 2026-11-04T22:44:12.140525+00:00
 id: CATA::bradley::5
 kind: bug
 priority: high
 project: CATA
 seq: 5
-status: needs-review
+status: icebox
 title: Handle Git stdin failures and harden runGit
 uid: 01M6KXVXAMCB68N8Z8DK2AXC45
 view: dev
 entry_type: intent
 content_hash: OINLX7NLRRVAX4NIGNJFI7YQA3K6OHP2EB2Q6GPLHRLPCWY2JJKQ
-created_at: 2026-11-04T19:15:26.230105+00:00
-updated_at: 2026-11-04T19:15:26.230105+00:00
+created_at: 2026-11-04T22:44:12.140753+00:00
+updated_at: 2026-11-04T22:44:12.140753+00:00
 ---
 :::why
 `src/git/cli.ts:98-102` calls `child.stdin.end(...)` with no `stdin` error listener. Reproduced with Node: when the child exits before reading stdin, the write raises an uncaught `EPIPE` that can terminate the extension host. Git exits early on ordinary failures such as missing paths and out-of-range blame lines, and the `maxBytes` guard can kill the child mid-write.

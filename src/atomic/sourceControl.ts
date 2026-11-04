@@ -412,7 +412,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         const subject = (entry.message || '').split(/\r?\n/)[0].trim();
         // Message first, like other history views; the short hash stays visible as the description.
         return { label: subject || '(no message)', description: id.slice(0, 12),
-          tooltip: `${id}\n${entry.message || ''}`, iconPath: new vscode.ThemeIcon('git-commit'),
+          tooltip: `${id}\n${entry.message || ''}`, iconPath: new vscode.ThemeIcon('history'),
           command: { command: 'catalystAtomic.showChange', title: 'Show Change', arguments: [owner, hash, view] } };
       });
       if (history.nextCursor) rows.push({ label: 'Load more changes…',

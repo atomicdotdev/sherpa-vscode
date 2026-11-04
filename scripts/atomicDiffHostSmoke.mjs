@@ -28,7 +28,7 @@ mock.module('vscode', () => ({
     diffs.push({ left, right, title, options, before, after });
   } },
   window: { registerTreeDataProvider: (_id, provider) => { tree = provider; return disposable(); },
-    createOutputChannel: () => ({ appendLine() {}, show() {}, dispose() {} }), showErrorMessage: async (message) => { errors.push(message); },
+    createOutputChannel: () => ({ appendLine() {}, show() {}, dispose() {} }), showErrorMessage: async (message) => { errors.push(message); }, showWarningMessage: async () => undefined,
     createWebviewPanel: () => {
       let receive, onDispose, resolveSelection;
       const panel = { title: '', reveal() {}, dispose() { onDispose?.(); }, onDidDispose: (handler) => { onDispose = handler; return disposable(); },

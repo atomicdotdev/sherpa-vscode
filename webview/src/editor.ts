@@ -21,15 +21,6 @@ import { sourceFileLinkField } from './helpers/sourceRawLinks';
 import { sourceUrlBoundaryField } from './helpers/sourceUrlBoundaries';
 import { sourceFootnoteMarkerField } from './helpers/sourceFootnotes';
 import { getLinkHrefAtPointer, isPrimaryModifierPointerClick } from './helpers/linkNavigation';
-import {
-  gitDiffGutterBaselineExtensions,
-  gitDiffGutterLiveRenderExtensions,
-  gitDiffGutterRenderExtensions,
-  setGitBaseline as applyGitBaseline
-} from './helpers/gitDiffGutter';
-import { gitDiffLineHighlightsField } from './helpers/gitDiffLineHighlights';
-import { createGitDiffOverviewRulerController } from './helpers/gitDiffOverviewRuler';
-import { createGitBlameHoverController } from './helpers/gitBlameHover';
 import { mergeConflictSourceExtensions } from './helpers/mergeConflicts';
 import { resolvedSyntaxTree, extractHeadings, extractHeadingSections } from './helpers/markdownSyntax';
 import {
@@ -173,15 +164,11 @@ export function createEditor({
   onSelectionChange,
   onRequestDiagnosticSuggestions,
   onViewportChange,
-  onRequestGitBlame,
-  onOpenGitRevisionForLine,
-  onOpenGitWorktreeForLine,
   initialMode = 'source',
   initialTopLine = null,
   initialTopLineOffset = 0,
   initialLineNumbers = true,
   initialReadOnly = false,
-  initialGitGutter = true,
   initialVimMode = false,
   initialVimKeybindings = [],
   initialVimLeader = '\\',
@@ -194,7 +181,6 @@ export function createEditor({
   (EditorView as any).EDIT_CONTEXT = false;
 
   const modeCompartment = new Compartment();
-  const gitGutterCompartment = new Compartment();
   const vimCompartment = new Compartment();
   const readingCompartment = new Compartment();
   const activeLineHighlightCompartment = new Compartment();
@@ -202,7 +188,6 @@ export function createEditor({
   const startMode = initialMode === 'live' ? 'live' : 'source';
   let lineNumbersVisible = initialLineNumbers !== false;
   let readOnlyEnabled = initialReadOnly === true;
-  let gitGutterVisible = initialGitGutter !== false;
   let vimModeEnabled = initialVimMode === true;
   let vimKeybindings = initialVimKeybindings;
   let vimLeader = initialVimLeader;
@@ -306,8 +291,6 @@ export function createEditor({
   let onScroll = null;
   let pendingLiveSearchRevealFrame: number | null = null;
   let pendingLiveSearchRevealToken = 0;
-  let gitBlameHover = null;
-  let gitDiffOverviewRuler = null;
   let sourceLinkHoverPointerActive = false;
   const normalizeTopLineOffset = (value) => {
     if (!Number.isFinite(value)) {
@@ -561,18 +544,6 @@ export function createEditor({
       return;
     }
     view.dom.classList.toggle('meo-line-numbers-hidden', !lineNumbersVisible);
-  };
-
-  const syncGitGutterVisibility = () => {
-    if (!view) {
-      return;
-    }
-    const shouldShowGitGutter = gitGutterVisible;
-    view.dom.classList.toggle('meo-git-gutter-hidden', !shouldShowGitGutter);
-    if (!shouldShowGitGutter) {
-      gitBlameHover?.hide();
-    }
-    gitDiffOverviewRuler?.refresh();
   };
 
   const releasePointerCaptureIfHeld = (pointerId) => {
@@ -1586,8 +1557,6 @@ export function createEditor({
       ]),
       history(),
       lineNumbers(),
-      ...gitDiffGutterBaselineExtensions(),
-      gitGutterCompartment.of(startMode === 'live' ? gitDiffGutterLiveRenderExtensions() : gitDiffGutterRenderExtensions()),
       readingCompartment.of(readOnlyExtensions(readOnlyEnabled)),
       activeLineHighlightCompartment.of(activeLineHighlightExtensions(!readOnlyEnabled)),
       shikiCodeHighlight,
@@ -1804,7 +1773,6 @@ export function createEditor({
       EditorView.updateListener.of((update) => {
         syncModeClasses();
         syncLineNumbersVisibility();
-        syncGitGutterVisibility();
         emitSearchStateChange();
 
         if (update.docChanged) {
@@ -1823,8 +1791,7 @@ export function createEditor({
           return;
         }
 
-        gitBlameHover?.hide();
-
+    
         pendingExternalUndoSelectionPreserve = false;
 
         if (isHistoryReplayUpdate(update)) {
@@ -1896,27 +1863,11 @@ export function createEditor({
   view.dom.addEventListener('meo-table-selection-change', onTableSelectionChange);
   onScroll = () => {
     emitSelectionChange();
-    gitBlameHover?.hide();
     onViewportChange?.();
   };
   view.scrollDOM.addEventListener('scroll', onScroll, { passive: true });
-  if (typeof onRequestGitBlame === 'function') {
-    gitBlameHover = createGitBlameHoverController({
-      view,
-      getMode: () => currentMode,
-      requestBlame: onRequestGitBlame,
-      openRevisionForLine: onOpenGitRevisionForLine,
-      openWorktreeForLine: onOpenGitWorktreeForLine
-    });
-  }
-  gitDiffOverviewRuler = createGitDiffOverviewRulerController({
-    view,
-    getMode: () => currentMode,
-    isGitChangesVisible: () => gitGutterVisible
-  });
   syncModeClasses();
   syncLineNumbersVisibility();
-  syncGitGutterVisibility();
   syncSelectionClass();
   syncReadingPresentation();
   view.dispatch({ effects: setDiagnosticsEffect.of(currentDiagnostics) });
@@ -2036,10 +1987,6 @@ export function createEditor({
     destroy() {
       window.removeEventListener('pointerup', finishSelectionOutsideEditor);
       window.removeEventListener('pointercancel', finishSelectionOutsideEditor);
-      gitBlameHover?.destroy();
-      gitBlameHover = null;
-      gitDiffOverviewRuler?.destroy();
-      gitDiffOverviewRuler = null;
       if (onScroll) {
         view.scrollDOM.removeEventListener('scroll', onScroll);
         onScroll = null;
@@ -2074,8 +2021,7 @@ export function createEditor({
       view.destroy();
     },
     setText(textValue) {
-      gitBlameHover?.hide();
-      clearDiagnosticSuggestionState();
+        clearDiagnosticSuggestionState();
       // Commit widget editors (tables) before replacing the underlying doc.
       commitActiveTableInput();
       const currentText = view.state.doc.toString();
@@ -2110,8 +2056,7 @@ export function createEditor({
       const draft = { accepted: true };
       view.dom.dispatchEvent(new CustomEvent('atomic-commit-ticket-edit', { detail: draft }));
       if (!draft.accepted) throw new Error('Finish or cancel the ticket field edit before changing modes.');
-      gitBlameHover?.hide();
-      clearDiagnosticSuggestionState();
+        clearDiagnosticSuggestionState();
       commitActiveTableInput();
       const nextMode = mode === 'live' ? 'live' : 'source';
       if (nextMode === currentMode) {
@@ -2127,9 +2072,6 @@ export function createEditor({
         view.dispatch({
           effects: [
             modeCompartment.reconfigure(nextMode === 'live' ? [liveModeExtensions(), atomicIntentExtensions(onOpenLink, onRequestSource)] : sourceMode()),
-            gitGutterCompartment.reconfigure(
-              nextMode === 'live' ? gitDiffGutterLiveRenderExtensions() : gitDiffGutterRenderExtensions()
-            ),
             vimCompartment.reconfigure(vimExtensionsForState()),
             readingCompartment.reconfigure(readOnlyExtensions(reading)),
             activeLineHighlightCompartment.reconfigure(activeLineHighlightExtensions(!reading))
@@ -2142,8 +2084,7 @@ export function createEditor({
         throw error;
       }
       syncModeClasses();
-      syncGitGutterVisibility();
-      syncReadingPresentation();
+          syncReadingPresentation();
 
       restoreTopVisibleLine(topPosition.lineNumber, topPosition.lineOffset, { syncCursor: false });
     },
@@ -2169,14 +2110,6 @@ export function createEditor({
       }
       lineNumbersVisible = nextVisible;
       syncLineNumbersVisibility();
-    },
-    setGitGutterVisible(visible) {
-      const nextVisible = visible !== false;
-      if (nextVisible === gitGutterVisible) {
-        return;
-      }
-      gitGutterVisible = nextVisible;
-      syncGitGutterVisibility();
     },
     setVimMode(enabled) {
       const nextEnabled = enabled === true;
@@ -2461,14 +2394,6 @@ export function createEditor({
       }
       emitSelectionChange();
     },
-    setGitBaseline(snapshot) {
-      applyGitBaseline(view, snapshot);
-      gitBlameHover?.hide();
-      gitDiffOverviewRuler?.refresh();
-    },
-    clearGitUiTransientState() {
-      gitBlameHover?.hide();
-    }
   };
 }
 
@@ -2939,7 +2864,6 @@ function sourceMode() {
     sourceFootnoteMarkerField,
     sourceTableHeaderLineField,
     sourceFrontmatterField,
-    gitDiffLineHighlightsField,
     ...headingCollapseSourceSpacerExtensions(),
     ...mergeConflictSourceExtensions()
   ];

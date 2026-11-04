@@ -62,7 +62,7 @@
       }
     ],
     "commands": [
-      { "command": "catalystAtomic.openGraph", "title": "Atomic: Inspect View Changes", "icon": "$(git-commit)" },
+      { "command": "catalystAtomic.openGraph", "title": "Atomic: Inspect View Changes", "icon": "$(history)" },
       { "command": "catalystAtomic.refresh", "title": "Atomic: Refresh Version Control", "icon": "$(refresh)" },
       { "command": "catalystAtomic.record", "title": "Atomic: Record Tracked Changes", "icon": "$(check)" },
       { "command": "catalystAtomic.add", "title": "Atomic: Add File", "icon": "$(add)" },
@@ -238,18 +238,6 @@
           "default": true,
           "order": 4,
           "description": "Show line numbers."
-        },
-        "catalystIntent.gitChanges.visible": {
-          "type": "boolean",
-          "default": true,
-          "order": 5,
-          "description": "Show Git change indicators in the editor."
-        },
-        "catalystIntent.gitChanges.lineHighlights": {
-          "type": "boolean",
-          "default": true,
-          "order": 6,
-          "description": "Show subtle line coloring for modified lines in Source mode."
         },
         "catalystIntent.spellCheck.enabled": {
           "type": "boolean",

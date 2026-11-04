@@ -6,14 +6,7 @@ import { getMermaidColonBlocks, rangeOverlapsMermaidColonBlock } from './mermaid
 import { collectLatexMathRanges, resolveFencedDisplayMathInnerLineRange } from './math';
 import { isTableDelimiterLine, parseTableInfo } from './tables';
 
-type LineFlagLike = {
-  added?: boolean;
-  modified?: boolean;
-  trailingEofProxyOnly?: boolean;
-} | undefined;
-
 export type LiveRenderedBlockKind = 'table' | 'mermaid' | 'math';
-export type LiveGitChangeKind = 'added' | 'modified';
 
 export interface LiveRenderedBlock {
   kind: LiveRenderedBlockKind;
@@ -24,20 +17,7 @@ export interface LiveRenderedBlock {
   lineNumberHiddenTo: number;
 }
 
-export interface LiveCollapsedGitBlock {
-  kind: LiveRenderedBlockKind;
-  startLine: number;
-  endLine: number;
-  canonicalLine: number;
-  aggregateChangeKind: LiveGitChangeKind;
-  containsLine(lineNo: number): boolean;
-}
-
 const renderedBlockCache = new WeakMap<EditorState, { tree: any; blocks: LiveRenderedBlock[] }>();
-const collapsedBlockCache = new WeakMap<EditorState, {
-  lineFlags: readonly LineFlagLike[];
-  blocks: LiveCollapsedGitBlock[];
-}>();
 
 function createRenderedBlock(
   kind: LiveRenderedBlockKind,
@@ -289,97 +269,6 @@ export function getLiveRenderedBlocks(state: EditorState): LiveRenderedBlock[] {
   return blocks;
 }
 
-function createCollapsedBlock(
-  block: LiveRenderedBlock,
-  canonicalLine: number,
-  aggregateChangeKind: LiveGitChangeKind
-): LiveCollapsedGitBlock {
-  return {
-    kind: block.kind,
-    startLine: block.startLine,
-    endLine: block.endLine,
-    canonicalLine,
-    aggregateChangeKind,
-    containsLine(lineNo: number): boolean {
-      return lineNo >= block.startLine && lineNo <= block.endLine;
-    }
-  };
-}
-
-function buildCollapsedBlock(
-  block: LiveRenderedBlock,
-  lineFlags: readonly LineFlagLike[] | null | undefined
-): LiveCollapsedGitBlock | null {
-  if (!Array.isArray(lineFlags) || !lineFlags.length) {
-    return null;
-  }
-
-  let firstChangedLine = 0;
-  let hasModified = false;
-  let hasAdded = false;
-  let hasNonDelimiterChange = false;
-
-  for (let lineNo = block.startLine; lineNo <= block.endLine; lineNo += 1) {
-    const flags = lineFlags[lineNo - 1];
-    const modified = !!(flags?.modified || flags?.trailingEofProxyOnly);
-    const added = !!flags?.added;
-    if (!modified && !added) {
-      continue;
-    }
-    if (!firstChangedLine) {
-      firstChangedLine = lineNo;
-    }
-    if (lineNo !== block.delimiterLine) {
-      hasNonDelimiterChange = true;
-    }
-    if (modified) {
-      hasModified = true;
-      continue;
-    }
-    hasAdded = true;
-  }
-
-  if (!firstChangedLine || (!hasModified && !hasAdded)) {
-    return null;
-  }
-
-  let canonicalLine = firstChangedLine;
-  if (
-    block.kind === 'table' &&
-    block.delimiterLine !== null &&
-    !hasNonDelimiterChange &&
-    firstChangedLine === block.delimiterLine
-  ) {
-    canonicalLine = block.startLine;
-  }
-
-  return createCollapsedBlock(block, canonicalLine || block.startLine, hasModified ? 'modified' : 'added');
-}
-
-function findCollapsedBlockAtLine(
-  blocks: readonly LiveCollapsedGitBlock[],
-  lineNo: number
-): LiveCollapsedGitBlock | null {
-  let low = 0;
-  let high = blocks.length - 1;
-
-  while (low <= high) {
-    const mid = (low + high) >> 1;
-    const block = blocks[mid];
-    if (lineNo < block.startLine) {
-      high = mid - 1;
-      continue;
-    }
-    if (lineNo > block.endLine) {
-      low = mid + 1;
-      continue;
-    }
-    return block;
-  }
-
-  return null;
-}
-
 function findRenderedBlockAtLine(
   blocks: readonly LiveRenderedBlock[],
   lineNo: number
@@ -413,40 +302,4 @@ export function getLiveRenderedBlockAtLine(
     return null;
   }
   return findRenderedBlockAtLine(blocks, Math.max(1, Math.floor(lineNo)));
-}
-
-export function getLiveGitCollapsedBlocks(
-  state: EditorState,
-  lineFlags: readonly LineFlagLike[] | null | undefined
-): LiveCollapsedGitBlock[] {
-  if (!Array.isArray(lineFlags) || !lineFlags.length) {
-    return [];
-  }
-
-  const cached = collapsedBlockCache.get(state);
-  if (cached?.lineFlags === lineFlags) {
-    return cached.blocks;
-  }
-
-  const collapsed: LiveCollapsedGitBlock[] = [];
-  for (const block of getLiveRenderedBlocks(state)) {
-    const next = buildCollapsedBlock(block, lineFlags);
-    if (next) {
-      collapsed.push(next);
-    }
-  }
-  collapsedBlockCache.set(state, { lineFlags, blocks: collapsed });
-  return collapsed;
-}
-
-export function getLiveGitCollapsedBlockAtLine(
-  state: EditorState,
-  lineFlags: readonly LineFlagLike[] | null | undefined,
-  lineNo: number
-): LiveCollapsedGitBlock | null {
-  const blocks = getLiveGitCollapsedBlocks(state, lineFlags);
-  if (!blocks.length) {
-    return null;
-  }
-  return findCollapsedBlockAtLine(blocks, Math.max(1, Math.floor(lineNo)));
 }

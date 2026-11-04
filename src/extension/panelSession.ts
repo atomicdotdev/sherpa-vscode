@@ -7,15 +7,12 @@ import type { MarkdownCustomDocument } from './markdownCustomDocument';
 import {
   EXTENSION_CONFIG_SECTION,
   LINE_NUMBERS_SETTING_KEY,
-  GIT_CHANGES_GUTTER_SETTING_KEY,
   CONTENT_MAX_WIDTH_SETTING_KEY,
   SPELL_CHECK_SETTING_KEY,
   getReadOnlyEnabled,
   setReadOnlyEnabled,
   getContentMaxWidthEnabled,
   getLineNumbersEnabled,
-  getGitChangesGutterEnabled,
-  getGitDiffLineHighlightsEnabled,
   getSpellCheckEnabled,
   getOutlinePosition,
   getOutlineVisible,
@@ -31,9 +28,6 @@ import {
 } from '../shared/extensionConfig';
 import type { NormalizedKeymapBinding } from '../shared/keymapConfig';
 import { openLink, resolveLocalLinkTargets, resolveWebviewImageSrc, resolveWikiLinkTargets } from '../shared/documentLinks';
-import { GitDocumentState, hashGitBaselinePayload } from '../git/documentState';
-import { openGitRevisionForLine, openGitWorktreeForLine, resolveGitBlameForRequest } from '../git/blameActions';
-import type { GitBaselinePayload, GitBlameLineResult } from '../git/types';
 import type { ExportStyleEnvironment } from '../export/runtime';
 import type { ThemeSettings } from '../shared/themeDefaults';
 import type { RawVscodeTheme } from '../shared/vscodeTheme';
@@ -62,8 +56,6 @@ type InitMessage = {
   mode: EditorMode;
   lineNumbers: boolean;
   readOnly: boolean;
-  gitChangesGutter: boolean;
-  gitDiffLineHighlights: boolean;
   spellCheckEnabled: boolean;
   contentMaxWidthEnabled: boolean;
   vimMode: boolean;
@@ -184,12 +176,6 @@ type SetLineNumbersMessage = {
   enabled?: boolean;
 };
 
-type SetGitChangesGutterMessage = {
-  type: 'setGitChangesGutter';
-  visible?: boolean;
-  enabled?: boolean;
-};
-
 type SetSpellCheckMessage = {
   type: 'setSpellCheck';
   enabled: boolean;
@@ -246,26 +232,6 @@ type RequestExportSnapshotMessage = {
   requestId: string;
 };
 
-type RequestGitBlameMessage = {
-  type: 'requestGitBlame';
-  requestId: string;
-  lineNumber: number;
-  text?: string;
-  localEditGeneration: number;
-};
-
-type OpenGitRevisionForLineMessage = {
-  type: 'openGitRevisionForLine';
-  lineNumber: number;
-  text?: string;
-};
-
-type OpenGitWorktreeForLineMessage = {
-  type: 'openGitWorktreeForLine';
-  lineNumber: number;
-  text?: string;
-};
-
 type SaveImageFromClipboardMessage = {
   type: 'saveImageFromClipboard';
   requestId: string;
@@ -299,20 +265,6 @@ type SavedImagePathMessage = {
   error?: string;
 };
 
-type GitBaselineChangedMessage = {
-  type: 'gitBaselineChanged';
-  version: number;
-  payload: GitBaselinePayload;
-};
-
-type GitBlameResultMessage = {
-  type: 'gitBlameResult';
-  requestId: string;
-  lineNumber: number;
-  localEditGeneration: number;
-  result: GitBlameLineResult;
-};
-
 type SerializedDiagnostic = {
   from: number;
   to: number;
@@ -332,7 +284,6 @@ type WebviewMessage =
   | DraftChangedMessage
   | SetModeMessage
   | SetLineNumbersMessage
-  | SetGitChangesGutterMessage
   | SetSpellCheckMessage
   | SetOutlineVisibleMessage
   | SetContentMaxWidthMessage
@@ -348,18 +299,9 @@ type WebviewMessage =
   | ExportDocumentMessage
   | ExportSnapshotMessage
   | ExportSnapshotErrorMessage
-  | RequestGitBlameMessage
-  | OpenGitRevisionForLineMessage
-  | OpenGitWorktreeForLineMessage
   | SaveImageFromClipboardMessage
   | RequestDiagnosticSuggestionsMessage
   | { type: 'ready' };
-
-type RefreshGitBaselineOptions = {
-  forcePost?: boolean;
-  forceReload?: boolean;
-  delayMs?: number;
-};
 
 type PendingExportSnapshot = {
   resolve: (value: { text: string; environment?: ExportStyleEnvironment }) => void;
@@ -377,14 +319,7 @@ const REMEMBERED_VIEW_POSITIONS_STATE_KEY = 'rememberedViewPositionsByDocument';
 const MAX_REMEMBERED_VIEW_POSITIONS = 300;
 const REMEMBERED_EOF_NEAR_THRESHOLD_LINES = 10;
 const REMEMBERED_EOF_BACKOFF_LINES = 10;
-const GIT_BASELINE_STARTUP_DELAY_MS = 350;
-const GIT_BASELINE_REFRESH_DELAY_MS = 150;
 const MAX_DIAGNOSTIC_SUGGESTIONS = 1;
-const EMPTY_GIT_BASELINE_PAYLOAD: GitBaselinePayload = Object.freeze({
-  available: false,
-  tracked: false,
-  baseText: null
-});
 
 type PanelSessionControllerParams = {
   panel: vscode.WebviewPanel;
@@ -406,15 +341,12 @@ export type PanelSession = {
   panel: vscode.WebviewPanel;
   document: MarkdownCustomDocument;
   documentUri: vscode.Uri;
-  gitDocumentState: GitDocumentState;
   getMode: () => EditorMode;
   ensureInitDelivered: () => Promise<void>;
   prepareSave: () => Promise<boolean>;
   requestExportSnapshot: () => Promise<{ text: string; environment?: ExportStyleEnvironment }>;
   rejectPendingExportSnapshots: (reason: Error) => void;
-  refreshGitBaseline: (options?: RefreshGitBaselineOptions) => void;
   refreshSpellDiagnostics: () => void;
-  getGitRepoRoot: () => string | null;
 };
 
 export type PanelSessionController = {
@@ -449,11 +381,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
   let applyGeneration = 0;
   let lastAppliedNormalizedText: string | null = null;
   let lastAppliedAtMs = 0;
-  let gitRefreshRunning = false;
-  let gitRefreshPending = false;
-  let gitRefreshPendingForcePost = false;
-  let gitRefreshPendingForceReload = false;
-  let pendingGitRefreshTimer: ReturnType<typeof setTimeout> | null = null;
   let lastSentRevealSelectionKey: string | null = null;
   let pendingRevealSelection: RevealSelectionPayload | null = null;
   let pendingRestoreTopLine: number | null = null;
@@ -465,7 +392,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
   let spellCheckGeneration = 0;
   let pendingSpellCheckTimer: ReturnType<typeof setTimeout> | null = null;
   const workspaceRoot = vscode.workspace.getWorkspaceFolder(document.uri)?.uri.fsPath;
-  const gitDocumentState = new GitDocumentState(documentUri.fsPath, workspaceRoot);
   const pendingExportSnapshots = new Map<string, PendingExportSnapshot>();
 
   const enqueue = (task: () => Promise<void>): Promise<void> => {
@@ -599,8 +525,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
       mode,
       lineNumbers: getLineNumbersEnabled(context),
       readOnly: getReadOnlyEnabled(),
-      gitChangesGutter: getGitChangesGutterEnabled(context),
-      gitDiffLineHighlights: getGitDiffLineHighlightsEnabled(),
       spellCheckEnabled: getSpellCheckEnabled(),
       contentMaxWidthEnabled: getContentMaxWidthEnabled(context),
       vimMode: getVimModeEnabled(context),
@@ -699,35 +623,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     return incoming === lastAppliedNormalizedText;
   };
 
-  const sendGitBaselineChanged = async (options: RefreshGitBaselineOptions = {}): Promise<boolean> => {
-    if (!initDelivered) {
-      return false;
-    }
-
-    const payload = getGitChangesGutterEnabled(context)
-      ? await gitDocumentState.resolveBaseline({
-          includeText: true,
-          force: options.forceReload === true
-        })
-      : EMPTY_GIT_BASELINE_PAYLOAD;
-    gitDocumentState.noteBaselinePayload(payload);
-    const payloadHash = hashGitBaselinePayload(payload);
-    if (!options.forcePost && payloadHash === gitDocumentState.getLastSentBaselineHash()) {
-      return true;
-    }
-
-    const message: GitBaselineChangedMessage = {
-      type: 'gitBaselineChanged',
-      version: document.version,
-      payload
-    };
-    const posted = await postToWebview(message);
-    if (posted) {
-      gitDocumentState.setLastSentBaselineHash(payloadHash);
-    }
-    return posted;
-  };
-
   const parseRevealOffsetFromUriFragment = (uri: vscode.Uri): number | null => {
     const fragment = uri.fragment?.trim() ?? '';
     if (!fragment) {
@@ -817,66 +712,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     for (const requestId of pendingExportSnapshots.keys()) {
       rejectPendingExportSnapshot(requestId, error);
     }
-  };
-
-  const runPendingGitRefreshes = async (): Promise<void> => {
-    if (pendingGitRefreshTimer !== null) {
-      clearTimeout(pendingGitRefreshTimer);
-      pendingGitRefreshTimer = null;
-    }
-    if (gitRefreshRunning || !webviewReady) {
-      return;
-    }
-    gitRefreshRunning = true;
-    try {
-      while (gitRefreshPending) {
-        const nextOptions: RefreshGitBaselineOptions = {
-          forcePost: gitRefreshPendingForcePost,
-          forceReload: gitRefreshPendingForceReload
-        };
-        gitRefreshPending = false;
-        gitRefreshPendingForcePost = false;
-        gitRefreshPendingForceReload = false;
-        try {
-          await ensureInitDelivered();
-          if (!initDelivered) {
-            gitRefreshPending = true;
-            gitRefreshPendingForcePost = gitRefreshPendingForcePost || nextOptions.forcePost === true;
-            gitRefreshPendingForceReload = gitRefreshPendingForceReload || nextOptions.forceReload === true;
-            return;
-          }
-          await sendGitBaselineChanged(nextOptions);
-        } catch {
-          // Keep refresh coalescing alive across transient git/webview failures.
-        }
-      }
-    } finally {
-      gitRefreshRunning = false;
-      if (gitRefreshPending) {
-        runBackground(runPendingGitRefreshes(), 'runPendingGitRefreshes.retry');
-      }
-    }
-  };
-
-  const refreshGitBaseline = (options: RefreshGitBaselineOptions = {}): void => {
-    if (options.forceReload) {
-      gitDocumentState.invalidate();
-    }
-    gitRefreshPending = true;
-    gitRefreshPendingForcePost = gitRefreshPendingForcePost || options.forcePost === true;
-    gitRefreshPendingForceReload = gitRefreshPendingForceReload || options.forceReload === true;
-    const delayMs = Math.max(0, options.delayMs ?? 0);
-    if (delayMs > 0 && !gitRefreshRunning) {
-      if (pendingGitRefreshTimer !== null) {
-        clearTimeout(pendingGitRefreshTimer);
-      }
-      pendingGitRefreshTimer = setTimeout(() => {
-        pendingGitRefreshTimer = null;
-        runBackground(runPendingGitRefreshes(), 'runPendingGitRefreshes.delayed');
-      }, delayMs);
-      return;
-    }
-    runBackground(runPendingGitRefreshes(), 'runPendingGitRefreshes');
   };
 
   const isTextEditorForDocument = (textEditor: vscode.TextEditor | undefined): textEditor is vscode.TextEditor => {
@@ -1025,15 +860,12 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     panel,
     document,
     documentUri,
-    gitDocumentState,
     getMode: () => mode,
     ensureInitDelivered,
     prepareSave,
     requestExportSnapshot,
     rejectPendingExportSnapshots,
-    refreshGitBaseline,
     refreshSpellDiagnostics: () => scheduleSpellCheck(0),
-    getGitRepoRoot: () => gitDocumentState.getRepoRoot()
   };
 
   const handleMessage = async (raw: WebviewMessage): Promise<void> => {
@@ -1046,7 +878,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
         await ensureInitDelivered();
         await flushPendingRevealSelection();
         scheduleSpellCheck(0);
-        refreshGitBaseline({ forcePost: true, delayMs: GIT_BASELINE_STARTUP_DELAY_MS });
         return;
       case 'setMode':
         mode = raw.mode;
@@ -1059,16 +890,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
         await vscode.workspace
           .getConfiguration(EXTENSION_CONFIG_SECTION)
           .update(LINE_NUMBERS_SETTING_KEY, visible, vscode.ConfigurationTarget.Global);
-        return;
-      }
-      case 'setGitChangesGutter': {
-        const visible = raw.visible ?? raw.enabled;
-        if (typeof visible !== 'boolean') {
-          return;
-        }
-        await vscode.workspace
-          .getConfiguration(EXTENSION_CONFIG_SECTION)
-          .update(GIT_CHANGES_GUTTER_SETTING_KEY, visible, vscode.ConfigurationTarget.Global);
         return;
       }
       case 'setSpellCheck':
@@ -1146,24 +967,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
         return;
       case 'exportSnapshotError':
         rejectPendingExportSnapshot(raw.requestId, new Error(raw.message || 'Failed to collect export snapshot.'));
-        return;
-      case 'requestGitBlame': {
-        const resolved = await resolveGitBlameForRequest(documentUri, raw, document.getText(), gitDocumentState);
-        const response: GitBlameResultMessage = {
-          type: 'gitBlameResult',
-          requestId: raw.requestId,
-          lineNumber: raw.lineNumber,
-          localEditGeneration: raw.localEditGeneration,
-          result: resolved.result
-        };
-        await postToWebview(response);
-        return;
-      }
-      case 'openGitRevisionForLine':
-        await openGitRevisionForLine(documentUri, raw, document.getText(), gitDocumentState);
-        return;
-      case 'openGitWorktreeForLine':
-        await openGitWorktreeForLine(documentUri, raw, document.getText(), gitDocumentState);
         return;
       case 'applyChanges':
         agentReviewHandoff.noteRecentMEOOwnedFileChangeForUri(document.uri);
@@ -1276,7 +1079,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     if (savedDocument.uri.toString() !== documentKey) {
       return;
     }
-    refreshGitBaseline({ forceReload: true, delayMs: GIT_BASELINE_REFRESH_DELAY_MS });
   });
 
   const diagnosticsSubscription = vscode.languages.onDidChangeDiagnostics((event) => {
@@ -1315,7 +1117,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
   const viewStateSubscription = panel.onDidChangeViewState((event) => {
     if (event.webviewPanel.active) {
       onPanelActivated(event.webviewPanel);
-      refreshGitBaseline({ forcePost: true, delayMs: GIT_BASELINE_REFRESH_DELAY_MS });
       runBackground(flushPendingRevealSelection(), 'flushPendingRevealSelection');
       runBackground(sendRevealSelectionForEditor(findEditorForDocumentReveal()), 'sendRevealSelectionForEditor.viewState');
       runBackground(postFocusEditor(), 'postFocusEditor');
@@ -1327,7 +1128,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     dispose();
   });
 
-  refreshGitBaseline({ forcePost: true, delayMs: GIT_BASELINE_STARTUP_DELAY_MS });
   runBackground(sendRevealSelectionForEditor(findEditorForDocumentReveal()), 'sendRevealSelectionForEditor.startup');
 
   const dispose = (): void => {
@@ -1339,10 +1139,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     if (pendingSpellCheckTimer !== null) {
       clearTimeout(pendingSpellCheckTimer);
       pendingSpellCheckTimer = null;
-    }
-    if (pendingGitRefreshTimer !== null) {
-      clearTimeout(pendingGitRefreshTimer);
-      pendingGitRefreshTimer = null;
     }
     spellDiagnosticCollection.delete(document.uri);
 

@@ -6,6 +6,8 @@ import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels,
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
 import { displayChangeHash } from '../shared/atomicHash';
+import { buildInsertViewArgs, buildPullArgs, buildPushArgs } from './syncArgs';
+import { runAtomicCli } from './syncCli';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import { AtomicDiffEditor } from './diffEditor';
 import { revisionText } from './fileDiff';
@@ -178,6 +180,55 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         this.changed.fire(undefined);
       });
     });
+    command('push', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const fromView = await this.pickView(owner, 'Local view to push', owner.session.status?.view);
+      if (fromView === undefined) return;
+      const toView = await vscode.window.showInputBox({ prompt: 'Remote view name', value: fromView });
+      if (toView === undefined) return;
+      const remote = await this.promptRemote();
+      if (remote === undefined) return;
+      await this.runSync(owner, 'Push view', buildPushArgs({ remote, fromView, toView }));
+    });
+    command('pull', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const remote = await this.promptRemote();
+      if (remote === undefined) return;
+      const fromView = await vscode.window.showInputBox({ prompt: 'Remote view to pull from', value: owner.session.status?.view });
+      if (fromView === undefined) return;
+      const toView = await this.pickView(owner, 'Local view to pull into', owner.session.status?.view);
+      if (toView === undefined) return;
+      await this.runSync(owner, 'Pull view', buildPullArgs({ remote, fromView, toView }));
+    });
+    command('insertView', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const source = await this.pickView(owner, 'Source view to insert from', owner.session.status?.view);
+      if (source === undefined) return;
+      const target = await this.pickView(owner, 'Target view', owner.session.status?.view);
+      if (target === undefined) return;
+      if (source === target) throw new Error('Choose different source and target views.');
+      const confirmed = await vscode.window.showWarningMessage(
+        `Insert all changes from “${source}” into “${target}”?`,
+        { modal: true },
+        'Insert View'
+      );
+      if (confirmed !== 'Insert View') return;
+      await this.runSync(owner, 'Insert view', buildInsertViewArgs(source, target));
+    });
+    command('addRemote', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const name = await vscode.window.showInputBox({ prompt: 'Remote name', value: 'origin',
+        validateInput: (value) => value.trim() ? undefined : 'A remote name is required' });
+      if (name === undefined) return;
+      const url = await vscode.window.showInputBox({ prompt: 'Remote URL (for example an atomic.storage project URL)',
+        placeHolder: 'https://atomic.storage/…', validateInput: (value) => value.trim() ? undefined : 'A remote URL is required' });
+      if (url === undefined) return;
+      await this.runSync(owner, 'Add remote', ['remote', 'add', name.trim(), url.trim()]);
+    });
     void this.discover();
   }
 
@@ -342,6 +393,38 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       const input = tab.input;
       return tab.isDirty && (input instanceof vscode.TabInputCustom || input instanceof vscode.TabInputText) && inRepository(input.uri);
     }));
+  }
+
+  private async promptRemote(): Promise<string | undefined> {
+    return vscode.window.showInputBox({
+      prompt: 'Atomic remote name or URL',
+      value: 'origin',
+      placeHolder: 'origin or https://atomic.storage/…',
+      validateInput: (value) => value.trim() ? undefined : 'A remote name or URL is required'
+    });
+  }
+
+  private async pickView(owner: RepositoryUI, placeHolder: string, defaultValue?: string): Promise<string | undefined> {
+    const names = [...new Set((owner.session.views?.views ?? []).map((view) => view.name).filter((name): name is string => Boolean(name)))];
+    if (!names.length) {
+      return vscode.window.showInputBox({ prompt: placeHolder, value: defaultValue ?? '' });
+    }
+    const picked = await vscode.window.showQuickPick(names, { placeHolder });
+    return picked;
+  }
+
+  private async runSync(owner: RepositoryUI, label: string, args: string[]): Promise<void> {
+    this.requireTrusted();
+    this.output.appendLine(`atomic ${args.join(' ')}`);
+    await vscode.window.withProgress(
+      { location: vscode.ProgressLocation.Notification, title: `Atomic: ${label}`, cancellable: false },
+      async () => {
+        const result = await owner.session.run(() => runAtomicCli(args, { cwd: owner.session.root }));
+        if (result.stdout.trim()) this.output.appendLine(result.stdout.trim());
+        if (result.stderr.trim()) this.output.appendLine(result.stderr.trim());
+      }
+    );
+    await this.update(owner);
   }
 
   private async pick(source?: vscode.SourceControl): Promise<RepositoryUI | undefined> {

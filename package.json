@@ -69,6 +69,10 @@
       { "command": "catalystAtomic.createView", "title": "Atomic: Create View", "icon": "$(add)" },
       { "command": "catalystAtomic.switchView", "title": "Atomic: Switch View", "icon": "$(versions)" },
       { "command": "catalystAtomic.deleteView", "title": "Atomic: Delete View", "icon": "$(trash)" },
+      { "command": "catalystAtomic.push", "title": "Atomic: Push View", "icon": "$(cloud-upload)" },
+      { "command": "catalystAtomic.pull", "title": "Atomic: Pull View", "icon": "$(cloud-download)" },
+      { "command": "catalystAtomic.insertView", "title": "Atomic: Insert View Into View", "icon": "$(arrow-right)" },
+      { "command": "catalystAtomic.addRemote", "title": "Atomic: Add Remote", "icon": "$(plug)" },
       {
         "command": "catalystIntent.open",
         "title": "Atomic: Open Intent as Ticket",
@@ -170,10 +174,16 @@
         { "command": "catalystAtomic.openGraph", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "navigation" },
         { "command": "catalystAtomic.createView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
         { "command": "catalystAtomic.switchView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "catalystAtomic.deleteView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" }
+        { "command": "catalystAtomic.deleteView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "catalystAtomic.push", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "catalystAtomic.pull", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "catalystAtomic.insertView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "catalystAtomic.addRemote", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" }
       ],
       "scm/title": [
         { "command": "catalystAtomic.record", "when": "scmProvider == atomic", "group": "navigation" },
+        { "command": "catalystAtomic.push", "when": "scmProvider == atomic", "group": "navigation" },
+        { "command": "catalystAtomic.pull", "when": "scmProvider == atomic", "group": "navigation" },
         { "command": "catalystAtomic.refresh", "when": "scmProvider == atomic", "group": "navigation" }
       ],
       "scm/resourceState/context": [

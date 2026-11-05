@@ -12,3 +12,6 @@ assets/
 AGENTS.md
 features.md
 /.atomic
+
+!vendor/nodeatomic/dist/
+!vendor/nodeatomic/dist/**

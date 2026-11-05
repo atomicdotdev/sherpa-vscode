@@ -919,7 +919,7 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
             const puppeteerRuntimeModulePath = vscode.Uri.joinPath(
               this.context.extensionUri,
               'dist',
-              'puppeteer-runtime.js'
+              'puppeteer-runtime.mjs'
             ).fsPath;
             progress.report({ message: format === 'html' ? 'Finalizing HTML…' : 'Rendering PDF in headless browser…' });
 

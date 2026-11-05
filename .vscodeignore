@@ -32,3 +32,8 @@ features.md
 .github/**
 .vault/**
 examples/**
+
+vendor/**
+tsconfig.json
+flask.png
+logo.png

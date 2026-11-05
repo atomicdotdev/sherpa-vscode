@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from 'bun:test';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { rewriteExportImageSrc } from '../src/export/assetPaths.ts';
 import { renderMarkdownToHtml } from '../src/export/renderMarkdown.ts';
 
@@ -50,8 +51,8 @@ describe('Export image embedding containment', () => {
   });
 
   test('drops absolute and relative paths outside the workspace', () => {
-    expect(rewriteExportImageSrc(`file://${path.join(outside, 'secret.txt')}`, { ...base, target: 'html' })).toBe('');
-    expect(rewriteExportImageSrc('../outside/pixel.png', { ...base, target: 'html' })).toBe('');
+    expect(rewriteExportImageSrc(pathToFileURL(path.join(outside, 'secret.txt')).href, { ...base, target: 'html' })).toBe('');
+    expect(rewriteExportImageSrc('../../outside/pixel.png', { ...base, target: 'html' })).toBe('');
   });
 
   test('drops symlinks that resolve outside the workspace', () => {
@@ -60,8 +61,8 @@ describe('Export image embedding containment', () => {
   });
 
   test('pdf and linked modes never expose an outside path', () => {
-    expect(rewriteExportImageSrc('../outside/pixel.png', { ...base, target: 'pdf' })).toBe('');
-    expect(rewriteExportImageSrc('../outside/pixel.png', { ...base, target: 'html', htmlImageMode: 'linked' })).toBe('');
+    expect(rewriteExportImageSrc('../../outside/pixel.png', { ...base, target: 'pdf' })).toBe('');
+    expect(rewriteExportImageSrc('../../outside/pixel.png', { ...base, target: 'html', htmlImageMode: 'linked' })).toBe('');
   });
 
   test('linked mode keeps an inside workspace image as a relative link', () => {
@@ -72,7 +73,7 @@ describe('Export image embedding containment', () => {
 
   test('markdown rendering applies the same containment rule', () => {
     const { html } = renderMarkdownToHtml({
-      markdownText: '![inside](../assets/pixel.png)\n\n![outside](../outside/pixel.png)',
+      markdownText: '![inside](../assets/pixel.png)\n\n![outside](../../outside/pixel.png)',
       markdownFilePath: documentPath,
       workspaceRoot: workspace,
       outputFilePath: path.join(workspace, 'out.html'),

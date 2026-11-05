@@ -13,7 +13,7 @@ import {
 } from './themeDefaults';
 import { getActiveVscodeRawTheme, type RawVscodeTheme } from './vscodeTheme';
 
-export const EXTENSION_CONFIG_SECTION = 'catalystIntent';
+export const EXTENSION_CONFIG_SECTION = 'sherpaIntent';
 export const LINE_NUMBERS_SETTING_KEY = 'lineNumbers.visible';
 export const READ_ONLY_SETTING_KEY = 'readOnly';
 export const SPELL_CHECK_SETTING_KEY = 'spellCheck.enabled';
@@ -259,7 +259,7 @@ export async function syncEditorAssociations(useAsDefault: boolean): Promise<voi
   }
   const config = vscode.workspace.getConfiguration('workbench');
   const inspected = config.inspect<Record<string, string>>('editorAssociations');
-  const markdownAssociation = useAsDefault ? 'catalystIntent.editor' : 'default';
+  const markdownAssociation = useAsDefault ? 'sherpaIntent.editor' : 'default';
 
   await syncEditorAssociationsForTarget(
     config,

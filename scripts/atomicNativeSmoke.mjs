@@ -8,13 +8,13 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { openRepository, proto } from '../dist/nodeatomic/index.mjs';
 
-const root = await mkdtemp(join(tmpdir(), 'catalyst-atomic-'));
+const root = await mkdtemp(join(tmpdir(), 'sherpa-atomic-'));
 try {
   execFileSync(process.env.ATOMIC_BIN || 'atomic', ['init', '--no-vault', '--view', 'test', '.'], {
     cwd: root, env: { ...process.env, ATOMIC_SERVICE: 'local', ATOMIC_RPC: '0' }, stdio: 'pipe'
   });
   process.env.ATOMIC_SERVICE = 'reactor';
-  process.env.ATOMIC_DAEMON_SOCKET = '/nonexistent/catalyst-atomic.sock';
+  process.env.ATOMIC_DAEMON_SOCKET = '/nonexistent/sherpa-atomic.sock';
   const repo = await openRepository(root);
   await writeFile(join(root, 'intent.md'), '# Test intent\n');
   assert.equal((await repo.status()).files.find((f) => f.path === 'intent.md').status,
@@ -23,11 +23,11 @@ try {
   const status = await repo.status();
   assert.equal(status.files.find((f) => f.path === 'intent.md').status, proto.FileStatus.FILE_STATUS_ADDED);
   const expected = status.snapshot ? { viewSnapshot: status.snapshot } : { merkleRoot: status.viewMerkle };
-  const recorded = await repo.record('Catalyst packaged consumer smoke', { paths: ['intent.md'], expected });
+  const recorded = await repo.record('Sherpa packaged consumer smoke', { paths: ['intent.md'], expected });
   const history = await repo.log({ view: status.view, budget: { maxItems: 30 } });
-  assert.equal(history.entries[0].message, 'Catalyst packaged consumer smoke');
+  assert.equal(history.entries[0].message, 'Sherpa packaged consumer smoke');
    const detail = await repo.change({ hash: recorded.change.hash.value }, { includes: { metadata: true, blastRadius: true } });
-  assert.equal(detail.change.message, 'Catalyst packaged consumer smoke');
+  assert.equal(detail.change.message, 'Sherpa packaged consumer smoke');
   assert.ok(detail.metadata.graphSummary, 'Packaged addon must expose the native graph summary');
   assert.ok(BigInt(String(detail.metadata.graphSummary.verticesAdded)) > 0n);
   assert.ok(detail.metadata.graphSummary.files.some((file) => file.path === 'intent.md' && file.info.includes('vertices')));

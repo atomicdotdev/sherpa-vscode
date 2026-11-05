@@ -47,7 +47,7 @@ provider.repositories.set('/repository', owner);
 const nodes = provider.getChildren()[0].children.find((node) => node.label === 'Views').children;
 const shared = nodes.find((node) => node.label === 'main'), draft = nodes.find((node) => node.label === 'draft-feature');
 assert.match(shared.description, /^Shared · current/); assert.match(draft.description, /^Draft/);
-assert.equal(shared.command.command, 'catalystAtomic.openView');
+assert.equal(shared.command.command, 'sherpaAtomic.openView');
 
 await commands.get(shared.command.command)(...shared.command.arguments);
 assert.equal(panels.length, 1);

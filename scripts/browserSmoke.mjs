@@ -5,7 +5,7 @@ import { findPdfBrowserExecutablePath } from '../src/export/browserDiscovery.ts'
 
 // Start `npm run preview` separately. Uses an installed Chrome/Edge in a
 // temporary headless profile; it never opens the user's browser profile.
-const fixture = await Bun.file(path.resolve(import.meta.dir, '../examples/catalyst.intent.md')).text();
+const fixture = await Bun.file(path.resolve(import.meta.dir, '../examples/sherpa.intent.md')).text();
 const edited = fixture.replace('status=done criteria=', 'status=open criteria=');
 const browser = await puppeteer.launch({
   executablePath: await findPdfBrowserExecutablePath(),
@@ -30,7 +30,7 @@ try {
     await titleInput.click({ clickCount: 3 });
     await titleInput.type('Ticket title edited');
     await page.evaluate(() => [...document.querySelectorAll('.atomic-ticket-edit-form button')].find((button) => button.textContent === 'Save').click());
-    const retitled = fixture.replace('title: Rename the desktop application to Catalyst', 'title: Ticket title edited');
+    const retitled = fixture.replace('title: Rename the desktop application to Sherpa', 'title: Ticket title edited');
     await page.waitForFunction((expected) => window.__atomicPreviewSource === expected, {}, retitled);
     await page.focus('.atomic-ticket-title-row button');
     await page.keyboard.down(modifier);

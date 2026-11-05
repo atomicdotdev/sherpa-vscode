@@ -12,7 +12,7 @@ Local packages are written to `releases/`. Use the version confirmed by the buil
 
 **Atomic prerequisite:** Atomic features require a compatible complete Atomic installation on the **extension host**, including its CLI, platform library, and `libatomic-runtime.json`. This is a universal JavaScript-only VSIX, not a bundled native runtime. Install the complete release archive into a versioned directory and put it on PATH, or set an absolute `ATOMIC_RUNTIME_DIR` before launching the editor. Older CLI-only installations are insufficient. For Remote SSH/WSL/containers, install Atomic remotely. Fully restart the editor after environment/runtime changes. Intent/Markdown editing does not require loading the native runtime.
 
-1. In VS Code, VSCodium, Catalyst, or another compatible editor, open the Command Palette.
+1. In VS Code, VSCodium, or another compatible editor, open the Command Palette.
 2. Run **Extensions: Install from VSIX…** and select that file.
 3. Reload the editor window if prompted.
 4. Open a vault `intent.md` or `*.intent.md` file. These filenames now default to **Atomic Intent Ticket**.
@@ -20,7 +20,7 @@ Local packages are written to `releases/`. Use the version confirmed by the buil
 
 **Do not choose Markdown Preview.** It is the editor's generic read-only Markdown renderer and cannot display Atomic ticket fields.
 
-The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code API 1.97+. Editor command, setting, and custom-editor IDs retain `catalystIntent.*`; version control commands retain `catalystAtomic.*` for compatibility with existing configurations. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
+The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code API 1.97+. Editor commands, settings, and custom-editor IDs use the `sherpaIntent.*` namespace; version-control commands use `sherpaAtomic.*`. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
 
 ## Ticket layout
 
@@ -112,7 +112,7 @@ The extension build bundles only JavaScript/protobuf dependencies as `dist/nodea
 
 **Universal packaging is not a claim of tested support on every host.** The external producer currently supplies macOS ARM64, Linux x64 glibc, and Windows x64 runtimes. Validate the same VSIX inside the actual VS Code/Electron extension host on each platform before claiming compatibility. Node-only integration tests do not establish Electron compatibility. Remote hosts need their own matching runtime. Browser preview does not exercise this panel. External Atomic installers and self-update must preserve the complete CLI/library pair; this extension does not implement those installation paths.
 
-Alternatively, open this repository in VS Code and press **F5** to launch its Extension Development Host. Open `examples/catalyst.intent.md` there as **Atomic Intent Ticket**.
+Alternatively, open this repository in VS Code and press **F5** to launch its Extension Development Host. Open `examples/sherpa.intent.md` there as **Atomic Intent Ticket**.
 
 For a browser-only demo after building, run `npm run preview` and open `http://127.0.0.1:4173`. The demo uses the same built webview, but changes stay in memory. It does **not** install the extension or test VS Code file saving, host navigation, or CLI integration.
 
@@ -126,6 +126,6 @@ Atomic CLI generation, JSON-LD lifting, SHACL validation, signing, and verificat
 
 Full VS Code save/recovery and external CLI synchronization testing is still required. CodeMirror normalizes line endings internally, so exact CRLF round trips through the entire editor are not yet guaranteed, although targeted edit helpers preserve CRLF.
 
-**Local development build, not production-ready:** the inherited dependency tree reports 22 advisories, including one critical. Review `npm audit` and harden dependencies before distribution. `catalyst-local` is a local publisher placeholder, not a registered Marketplace identity.
+**Local development build, not production-ready:** the inherited dependency tree reports 22 advisories, including one critical. Review `npm audit` and harden dependencies before distribution. `sherpa-local` is a local publisher placeholder, not a registered Marketplace identity.
 
 Upstream revision and attribution are documented in `docs/UPSTREAM.md`; the upstream README is retained in `docs/MEO-README.md`. The original MIT `LICENSE` is retained unchanged.

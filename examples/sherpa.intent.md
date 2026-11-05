@@ -7,7 +7,7 @@ priority: medium
 project: VSCO
 seq: 2
 status: needs-review
-title: Rename the desktop application to Catalyst
+title: Rename the desktop application to Sherpa
 uid: 01M4REEBQZEK2QC1ATSBF3CCHC
 view: dev
 entry_type: intent
@@ -16,11 +16,11 @@ created_at: 2026-10-12T16:25:28.947816+00:00
 updated_at: 2026-10-12T16:25:28.947816+00:00
 ---
 :::why
-The user chose Catalyst as the developer tool's app name. Builds must consistently identify themselves as Catalyst and coexist safely with VSCodium instead of sharing its installation and user-data identity.
+The user chose Sherpa as the developer tool's app name. Builds must consistently identify themselves as Sherpa and coexist safely with VSCodium instead of sharing its installation and user-data identity.
 :::
 
 :::acceptance-criterion{#01M4REEBQZEK2QC1ATSBF3CCHC-ac-1 status=met verifiedBy="tests/test_branding.py" evidence="python3 -m unittest discover -s tests -p 'test_branding.py' -v: 12 tests passed, including real stable/insider preparation prefixes, endpoint removal, metadata preservation, distinct identifiers, entry-point agreement, MSI metadata and Bash syntax. git diff --check passed. Native full builds not run."}
-Stable and insider branding generates Catalyst display names, executable/protocol/data-folder identities and distinct Windows/macOS identifiers; local and CI build entry points and Linux/MSI metadata agree; automated branding tests and shell syntax checks pass. Desktop and CLI update endpoints no longer default to VSCodium releases.
+Stable and insider branding generates Sherpa display names, executable/protocol/data-folder identities and distinct Windows/macOS identifiers; local and CI build entry points and Linux/MSI metadata agree; automated branding tests and shell syntax checks pass. Desktop and CLI update endpoints no longer default to VSCodium releases.
 :::
 
 :::task{#01M4REEBQZEK2QC1ATSBF3CCHC-1 status=done criteria=01M4REEBQZEK2QC1ATSBF3CCHC-ac-1}

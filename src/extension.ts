@@ -72,9 +72,9 @@ import {
 } from './shared/timedUi';
 import type { ExportStyleEnvironment } from './export/runtime';
 
-const VIEW_TYPE = 'catalystIntent.editor';
-const TICKET_VIEW_TYPE = 'catalystIntent.ticket';
-const ACTIVE_EDITOR_CONTEXT_KEY = 'catalystIntent.activeEditor';
+const VIEW_TYPE = 'sherpaIntent.editor';
+const TICKET_VIEW_TYPE = 'sherpaIntent.ticket';
+const ACTIVE_EDITOR_CONTEXT_KEY = 'sherpaIntent.activeEditor';
 const FIND_OPTIONS_STATE_KEY = 'findOptions';
 const CUSTOM_THEMES_STATE_KEY = 'customThemes';
 
@@ -306,7 +306,7 @@ export function activate(context: vscode.ExtensionContext): void {
   void migrateLegacyToggleSettings(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.open', async (uriLike?: unknown) => {
+    vscode.commands.registerCommand('sherpaIntent.open', async (uriLike?: unknown) => {
       const targetUri = getPreferredCommandUri(uriLike);
       if (!targetUri) {
         return;
@@ -335,14 +335,14 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.setDefaultEditor', async () => {
+    vscode.commands.registerCommand('sherpaIntent.setDefaultEditor', async () => {
       await syncEditorAssociations(true);
       void showTimedInformationMessage('Markdown Editor Optimized is now set as the default editor for Markdown files.');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.resetThemeToDefault', async () => {
+    vscode.commands.registerCommand('sherpaIntent.resetThemeToDefault', async () => {
       await resetThemeSettingsToDefault();
       provider.notifyThemeChanged();
       void showTimedInformationMessage('Markdown Editor Optimized theme was reset to default.');
@@ -350,7 +350,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.selectTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.selectTheme', async () => {
       const themeItems = buildThemeQuickPickItems(context);
       const selectedTheme = await showTimedQuickPick(
         themeItems,
@@ -377,7 +377,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.importTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.importTheme', async () => {
       const openFiles = await vscode.window.showOpenDialog({
         title: 'Import Theme JSON',
         filters: { 'Theme JSON': ['json'] },
@@ -412,7 +412,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.exportTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.exportTheme', async () => {
       const uri = await vscode.window.showSaveDialog({
         title: 'Export Theme JSON',
         filters: { 'Theme JSON': ['json'] },
@@ -438,7 +438,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.deleteImportedTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.deleteImportedTheme', async () => {
       const importedThemes = getImportedThemes(context);
       if (!importedThemes.length) {
         void showTimedInformationMessage('No imported themes to delete.');
@@ -491,22 +491,22 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.toggleReadOnly', async () => {
+    vscode.commands.registerCommand('sherpaIntent.toggleReadOnly', async () => {
       await provider.toggleReadOnly();
     }),
-    vscode.commands.registerCommand('catalystIntent.toggleMode', async () => {
+    vscode.commands.registerCommand('sherpaIntent.toggleMode', async () => {
       await provider.toggleActiveEditorMode();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.exportHtml', async () => {
+    vscode.commands.registerCommand('sherpaIntent.exportHtml', async () => {
       await provider.exportActiveDocument('html');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.exportPdf', async () => {
+    vscode.commands.registerCommand('sherpaIntent.exportPdf', async () => {
       await provider.exportActiveDocument('pdf');
     })
   );

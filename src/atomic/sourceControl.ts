@@ -44,12 +44,12 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.disposables.push(this.output, this.diffs,
-      vscode.window.registerTreeDataProvider('catalystAtomic.repository', this),
+      vscode.window.registerTreeDataProvider('sherpaAtomic.repository', this),
       vscode.workspace.onDidChangeWorkspaceFolders(() => { void this.discover(); }),
       vscode.workspace.onDidGrantWorkspaceTrust(() => { void this.discover(); })
     );
     const command = (name: string, handler: (...args: any[]) => Promise<unknown>) => {
-      this.disposables.push(vscode.commands.registerCommand(`catalystAtomic.${name}`, (...args) =>
+      this.disposables.push(vscode.commands.registerCommand(`sherpaAtomic.${name}`, (...args) =>
         handler(...args).catch((error) => this.report(error))));
     };
     command('showOutput', async () => { this.output.show(true); });
@@ -296,7 +296,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
           if (this.repositories.has(resolvedRoot)) continue;
           const scm = vscode.scm.createSourceControl('atomic', `Atomic: ${path.basename(resolvedRoot)}`, vscode.Uri.file(resolvedRoot));
           scm.inputBox.placeholder = 'Message for recorded change (tracked changes only)';
-          scm.acceptInputCommand = { command: 'catalystAtomic.record', title: 'Record Change', arguments: [scm] };
+          scm.acceptInputCommand = { command: 'sherpaAtomic.record', title: 'Record Change', arguments: [scm] };
           const tracked = scm.createResourceGroup('tracked', 'Tracked Changes');
           const untracked = scm.createResourceGroup('untracked', 'Untracked Files');
           const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(resolvedRoot, '**/*'));
@@ -332,7 +332,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       owner.scm.count = 0;
       owner.issue = describeAtomicError(error);
       owner.scm.inputBox.enabled = false;
-      owner.scm.statusBarCommands = [{ command: 'catalystAtomic.showOutput', title: `$(warning) ${owner.issue.title}`,
+      owner.scm.statusBarCommands = [{ command: 'sherpaAtomic.showOutput', title: `$(warning) ${owner.issue.title}`,
         tooltip: `${owner.issue.detail}\n\n${owner.issue.recovery}` }];
       owner.session.status = undefined;
       owner.session.history = undefined;
@@ -362,7 +362,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       return { resourceUri: uri, atomicPath: file.path!, owner,
         contextValue: file.status === 3 ? 'atomicUntracked' : 'atomicTracked',
         command: file.status === 3 ? { command: 'vscode.open', title: 'Open Untracked File', arguments: [uri] }
-          : { command: 'catalystAtomic.openFileDiff', title: 'Open File Diff', arguments: [owner, file.path!, status] },
+          : { command: 'sherpaAtomic.openFileDiff', title: 'Open File Diff', arguments: [owner, file.path!, status] },
         decorations: { tooltip: `${label}${file.details ? `: ${file.details}` : ''}`, strikeThrough: file.status === 2,
           iconPath: new vscode.ThemeIcon(file.status === 3 || file.status === 4 ? 'diff-added'
             : file.status === 2 ? 'diff-removed' : file.status === 5 ? 'warning' : 'diff-modified') } };
@@ -370,7 +370,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     owner.tracked.resourceStates = resources.filter((file) => file.contextValue !== 'atomicUntracked');
     owner.untracked.resourceStates = resources.filter((file) => file.contextValue === 'atomicUntracked');
     owner.scm.count = resources.length;
-    owner.scm.statusBarCommands = [{ command: 'catalystAtomic.switchView', title: `$(versions) Atomic: ${status.view}`,
+    owner.scm.statusBarCommands = [{ command: 'sherpaAtomic.switchView', title: `$(versions) Atomic: ${status.view}`,
       arguments: [{ owner }], tooltip: status.needsReindex ? 'Atomic index needs reindexing; automatic reindex is not supported.' : 'Switch Atomic view' }];
     if (previousIdentity !== statusIdentity(status)) {
       owner.graph?.invalidate();
@@ -444,7 +444,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     if (!this.repositories.size) {
       const issue = this.discoveryIssue;
       return [{ label: this.message, tooltip: issue ? `${issue.detail}\n\n${issue.recovery}` : this.message,
-        ...(issue ? { iconPath: new vscode.ThemeIcon('warning'), command: { command: 'catalystAtomic.showOutput', title: 'Show Recovery Guidance' } } : {}) }];
+        ...(issue ? { iconPath: new vscode.ThemeIcon('warning'), command: { command: 'sherpaAtomic.showOutput', title: 'Show Recovery Guidance' } } : {}) }];
     }
     return [...this.repositories.values()].map((owner) => {
       const status = owner.session.status;
@@ -454,10 +454,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
           tooltip: `${owner.session.root}\n\n${issue.detail}\n\n${issue.recovery}`, owner,
           iconPath: new vscode.ThemeIcon('warning'), collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
           children: [
-            { label: issue.title, tooltip: issue.detail, command: { command: 'catalystAtomic.showOutput', title: 'Show Backend Error' } },
+            { label: issue.title, tooltip: issue.detail, command: { command: 'sherpaAtomic.showOutput', title: 'Show Backend Error' } },
             { label: issue.requiresUpgrade ? 'Back up, then run atomic doctor repair-native-indexes' : 'Show recovery guidance',
-              tooltip: issue.recovery, command: { command: 'catalystAtomic.showOutput', title: 'Show Recovery Guidance' } },
-            { label: 'Refresh after resolving the error', command: { command: 'catalystAtomic.refresh', title: 'Refresh' } }
+              tooltip: issue.recovery, command: { command: 'sherpaAtomic.showOutput', title: 'Show Recovery Guidance' } },
+            { label: 'Refresh after resolving the error', command: { command: 'sherpaAtomic.refresh', title: 'Refresh' } }
           ] };
       }
       return { label: path.basename(owner.session.root), description: status?.view ?? 'Unavailable — refresh to retry',
@@ -471,7 +471,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
                  contextValue: info.scope === 'draft' ? 'atomicDraftView' : info.scope === 'shared' ? 'atomicSharedView' : 'atomicUnknownView',
                  iconPath: new vscode.ThemeIcon(info.scope === 'draft' ? 'edit' : info.scope === 'shared' ? 'organization' : 'question'),
                  tooltip: `${viewTreeDescription(view)}${info.parent ? `\nParent: ${info.parent}` : ''}\nClick to inspect; this does not switch the working copy.`,
-                  command: { command: 'catalystAtomic.openView', title: 'Inspect View Changes', arguments: [{ owner, viewName: info.name }] } };
+                  command: { command: 'sherpaAtomic.openView', title: 'Inspect View Changes', arguments: [{ owner, viewName: info.name }] } };
              }) }
         ] };
     });
@@ -496,10 +496,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         // Message first, like other history views; the short hash stays visible as the description.
         return { label: subject || '(no message)', description: id.slice(0, 12),
           tooltip: `${id}\n${entry.message || ''}`, iconPath: new vscode.ThemeIcon('history'),
-          command: { command: 'catalystAtomic.showChange', title: 'Show Change', arguments: [owner, hash, view] } };
+          command: { command: 'sherpaAtomic.showChange', title: 'Show Change', arguments: [owner, hash, view] } };
       });
       if (history.nextCursor) rows.push({ label: 'Load more changes…',
-        command: { command: 'catalystAtomic.moreHistory', title: 'Load More', arguments: [owner, view] } });
+        command: { command: 'sherpaAtomic.moreHistory', title: 'Load More', arguments: [owner, view] } });
       if (!rows.length) rows.push({ label: 'No changes in this view' });
       return rows;
     });

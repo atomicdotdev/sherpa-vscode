@@ -1,5 +1,5 @@
 /**
- * Shared keymap config for catalystIntent.keymap.
+ * Shared keymap config for sherpaIntent.keymap.
  * Used by the extension host (settings parse) and the webview (bindings).
  */
 

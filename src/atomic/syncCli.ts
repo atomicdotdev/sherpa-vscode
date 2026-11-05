@@ -10,12 +10,15 @@ export class AtomicCliError extends Error {
   }
 }
 
-export type AtomicCliOptions = { cwd: string; timeoutMs?: number };
+export type AtomicCliOptions = { cwd: string; timeoutMs?: number; executable?: string; argsPrefix?: string[] };
 
 /** Run the installed Atomic CLI for sync/remote workflows that need its identity and transport handling. */
 export function runAtomicCli(args: string[], options: AtomicCliOptions): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
-    const child = spawn('atomic', args, { cwd: options.cwd, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(options.executable ?? 'atomic', [...(options.argsPrefix ?? []), ...args], {
+      cwd: options.cwd,
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
     const stdout: Buffer[] = [];
     const stderr: Buffer[] = [];
     let outputBytes = 0;

@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import path from 'node:path';
 import { RepositorySession, resolveRepositoryPath, statusLabels } from '../src/atomic/model.ts';
 
 function fixture() {
@@ -11,14 +12,15 @@ function fixture() {
     views: { list: async () => { calls.push(['views']); return { views: [] }; } },
     record: async (...args) => { calls.push(['record', ...args]); return {}; }
   };
-  return { session: new RepositorySession('/repo', client), client, calls, status };
+  return { session: new RepositorySession(path.resolve('/repo'), client), client, calls, status };
 }
 
 describe('Atomic version control model', () => {
   test('validates repository-relative paths', () => {
-    expect(resolveRepositoryPath('/repo', 'src/intent.md')).toBe('/repo/src/intent.md');
+    const repo = path.resolve('/repo');
+    expect(resolveRepositoryPath(repo, 'src/intent.md')).toBe(path.join(repo, 'src/intent.md'));
     for (const file of ['', '.', '..', '../escape', '/absolute', 'src/../../escape']) {
-      expect(() => resolveRepositoryPath('/repo', file)).toThrow();
+      expect(() => resolveRepositoryPath(repo, file)).toThrow();
     }
   });
 

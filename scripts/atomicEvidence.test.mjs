@@ -135,16 +135,15 @@ describe('Evidence explorer request boundary', () => {
     client.change = async () => ({ ...detail(), change: { ...detail().change, hash: { value: bytes(8) } } });
     await explorer.inspectHistoryHash(hex(8));
     const state = events.filter((event) => event.type === 'state').at(-1).state;
-    expect(state.nodes.find((node) => node.id === hex(8))).toBeUndefined();
     expect(events.filter((event) => event.type === 'selection').at(-1).selection.id).toBe(hex(8));
   });
-  test('vault failure does not hide the change graph', async () => {
+  test('vault failure does not hide the published view state', async () => {
     const { explorer, client, events } = fixture();
     client.vault.getIntent = async () => { throw new Error('vault unavailable'); };
     await explorer.handle({ action: 'ready' });
     expect(events.at(-1).type).toBe('state');
-    expect(events.at(-1).state.nodes.length).toBeGreaterThan(0);
-    expect(events.at(-1).state.draft.intents[0].notice).toContain('vault unavailable');
+    expect(events.at(-1).state.view).toBe('dev');
+    expect(events.at(-1).state.draft.intents[0].id).toBe('TEST::1');
   });
   test('a later selection discards an older attestation response', async () => {
     const { explorer, client, events, snapshots } = fixture();
@@ -192,7 +191,7 @@ describe('Evidence explorer request boundary', () => {
     await explorer.handle({ action: 'ready' });
     await explorer.handle({ action: 'more' });
     expect(calls.filter(([name]) => name === 'log').at(-1)[1]).toEqual({ view: 'dev', allViews: false, cursor, budget: { maxItems: 30 } });
-    expect(events.at(-1).state.nodes.find((node) => node.id === hex(2)).loaded).toBe(true);
+    expect(events.at(-1).state.view).toBe('dev');
   });
 });
 
@@ -236,7 +235,7 @@ describe('Draft overview inline evidence', () => {
     const ui = mountAtomicGraph(root, () => {});
     const state = draftState(); ui.receive({ type: 'state', state });
     expect(root.querySelector('.activity-row')).toBeNull();
-    ui.receive({ type: 'selection', selection: state.draft.changes[0] });
+    ui.receive({ type: 'selection', selection: changeEvidence(detail(), hex(1)) });
     expect(root.querySelectorAll('.activity-row')).toHaveLength(2);
     expect(root.querySelector('canvas, svg, aside, [aria-label="Evidence inspector"]')).toBeNull();
     expect(root.querySelector('.change-files')).not.toBeNull();

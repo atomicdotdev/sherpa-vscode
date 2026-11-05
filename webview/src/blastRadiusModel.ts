@@ -26,25 +26,29 @@ export function groupByModule(files: readonly ImpactFile[]): [string, readonly I
   return [...groups].sort(([a, af], [b, bf]) => bf.length - af.length || a.localeCompare(b));
 }
 
-/** Distinct callers/importers per edited file. */
-export function dependentCounts(edges: readonly ImpactEdge[]): ReadonlyMap<string, number> {
-  const sources = edges.reduce((map, edge) => map.set(edge.toPath, new Set([...(map.get(edge.toPath) ?? []), edge.fromPath])), new Map<string, Set<string>>());
+/** Distinct hop-2 callers/importers per edited file; edges between two edited files are not dependents. */
+export function dependentCounts(files: readonly ImpactFile[], edges: readonly ImpactEdge[]): ReadonlyMap<string, number> {
+  const dependents = new Set(files.filter((file) => file.hop === 2).map((file) => file.path));
+  const sources = edges.reduce((map, edge) => {
+    if (!dependents.has(edge.fromPath)) return map;
+    return map.set(edge.toPath, new Set([...(map.get(edge.toPath) ?? []), edge.fromPath]));
+  }, new Map<string, Set<string>>());
   return new Map([...sources].map(([path, set]) => [path, set.size]));
 }
 
 export function reasonsFor(path: string, edges: readonly ImpactEdge[]): string[] {
-  return edges.filter((edge) => edge.fromPath === path).map((edge) => `${edge.relation === 'CALLS' ? 'calls' : 'includes'} ${edge.toPath}`);
+  return edges.filter((edge) => edge.fromPath === path).map((edge) => `${edge.relation.toLowerCase() === 'calls' ? 'calls' : 'includes'} ${edge.toPath}`);
 }
 
-/** "2 dependents" for an edited file, or nothing when no caller/importer was recorded. */
-export function dependentNote(path: string, edges: readonly ImpactEdge[]): string {
-  const count = dependentCounts(edges).get(path) ?? 0;
+/** "2 dependents" for an edited file, or nothing when no hop-2 caller/importer was recorded. */
+export function dependentNote(path: string, files: readonly ImpactFile[], edges: readonly ImpactEdge[]): string {
+  const count = dependentCounts(files, edges).get(path) ?? 0;
   return count ? plural(count, 'dependent') : '';
 }
 
 /** Full reason for a narrowed list, where the group heading no longer says the file was edited. */
-export function describeEdited(path: string, edges: readonly ImpactEdge[]): string {
-  return ['edited directly', dependentNote(path, edges)].filter(Boolean).join(' · ');
+export function describeEdited(path: string, files: readonly ImpactFile[], edges: readonly ImpactEdge[]): string {
+  return ['edited directly', dependentNote(path, files, edges)].filter(Boolean).join(' · ');
 }
 
 /** One honest sentence; coverage caveats live in the mode label and the dependents note, not repeated here. */

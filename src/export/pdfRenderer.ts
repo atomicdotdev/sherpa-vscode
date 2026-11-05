@@ -63,6 +63,10 @@ export async function finalizeHtmlExportInHeadlessBrowser(options: HeadlessExpor
   });
 }
 
+export function headlessBrowserLaunchArgs(): string[] {
+  return ['--allow-file-access-from-files', '--no-first-run', '--no-default-browser-check'];
+}
+
 async function withPreparedExportPage<T>(
   options: HeadlessExportOptions,
   runtimeOptions: {
@@ -83,12 +87,7 @@ async function withPreparedExportPage<T>(
     browser = await puppeteer.launch({
       executablePath: browserExecutablePath,
       headless: true,
-      args: [
-        '--allow-file-access-from-files',
-        '--disable-web-security',
-        '--no-first-run',
-        '--no-default-browser-check'
-      ]
+      args: headlessBrowserLaunchArgs()
     });
 
     const page = await browser.newPage();

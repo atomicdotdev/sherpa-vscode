@@ -38,6 +38,38 @@ export function resolveRepositoryPath(root: string, file: string): string {
   return resolved;
 }
 
+function identityPart(value: unknown): string {
+  if (value instanceof Uint8Array) return Buffer.from(value).toString('hex');
+  if (value && typeof value === 'object' && 'value' in value) {
+    const nested = (value as { value?: unknown }).value;
+    if (nested instanceof Uint8Array) return Buffer.from(nested).toString('hex');
+  }
+  return value == null ? '' : String(value);
+}
+
+/** Recorded view identity only: an ordinary file save must not invalidate selected evidence. */
+export function statusIdentity(status?: Status): string | undefined {
+  if (!status) return undefined;
+  return `${status.view ?? ''}\u0000${identityPart(status.snapshot)}\u0000${identityPart(status.viewMerkle)}`;
+}
+
+/** Keep one malformed backend path from aborting the whole SCM resource list. */
+export function partitionRepositoryFiles<T extends { path?: string | null }>(
+  root: string,
+  files: readonly T[]
+): { valid: Array<{ file: T; absolutePath: string }>; invalid: Array<{ path: string; error: string }> } {
+  const valid: Array<{ file: T; absolutePath: string }> = [];
+  const invalid: Array<{ path: string; error: string }> = [];
+  for (const file of files) {
+    try {
+      valid.push({ file, absolutePath: resolveRepositoryPath(root, file.path ?? '') });
+    } catch (error) {
+      invalid.push({ path: file.path ?? '', error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  return { valid, invalid };
+}
+
 export const statusLabels: Record<number, string> = {
   0: 'Unknown', 1: 'Modified', 2: 'Deleted', 3: 'Untracked', 4: 'Added', 5: 'Conflicted'
 };

@@ -12,7 +12,7 @@ Local packages are written to `releases/`. Use the version confirmed by the buil
 
 **Atomic prerequisite:** Atomic features require a compatible complete Atomic installation on the **extension host**, including its CLI, platform library, and `libatomic-runtime.json`. This is a universal JavaScript-only VSIX, not a bundled native runtime. Install the complete release archive into a versioned directory and put it on PATH, or set an absolute `ATOMIC_RUNTIME_DIR` before launching the editor. Older CLI-only installations are insufficient. For Remote SSH/WSL/containers, install Atomic remotely. Fully restart the editor after environment/runtime changes. Intent/Markdown editing does not require loading the native runtime.
 
-1. In VS Code, VSCodium, Catalyst, or another compatible editor, open the Command Palette.
+1. In VS Code, VSCodium, or another compatible editor, open the Command Palette.
 2. Run **Extensions: Install from VSIX…** and select that file.
 3. Reload the editor window if prompted.
 4. Open a vault `intent.md` or `*.intent.md` file. These filenames now default to **Atomic Intent Ticket**.
@@ -20,7 +20,7 @@ Local packages are written to `releases/`. Use the version confirmed by the buil
 
 **Do not choose Markdown Preview.** It is the editor's generic read-only Markdown renderer and cannot display Atomic ticket fields.
 
-The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code API 1.97+. Editor command, setting, and custom-editor IDs retain `catalystIntent.*`; version control commands retain `catalystAtomic.*` for compatibility with existing configurations. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
+The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code API 1.97+. Editor commands, settings, and custom-editor IDs use the `sherpaIntent.*` namespace; version-control commands use `sherpaAtomic.*`. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
 
 ## Ticket layout
 
@@ -40,12 +40,14 @@ Status suggestions are editing conveniences, not a schema. Setting a criterion t
 
 Open a **trusted, local filesystem** workspace in an Atomic repository, then open **Source Control**:
 
-- **Atomic: <repository>** shows tracked changes and untracked files separately, alongside any Git provider. Workspace folders inside a repository are supported; multiple repositories get separate providers.
+- **Atomic: <repository>** shows tracked changes and untracked files separately, alongside other SCM providers. Workspace folders inside a repository are supported; multiple repositories get separate providers.
 - Click a **Tracked Changes** file to open VS Code's native diff editor: the recorded view baseline on the left and the live working file (including its editor buffer) on the right. Adds use an empty recorded side; deletions use an empty working side. Untracked files still open normally. Opening a diff never restores or writes files.
-- Use **+ / Atomic: Add File** on an untracked file to track it. This is not Git staging; there is no invented staging/index layer.
+- Use **+ / Atomic: Add File** on an untracked file to track it. This is not a staging layer; there is no invented index.
 - Enter a message and choose **✓ / Atomic: Record Tracked Changes** (or accept the input box). This records the displayed tracked paths, not untracked files, using the displayed status's concurrency fence. Save or close unsaved repository documents first. Backend fence failures are surfaced, not retried automatically.
 - **Atomic History & Views** lists typed **Draft / Shared** views. Expand a view to see its change hashes, then click a hash to inspect the change without switching the working copy. **Load more changes…** pages through that view's history.
 - Right-click a repository in that panel for **Create View**, **Switch View**, or **Delete View**. New views derive from the displayed current view. Deletion requires confirmation and excludes the current view. Switching never bypasses Atomic's dirty-working-copy check and also refuses unsaved editor documents.
+- **Atomic: Push View** and **Atomic: Pull View** choose a remote and view names. Enter a configured remote name or an `https://atomic.storage/...` project URL; the installed Atomic CLI resolves identity authentication and project binding. **Atomic: Add Remote** records a remote in the repository.
+- **Atomic: Insert View Into View** inserts all changes from one view into another with Atomic's dependency closure and conflict rules. It asks for confirmation and uses `atomic insert --confirm view`.
 - Filesystem events trigger debounced refreshes; **Atomic: Refresh Version Control** retries discovery and reloads state. Errors are available in the **Atomic Version Control** output channel.
 
 ### Change detail
@@ -82,7 +84,7 @@ This explicitly writes/rebuilds derived database indexes from repository authori
 
 All repository calls run in the extension host through `nodeatomic` → the separately installed Node-enabled `libatomic.dylib`, `libatomic.so`, or `libatomic.dll`. nodeatomic selects the host OS/CPU, validates release metadata/checksums and its exact generated protobuf descriptor, then loads the library in-process. It follows the active Atomic executable on PATH (including executable symlinks), or explicit `ATOMIC_RUNTIME_DIR`, `LIBATOMIC_ADDON`, or `ATOMIC_BIN` configuration. Do not set `ATOMIC_RUNTIME_DIR` together with `LIBATOMIC_ADDON`; paths must be absolute. Automatic discovery excludes empty/relative PATH entries and the current working directory. Use a trusted installation PATH, not workspace-controlled executables.
 
-There is no daemon startup, CLI subprocess for repository operations, socket, direct database access, or webview native access. Missing/incompatible runtimes fail with installation/recovery guidance, not an automatic download, compiler invocation, schema repair, or fallback to another installation. Native editor diffs use read-only backend content; no repository initialization, untracking, restore mutation, pull/push, signing, or attestation creation is added by this panel. The existing Git-specific editor gutter/blame features remain Git-specific.
+There is no daemon startup, socket, direct database access, or webview native access for repository reads and mutations. The explicit **Push View**, **Pull View**, **Insert View Into View**, and **Add Remote** commands invoke the installed Atomic CLI because remote authentication, project binding, and view-promotion semantics are owned by that CLI. They pass argument arrays (never a shell) and surface bounded stdout/stderr in **Atomic Version Control**. Missing/incompatible runtimes fail with installation/recovery guidance, not an automatic download, compiler invocation, schema repair, or fallback to another installation. Native editor diffs use read-only backend content; no automatic repository initialization, untracking, restore mutation, signing, or attestation creation is added by this panel.
 
 ## Develop and package
 
@@ -110,7 +112,7 @@ The extension build bundles only JavaScript/protobuf dependencies as `dist/nodea
 
 **Universal packaging is not a claim of tested support on every host.** The external producer currently supplies macOS ARM64, Linux x64 glibc, and Windows x64 runtimes. Validate the same VSIX inside the actual VS Code/Electron extension host on each platform before claiming compatibility. Node-only integration tests do not establish Electron compatibility. Remote hosts need their own matching runtime. Browser preview does not exercise this panel. External Atomic installers and self-update must preserve the complete CLI/library pair; this extension does not implement those installation paths.
 
-Alternatively, open this repository in VS Code and press **F5** to launch its Extension Development Host. Open `examples/catalyst.intent.md` there as **Atomic Intent Ticket**.
+Alternatively, open this repository in VS Code and press **F5** to launch its Extension Development Host. Open `examples/sherpa.intent.md` there as **Atomic Intent Ticket**.
 
 For a browser-only demo after building, run `npm run preview` and open `http://127.0.0.1:4173`. The demo uses the same built webview, but changes stay in memory. It does **not** install the extension or test VS Code file saving, host navigation, or CLI integration.
 
@@ -124,6 +126,6 @@ Atomic CLI generation, JSON-LD lifting, SHACL validation, signing, and verificat
 
 Full VS Code save/recovery and external CLI synchronization testing is still required. CodeMirror normalizes line endings internally, so exact CRLF round trips through the entire editor are not yet guaranteed, although targeted edit helpers preserve CRLF.
 
-**Local development build, not production-ready:** the inherited dependency tree reports 22 advisories, including one critical. Review `npm audit` and harden dependencies before distribution. `catalyst-local` is a local publisher placeholder, not a registered Marketplace identity.
+**Local development build, not production-ready:** the inherited dependency tree reports 22 advisories, including one critical. Review `npm audit` and harden dependencies before distribution. `sherpa-local` is a local publisher placeholder, not a registered Marketplace identity.
 
 Upstream revision and attribution are documented in `docs/UPSTREAM.md`; the upstream README is retained in `docs/MEO-README.md`. The original MIT `LICENSE` is retained unchanged.

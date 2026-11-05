@@ -15,13 +15,20 @@ describe('blast radius model', () => {
     expect(groupByModule(files).map(([module, group]) => `${module}:${group.length}`)).toEqual(['(root):2', 'src:2', 'cli:1', 'tests:1']);
   });
   test('dependents are counted per edited file and explained per dependent', () => {
-    expect(dependentCounts(edges).get('src/api.ts')).toBe(3);
+    expect(dependentCounts(files, edges).get('src/api.ts')).toBe(3);
     expect(reasonsFor('src/ui.ts', edges)).toEqual(['includes src/api.ts']);
-    expect(describeEdited('src/api.ts', edges)).toBe('edited directly · 3 dependents');
-    expect(describeEdited('README.md', edges)).toBe('edited directly');
-    expect(dependentNote('src/api.ts', edges)).toBe('3 dependents');
-    expect(dependentNote('README.md', edges)).toBe('');
-    expect(describeEdited('x', [{ fromPath: 'a', toPath: 'x', relation: 'CALLS' }])).toBe('edited directly · 1 dependent');
+    expect(describeEdited('src/api.ts', files, edges)).toBe('edited directly · 3 dependents');
+    expect(describeEdited('README.md', files, edges)).toBe('edited directly');
+    expect(dependentNote('src/api.ts', files, edges)).toBe('3 dependents');
+    expect(dependentNote('README.md', files, edges)).toBe('');
+    expect(describeEdited('x', [{ path: 'x', hop: 1 }, { path: 'a', hop: 2 }], [{ fromPath: 'a', toPath: 'x', relation: 'CALLS' }])).toBe('edited directly · 1 dependent');
+  });
+  test('edges between two edited files are not reported as dependents', () => {
+    const filesWithEditedImporter = [...files, { path: 'src/other.ts', hop: 1 }];
+    const mixedEdges = [...edges, { fromPath: 'src/other.ts', toPath: './package.json', relation: 'INCLUDES' }];
+    expect(dependentCounts(filesWithEditedImporter, mixedEdges).get('./package.json')).toBeUndefined();
+    expect(dependentNote('./package.json', filesWithEditedImporter, mixedEdges)).toBe('');
+    expect(dependentCounts(filesWithEditedImporter, mixedEdges).get('src/api.ts')).toBe(3);
   });
   test('summary and heading never present unknown or partial analysis as zero', () => {
     expect(summarize(files, 'structural')).toBe('3 files edited · 3 dependents in 3 modules');

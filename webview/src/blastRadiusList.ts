@@ -28,7 +28,7 @@ export function renderFileList(drill: HTMLElement, context: ListContext, selecti
       link.addEventListener('click', () => { if (context.live()) open(file.path); });
       item.append(link);
     } else item.append(el('span', file.path, 'blast-path'));
-    const reason = file.hop !== 1 ? reasonsFor(file.path, context.edges).join(' · ') : narrowed ? describeEdited(file.path, context.edges) : dependentNote(file.path, context.edges);
+    const reason = file.hop !== 1 ? reasonsFor(file.path, context.edges).join(' · ') : narrowed ? describeEdited(file.path, context.files, context.edges) : dependentNote(file.path, context.files, context.edges);
     if (reason) item.append(doc.createTextNode(' '), el('span', reason, 'blast-reason'));
     return item;
   };

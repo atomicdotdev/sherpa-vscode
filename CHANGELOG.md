@@ -2,7 +2,7 @@
 
 ## Unreleased
 - Rename the extension to Atomic Sherpa (`atomic-sherpa`) and use the backpack artwork as its icon.
-- Update intent-editor labels and settings descriptions while preserving existing command, setting, and editor IDs.
+- Rename command, setting, and custom-editor IDs from `catalyst*` to `sherpa*` for the public release.
 
 ## 0.2.12
 - Package one universal, JavaScript-only VSIX; Atomic's platform library is supplied by the separate Atomic installation on the extension host.
@@ -13,7 +13,7 @@
 - Platform-specific Node/Electron host testing remains required before claiming tested support; no Marketplace publication is performed.
 
 ## 0.2.11
-- Rename the extension to Atomic Catalyst with the registered package name `atomic-catalyst` and publisher ID `atomicdotdev`.
+- Set the extension publisher ID to `atomicdotdev`.
 - Use the flask artwork as the extension icon.
 - Refresh the description, categories, keywords, and README to cover intents, source code, Draft and Shared views, change history, and blast-radius analysis.
 - Replace inherited MEO branding in settings descriptions while preserving upstream attribution and existing command, setting, and editor IDs.

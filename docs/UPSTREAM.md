@@ -12,7 +12,7 @@ The editing foundation is CodeMirror 6 with MEO's live/source presentation and V
 
 Atomic-specific additions live in `webview/src/helpers/atomicIntentDocument.ts`, `webview/src/helpers/atomicIntent.ts`, and `src/shared/atomicFileReference.ts`. The directive parser indexes syntax for presentation; it is not Atomic's canonical lifter or validator.
 
-The development manifest uses `catalyst-local` as a placeholder publisher; this is not a claim of a registered Marketplace publisher. Version 0.2.0 isolates all command/settings/editor IDs under `catalystIntent.*`, so the original MEO extension can remain installed. Intent filenames default to a separately registered ticket editor; unrelated Markdown remains opt-in.
+The development manifest uses `sherpa-local` as a placeholder publisher; this is not a claim of a registered Marketplace publisher. Version 0.2.0 isolates all command/settings/editor IDs under `sherpaIntent.*`, so the original MEO extension can remain installed. Intent filenames default to a separately registered ticket editor; unrelated Markdown remains opt-in.
 
 Review corrected the initial UI direction: an Atomic intent should render as a Jira-style ticket, not a decorated Markdown document. `atomicTicket.ts` supplies a title/status header, editable issue sections, task and criterion cards, and a metadata sidebar. The underlying MEO editor remains available in Source mode; YAML and directive syntax are hidden in the ticket surface.
 

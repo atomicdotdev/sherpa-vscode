@@ -1,10 +1,16 @@
 const liveModeFailureNoticeMessage = 'Live mode failed to render this document. Switched to Source mode.';
 const editorUpdateFailureNoticeMessage = 'Editor failed to update this document. Try reopening the file.';
-const externalSyncConflictNoticeMessage = 'Document changed outside the editor. Showing host content. Your unsaved MEO buffer was discarded from the view (use Undo if needed).';
+const externalSyncConflictNoticeMessage = 'Document changed outside the editor. Showing host content. Your unsaved buffer is still available with Restore draft.';
 const externalSyncAdoptFailureNoticeMessage = 'Could not apply an external document update. Reload from the host document or reopen the file.';
 
+export type EditorNoticeOptions = {
+  showReload?: boolean;
+  showRestore?: boolean;
+  onRestore?: () => void;
+};
+
 export interface EditorNotice {
-  setEditorNotice: (message: string, kind?: string, options?: { showReload?: boolean }) => void;
+  setEditorNotice: (message: string, kind?: string, options?: EditorNoticeOptions) => void;
   clearEditorNotice: () => void;
 }
 
@@ -49,15 +55,19 @@ export interface FailureNoticeState {
   message: string;
   kind: string;
   showReload: boolean;
+  showRestore: boolean;
+  onRestore?: () => void;
 }
 
 export const createFailureNoticeManager = (notice: EditorNotice) => {
-  let failureNotice: FailureNoticeState = { message: '', kind: 'error', showReload: false };
+  let failureNotice: FailureNoticeState = { message: '', kind: 'error', showReload: false, showRestore: false };
 
   const updateEditorNotice = () => {
     if (failureNotice.message) {
       notice.setEditorNotice(failureNotice.message, failureNotice.kind, {
-        showReload: failureNotice.showReload
+        showReload: failureNotice.showReload,
+        showRestore: failureNotice.showRestore,
+        onRestore: failureNotice.onRestore
       });
       return;
     }
@@ -67,9 +77,15 @@ export const createFailureNoticeManager = (notice: EditorNotice) => {
   const setFailureNotice = (
     message: string,
     kind: 'error' | 'warning' = 'error',
-    options?: { showReload?: boolean }
+    options?: EditorNoticeOptions
   ): void => {
-    failureNotice = { message, kind, showReload: options?.showReload === true };
+    failureNotice = {
+      message,
+      kind,
+      showReload: options?.showReload === true,
+      showRestore: options?.showRestore === true,
+      onRestore: options?.onRestore
+    };
     updateEditorNotice();
   };
 
@@ -77,7 +93,7 @@ export const createFailureNoticeManager = (notice: EditorNotice) => {
     if (!failureNotice.message) {
       return;
     }
-    failureNotice = { message: '', kind: 'error', showReload: false };
+    failureNotice = { message: '', kind: 'error', showReload: false, showRestore: false };
     updateEditorNotice();
   };
 

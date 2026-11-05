@@ -2,10 +2,12 @@ import * as path from 'node:path';
 import { stat, lstat, realpath } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
-import { RepositorySession, resolveRepositoryPath, statusLabels, summarizeView, viewTreeDescription, type History } from './model';
+import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
 import { displayChangeHash } from '../shared/atomicHash';
+import { buildInsertViewArgs, buildPullArgs, buildPushArgs } from './syncArgs';
+import { runAtomicCli } from './syncCli';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import { AtomicDiffEditor } from './diffEditor';
 import { revisionText } from './fileDiff';
@@ -42,12 +44,12 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.disposables.push(this.output, this.diffs,
-      vscode.window.registerTreeDataProvider('catalystAtomic.repository', this),
+      vscode.window.registerTreeDataProvider('sherpaAtomic.repository', this),
       vscode.workspace.onDidChangeWorkspaceFolders(() => { void this.discover(); }),
       vscode.workspace.onDidGrantWorkspaceTrust(() => { void this.discover(); })
     );
     const command = (name: string, handler: (...args: any[]) => Promise<unknown>) => {
-      this.disposables.push(vscode.commands.registerCommand(`catalystAtomic.${name}`, (...args) =>
+      this.disposables.push(vscode.commands.registerCommand(`sherpaAtomic.${name}`, (...args) =>
         handler(...args).catch((error) => this.report(error))));
     };
     command('showOutput', async () => { this.output.show(true); });
@@ -178,6 +180,55 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         this.changed.fire(undefined);
       });
     });
+    command('push', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const fromView = await this.pickView(owner, 'Local view to push', owner.session.status?.view);
+      if (fromView === undefined) return;
+      const toView = await vscode.window.showInputBox({ prompt: 'Remote view name', value: fromView });
+      if (toView === undefined) return;
+      const remote = await this.promptRemote();
+      if (remote === undefined) return;
+      await this.runSync(owner, 'Push view', buildPushArgs({ remote, fromView, toView }));
+    });
+    command('pull', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const remote = await this.promptRemote();
+      if (remote === undefined) return;
+      const fromView = await vscode.window.showInputBox({ prompt: 'Remote view to pull from', value: owner.session.status?.view });
+      if (fromView === undefined) return;
+      const toView = await this.pickView(owner, 'Local view to pull into', owner.session.status?.view);
+      if (toView === undefined) return;
+      await this.runSync(owner, 'Pull view', buildPullArgs({ remote, fromView, toView }));
+    });
+    command('insertView', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const source = await this.pickView(owner, 'Source view to insert from', owner.session.status?.view);
+      if (source === undefined) return;
+      const target = await this.pickView(owner, 'Target view', owner.session.status?.view);
+      if (target === undefined) return;
+      if (source === target) throw new Error('Choose different source and target views.');
+      const confirmed = await vscode.window.showWarningMessage(
+        `Insert all changes from “${source}” into “${target}”?`,
+        { modal: true },
+        'Insert View'
+      );
+      if (confirmed !== 'Insert View') return;
+      await this.runSync(owner, 'Insert view', buildInsertViewArgs(source, target));
+    });
+    command('addRemote', async (node?: Node) => {
+      const owner = node?.owner ?? await this.pick();
+      if (!owner) return;
+      const name = await vscode.window.showInputBox({ prompt: 'Remote name', value: 'origin',
+        validateInput: (value) => value.trim() ? undefined : 'A remote name is required' });
+      if (name === undefined) return;
+      const url = await vscode.window.showInputBox({ prompt: 'Remote URL (for example an atomic.storage project URL)',
+        placeHolder: 'https://atomic.storage/…', validateInput: (value) => value.trim() ? undefined : 'A remote URL is required' });
+      if (url === undefined) return;
+      await this.runSync(owner, 'Add remote', ['remote', 'add', name.trim(), url.trim()]);
+    });
     void this.discover();
   }
 
@@ -245,7 +296,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
           if (this.repositories.has(resolvedRoot)) continue;
           const scm = vscode.scm.createSourceControl('atomic', `Atomic: ${path.basename(resolvedRoot)}`, vscode.Uri.file(resolvedRoot));
           scm.inputBox.placeholder = 'Message for recorded change (tracked changes only)';
-          scm.acceptInputCommand = { command: 'catalystAtomic.record', title: 'Record Change', arguments: [scm] };
+          scm.acceptInputCommand = { command: 'sherpaAtomic.record', title: 'Record Change', arguments: [scm] };
           const tracked = scm.createResourceGroup('tracked', 'Tracked Changes');
           const untracked = scm.createResourceGroup('untracked', 'Untracked Files');
           const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(resolvedRoot, '**/*'));
@@ -281,7 +332,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       owner.scm.count = 0;
       owner.issue = describeAtomicError(error);
       owner.scm.inputBox.enabled = false;
-      owner.scm.statusBarCommands = [{ command: 'catalystAtomic.showOutput', title: `$(warning) ${owner.issue.title}`,
+      owner.scm.statusBarCommands = [{ command: 'sherpaAtomic.showOutput', title: `$(warning) ${owner.issue.title}`,
         tooltip: `${owner.issue.detail}\n\n${owner.issue.recovery}` }];
       owner.session.status = undefined;
       owner.session.history = undefined;
@@ -294,18 +345,24 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
 
   private async update(owner: RepositoryUI): Promise<void> {
     if (!this.isOwner(owner)) return;
+    const previousIdentity = statusIdentity(owner.session.status);
     await owner.session.refresh();
     if (!this.isOwner(owner)) return;
     const status = owner.session.status!;
     owner.issue = undefined;
     owner.scm.inputBox.enabled = true;
-    const resources: Resource[] = status.files.map((file) => {
-      const uri = vscode.Uri.file(resolveRepositoryPath(owner.session.root, file.path!));
+    const { valid, invalid } = partitionRepositoryFiles(owner.session.root, status.files);
+    if (invalid.length) {
+      this.output.appendLine(`Skipped ${invalid.length} invalid Atomic path(s) in ${owner.session.root}: ${invalid
+        .map((entry) => `${entry.path || '(empty)'}: ${entry.error}`).join('; ')}`);
+    }
+    const resources: Resource[] = valid.map(({ file, absolutePath }) => {
+      const uri = vscode.Uri.file(absolutePath);
       const label = statusLabels[file.status ?? 0] ?? 'Unknown';
       return { resourceUri: uri, atomicPath: file.path!, owner,
         contextValue: file.status === 3 ? 'atomicUntracked' : 'atomicTracked',
         command: file.status === 3 ? { command: 'vscode.open', title: 'Open Untracked File', arguments: [uri] }
-          : { command: 'catalystAtomic.openFileDiff', title: 'Open File Diff', arguments: [owner, file.path!, status] },
+          : { command: 'sherpaAtomic.openFileDiff', title: 'Open File Diff', arguments: [owner, file.path!, status] },
         decorations: { tooltip: `${label}${file.details ? `: ${file.details}` : ''}`, strikeThrough: file.status === 2,
           iconPath: new vscode.ThemeIcon(file.status === 3 || file.status === 4 ? 'diff-added'
             : file.status === 2 ? 'diff-removed' : file.status === 5 ? 'warning' : 'diff-modified') } };
@@ -313,10 +370,12 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     owner.tracked.resourceStates = resources.filter((file) => file.contextValue !== 'atomicUntracked');
     owner.untracked.resourceStates = resources.filter((file) => file.contextValue === 'atomicUntracked');
     owner.scm.count = resources.length;
-    owner.scm.statusBarCommands = [{ command: 'catalystAtomic.switchView', title: `$(versions) Atomic: ${status.view}`,
+    owner.scm.statusBarCommands = [{ command: 'sherpaAtomic.switchView', title: `$(versions) Atomic: ${status.view}`,
       arguments: [{ owner }], tooltip: status.needsReindex ? 'Atomic index needs reindexing; automatic reindex is not supported.' : 'Switch Atomic view' }];
-    owner.graph?.invalidate();
-    owner.viewHistory = undefined;
+    if (previousIdentity !== statusIdentity(status)) {
+      owner.graph?.invalidate();
+      owner.viewHistory = undefined;
+    }
     this.changed.fire(undefined);
   }
 
@@ -336,6 +395,38 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     }));
   }
 
+  private async promptRemote(): Promise<string | undefined> {
+    return vscode.window.showInputBox({
+      prompt: 'Atomic remote name or URL',
+      value: 'origin',
+      placeHolder: 'origin or https://atomic.storage/…',
+      validateInput: (value) => value.trim() ? undefined : 'A remote name or URL is required'
+    });
+  }
+
+  private async pickView(owner: RepositoryUI, placeHolder: string, defaultValue?: string): Promise<string | undefined> {
+    const names = [...new Set((owner.session.views?.views ?? []).map((view) => view.name).filter((name): name is string => Boolean(name)))];
+    if (!names.length) {
+      return vscode.window.showInputBox({ prompt: placeHolder, value: defaultValue ?? '' });
+    }
+    const picked = await vscode.window.showQuickPick(names, { placeHolder });
+    return picked;
+  }
+
+  private async runSync(owner: RepositoryUI, label: string, args: string[]): Promise<void> {
+    this.requireTrusted();
+    this.output.appendLine(`atomic ${args.join(' ')}`);
+    await vscode.window.withProgress(
+      { location: vscode.ProgressLocation.Notification, title: `Atomic: ${label}`, cancellable: false },
+      async () => {
+        const result = await owner.session.run(() => runAtomicCli(args, { cwd: owner.session.root }));
+        if (result.stdout.trim()) this.output.appendLine(result.stdout.trim());
+        if (result.stderr.trim()) this.output.appendLine(result.stderr.trim());
+      }
+    );
+    await this.update(owner);
+  }
+
   private async pick(source?: vscode.SourceControl): Promise<RepositoryUI | undefined> {
     const owners = [...this.repositories.values()];
     if (source) return owners.find((owner) => owner.scm === source);
@@ -353,7 +444,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     if (!this.repositories.size) {
       const issue = this.discoveryIssue;
       return [{ label: this.message, tooltip: issue ? `${issue.detail}\n\n${issue.recovery}` : this.message,
-        ...(issue ? { iconPath: new vscode.ThemeIcon('warning'), command: { command: 'catalystAtomic.showOutput', title: 'Show Recovery Guidance' } } : {}) }];
+        ...(issue ? { iconPath: new vscode.ThemeIcon('warning'), command: { command: 'sherpaAtomic.showOutput', title: 'Show Recovery Guidance' } } : {}) }];
     }
     return [...this.repositories.values()].map((owner) => {
       const status = owner.session.status;
@@ -363,10 +454,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
           tooltip: `${owner.session.root}\n\n${issue.detail}\n\n${issue.recovery}`, owner,
           iconPath: new vscode.ThemeIcon('warning'), collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
           children: [
-            { label: issue.title, tooltip: issue.detail, command: { command: 'catalystAtomic.showOutput', title: 'Show Backend Error' } },
+            { label: issue.title, tooltip: issue.detail, command: { command: 'sherpaAtomic.showOutput', title: 'Show Backend Error' } },
             { label: issue.requiresUpgrade ? 'Back up, then run atomic doctor repair-native-indexes' : 'Show recovery guidance',
-              tooltip: issue.recovery, command: { command: 'catalystAtomic.showOutput', title: 'Show Recovery Guidance' } },
-            { label: 'Refresh after resolving the error', command: { command: 'catalystAtomic.refresh', title: 'Refresh' } }
+              tooltip: issue.recovery, command: { command: 'sherpaAtomic.showOutput', title: 'Show Recovery Guidance' } },
+            { label: 'Refresh after resolving the error', command: { command: 'sherpaAtomic.refresh', title: 'Refresh' } }
           ] };
       }
       return { label: path.basename(owner.session.root), description: status?.view ?? 'Unavailable — refresh to retry',
@@ -380,7 +471,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
                  contextValue: info.scope === 'draft' ? 'atomicDraftView' : info.scope === 'shared' ? 'atomicSharedView' : 'atomicUnknownView',
                  iconPath: new vscode.ThemeIcon(info.scope === 'draft' ? 'edit' : info.scope === 'shared' ? 'organization' : 'question'),
                  tooltip: `${viewTreeDescription(view)}${info.parent ? `\nParent: ${info.parent}` : ''}\nClick to inspect; this does not switch the working copy.`,
-                  command: { command: 'catalystAtomic.openView', title: 'Inspect View Changes', arguments: [{ owner, viewName: info.name }] } };
+                  command: { command: 'sherpaAtomic.openView', title: 'Inspect View Changes', arguments: [{ owner, viewName: info.name }] } };
              }) }
         ] };
     });
@@ -404,11 +495,11 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         const subject = (entry.message || '').split(/\r?\n/)[0].trim();
         // Message first, like other history views; the short hash stays visible as the description.
         return { label: subject || '(no message)', description: id.slice(0, 12),
-          tooltip: `${id}\n${entry.message || ''}`, iconPath: new vscode.ThemeIcon('git-commit'),
-          command: { command: 'catalystAtomic.showChange', title: 'Show Change', arguments: [owner, hash, view] } };
+          tooltip: `${id}\n${entry.message || ''}`, iconPath: new vscode.ThemeIcon('history'),
+          command: { command: 'sherpaAtomic.showChange', title: 'Show Change', arguments: [owner, hash, view] } };
       });
       if (history.nextCursor) rows.push({ label: 'Load more changes…',
-        command: { command: 'catalystAtomic.moreHistory', title: 'Load More', arguments: [owner, view] } });
+        command: { command: 'sherpaAtomic.moreHistory', title: 'Load More', arguments: [owner, view] } });
       if (!rows.length) rows.push({ label: 'No changes in this view' });
       return rows;
     });

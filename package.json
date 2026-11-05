@@ -46,7 +46,7 @@
     "views": {
       "scm": [
         {
-          "id": "catalystAtomic.repository",
+          "id": "sherpaAtomic.repository",
           "name": "Atomic History & Views",
           "icon": "backpack.png"
         }
@@ -62,75 +62,79 @@
       }
     ],
     "commands": [
-      { "command": "catalystAtomic.openGraph", "title": "Atomic: Inspect View Changes", "icon": "$(git-commit)" },
-      { "command": "catalystAtomic.refresh", "title": "Atomic: Refresh Version Control", "icon": "$(refresh)" },
-      { "command": "catalystAtomic.record", "title": "Atomic: Record Tracked Changes", "icon": "$(check)" },
-      { "command": "catalystAtomic.add", "title": "Atomic: Add File", "icon": "$(add)" },
-      { "command": "catalystAtomic.createView", "title": "Atomic: Create View", "icon": "$(add)" },
-      { "command": "catalystAtomic.switchView", "title": "Atomic: Switch View", "icon": "$(versions)" },
-      { "command": "catalystAtomic.deleteView", "title": "Atomic: Delete View", "icon": "$(trash)" },
+      { "command": "sherpaAtomic.openGraph", "title": "Atomic: Inspect View Changes", "icon": "$(history)" },
+      { "command": "sherpaAtomic.refresh", "title": "Atomic: Refresh Version Control", "icon": "$(refresh)" },
+      { "command": "sherpaAtomic.record", "title": "Atomic: Record Tracked Changes", "icon": "$(check)" },
+      { "command": "sherpaAtomic.add", "title": "Atomic: Add File", "icon": "$(add)" },
+      { "command": "sherpaAtomic.createView", "title": "Atomic: Create View", "icon": "$(add)" },
+      { "command": "sherpaAtomic.switchView", "title": "Atomic: Switch View", "icon": "$(versions)" },
+      { "command": "sherpaAtomic.deleteView", "title": "Atomic: Delete View", "icon": "$(trash)" },
+      { "command": "sherpaAtomic.push", "title": "Atomic: Push View", "icon": "$(cloud-upload)" },
+      { "command": "sherpaAtomic.pull", "title": "Atomic: Pull View", "icon": "$(cloud-download)" },
+      { "command": "sherpaAtomic.insertView", "title": "Atomic: Insert View Into View", "icon": "$(arrow-right)" },
+      { "command": "sherpaAtomic.addRemote", "title": "Atomic: Add Remote", "icon": "$(plug)" },
       {
-        "command": "catalystIntent.open",
+        "command": "sherpaIntent.open",
         "title": "Atomic: Open Intent as Ticket",
         "icon": "$(book)"
       },
       {
-        "command": "catalystIntent.setDefaultEditor",
+        "command": "sherpaIntent.setDefaultEditor",
         "title": "Atomic Sherpa Intent Editor: Set as Default",
         "icon": "$(check)"
       },
       {
-        "command": "catalystIntent.resetThemeToDefault",
+        "command": "sherpaIntent.resetThemeToDefault",
         "title": "Atomic Sherpa Intent Editor: Reset Theme to Default",
         "icon": "$(discard)"
       },
       {
-        "command": "catalystIntent.selectTheme",
+        "command": "sherpaIntent.selectTheme",
         "title": "Atomic Sherpa Intent Editor: Select Theme"
       },
       {
-        "command": "catalystIntent.importTheme",
+        "command": "sherpaIntent.importTheme",
         "title": "Atomic Sherpa Intent Editor: Import Theme JSON"
       },
       {
-        "command": "catalystIntent.exportTheme",
+        "command": "sherpaIntent.exportTheme",
         "title": "Atomic Sherpa Intent Editor: Export Theme JSON"
       },
       {
-        "command": "catalystIntent.deleteImportedTheme",
+        "command": "sherpaIntent.deleteImportedTheme",
         "title": "Atomic Sherpa Intent Editor: Delete Imported Theme"
       },
       {
-        "command": "catalystIntent.toggleMode",
+        "command": "sherpaIntent.toggleMode",
         "title": "Atomic Sherpa Intent Editor: Toggle Ticket/Source Mode",
         "icon": "$(sync)"
       },
       {
-        "command": "catalystIntent.toggleReadOnly",
+        "command": "sherpaIntent.toggleReadOnly",
         "title": "Atomic Sherpa Intent Editor: Toggle Read Only",
         "icon": "$(book)"
       },
       {
-        "command": "catalystIntent.exportHtml",
+        "command": "sherpaIntent.exportHtml",
         "title": "Atomic Sherpa Intent Editor: Export as HTML",
         "icon": "$(export)"
       },
       {
-        "command": "catalystIntent.exportPdf",
+        "command": "sherpaIntent.exportPdf",
         "title": "Atomic Sherpa Intent Editor: Export as PDF",
         "icon": "$(file-pdf)"
       }
     ],
     "keybindings": [
       {
-        "command": "catalystIntent.toggleMode",
+        "command": "sherpaIntent.toggleMode",
         "key": "alt+shift+m",
-        "when": "catalystIntent.activeEditor"
+        "when": "sherpaIntent.activeEditor"
       }
     ],
     "customEditors": [
       {
-        "viewType": "catalystIntent.editor",
+        "viewType": "sherpaIntent.editor",
         "displayName": "Atomic Sherpa Intent Editor",
         "selector": [
           {
@@ -149,7 +153,7 @@
         "priority": "option"
       },
       {
-        "viewType": "catalystIntent.ticket",
+        "viewType": "sherpaIntent.ticket",
         "displayName": "Atomic Intent Ticket",
         "selector": [
           {
@@ -164,34 +168,40 @@
     ],
     "menus": {
       "view/title": [
-        { "command": "catalystAtomic.refresh", "when": "view == catalystAtomic.repository", "group": "navigation" }
+        { "command": "sherpaAtomic.refresh", "when": "view == sherpaAtomic.repository", "group": "navigation" }
       ],
       "view/item/context": [
-        { "command": "catalystAtomic.openGraph", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "navigation" },
-        { "command": "catalystAtomic.createView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "catalystAtomic.switchView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "catalystAtomic.deleteView", "when": "view == catalystAtomic.repository && viewItem == atomicRepository", "group": "atomic" }
+        { "command": "sherpaAtomic.openGraph", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "navigation" },
+        { "command": "sherpaAtomic.createView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "sherpaAtomic.switchView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "sherpaAtomic.deleteView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "sherpaAtomic.push", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "sherpaAtomic.pull", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "sherpaAtomic.insertView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
+        { "command": "sherpaAtomic.addRemote", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" }
       ],
       "scm/title": [
-        { "command": "catalystAtomic.record", "when": "scmProvider == atomic", "group": "navigation" },
-        { "command": "catalystAtomic.refresh", "when": "scmProvider == atomic", "group": "navigation" }
+        { "command": "sherpaAtomic.record", "when": "scmProvider == atomic", "group": "navigation" },
+        { "command": "sherpaAtomic.push", "when": "scmProvider == atomic", "group": "navigation" },
+        { "command": "sherpaAtomic.pull", "when": "scmProvider == atomic", "group": "navigation" },
+        { "command": "sherpaAtomic.refresh", "when": "scmProvider == atomic", "group": "navigation" }
       ],
       "scm/resourceState/context": [
-        { "command": "catalystAtomic.add", "when": "scmProvider == atomic && scmResourceState == atomicUntracked", "group": "inline" }
+        { "command": "sherpaAtomic.add", "when": "scmProvider == atomic && scmResourceState == atomicUntracked", "group": "inline" }
       ],
       "commandPalette": [
-        { "command": "catalystAtomic.add", "when": "false" }
+        { "command": "sherpaAtomic.add", "when": "false" }
       ],
       "explorer/context": [
         {
-          "command": "catalystIntent.open",
+          "command": "sherpaIntent.open",
           "when": "resourceFilename =~ /\\.(md|markdown|mdx|mdc)$/",
           "group": "navigation"
         }
       ],
       "editor/title/context": [
         {
-          "command": "catalystIntent.open",
+          "command": "sherpaIntent.open",
           "when": "resourceFilename =~ /\\.(md|markdown|mdx|mdc)$/",
           "group": "navigation"
         }
@@ -200,13 +210,13 @@
     "configuration": {
       "title": "Atomic Sherpa Intent Editor",
       "properties": {
-        "catalystIntent.useAsDefault": {
+        "sherpaIntent.useAsDefault": {
           "type": "boolean",
           "default": false,
           "order": 1,
           "description": "Use Atomic Sherpa as the default editor for Markdown files"
         },
-        "catalystIntent.outline.position": {
+        "sherpaIntent.outline.position": {
           "type": "string",
           "enum": [
             "left",
@@ -220,52 +230,40 @@
           "order": 2,
           "description": "Position of the contents outline sidebar."
         },
-        "catalystIntent.readOnly": {
+        "sherpaIntent.readOnly": {
           "type": "boolean",
           "default": false,
           "scope": "application",
           "order": 3,
           "description": "Make all Atomic Sherpa documents read-only in Live and Source. Remembered across editor sessions and workspaces."
         },
-        "catalystIntent.contentMaxWidth.visible": {
+        "sherpaIntent.contentMaxWidth.visible": {
           "type": "boolean",
           "default": false,
           "order": 3,
           "description": "Constrain the editor content to a centered 800px column."
         },
-        "catalystIntent.lineNumbers.visible": {
+        "sherpaIntent.lineNumbers.visible": {
           "type": "boolean",
           "default": true,
           "order": 4,
           "description": "Show line numbers."
         },
-        "catalystIntent.gitChanges.visible": {
-          "type": "boolean",
-          "default": true,
-          "order": 5,
-          "description": "Show Git change indicators in the editor."
-        },
-        "catalystIntent.gitChanges.lineHighlights": {
-          "type": "boolean",
-          "default": true,
-          "order": 6,
-          "description": "Show subtle line coloring for modified lines in Source mode."
-        },
-        "catalystIntent.spellCheck.enabled": {
+        "sherpaIntent.spellCheck.enabled": {
           "type": "boolean",
           "default": true,
           "order": 6,
           "description": "Show built-in spelling diagnostics in Atomic Sherpa when no external spell checker diagnostics are available."
         },
-        "catalystIntent.vimMode.enabled": {
+        "sherpaIntent.vimMode.enabled": {
           "type": "boolean",
           "default": false,
           "order": 6,
           "description": "Legacy Vim keybinding override.",
-          "deprecationMessage": "Use catalystIntent.vimMode.behavior instead.",
-          "markdownDeprecationMessage": "Use `catalystIntent.vimMode.behavior` instead."
+          "deprecationMessage": "Use sherpaIntent.vimMode.behavior instead.",
+          "markdownDeprecationMessage": "Use `sherpaIntent.vimMode.behavior` instead."
         },
-        "catalystIntent.vimMode.behavior": {
+        "sherpaIntent.vimMode.behavior": {
           "type": "string",
           "enum": [
             "auto",
@@ -281,34 +279,34 @@
           "order": 6,
           "description": "Controls Vim emulation in Source and Live mode."
         },
-        "catalystIntent.codeBlocks.useVscodeTheme": {
+        "sherpaIntent.codeBlocks.useVscodeTheme": {
           "type": "boolean",
           "default": false,
           "order": 7,
           "description": "Highlight fenced code blocks using your active VS Code color theme."
         },
-        "catalystIntent.rememberPosition.lines": {
+        "sherpaIntent.rememberPosition.lines": {
           "type": "number",
           "default": 100,
           "minimum": 0,
           "order": 7,
           "description": "Markdown files with at least this many lines will remember the last viewed line and restore the scroll position when opened."
         },
-        "catalystIntent.export.browserPath": {
+        "sherpaIntent.export.browserPath": {
           "type": "string",
           "default": "",
           "order": 7,
           "description": "Optional path to a Chrome/Edge executable used for browser-based export rendering (PDF and HTML finalize). Leave empty to auto-detect."
         },
-        "catalystIntent.export.pdf.browserPath": {
+        "sherpaIntent.export.pdf.browserPath": {
           "type": "string",
           "default": "",
           "order": 7,
-          "description": "Deprecated: use catalystIntent.export.browserPath.",
-          "deprecationMessage": "Use catalystIntent.export.browserPath instead.",
-          "markdownDeprecationMessage": "Use `catalystIntent.export.browserPath` instead."
+          "description": "Deprecated: use sherpaIntent.export.browserPath.",
+          "deprecationMessage": "Use sherpaIntent.export.browserPath instead.",
+          "markdownDeprecationMessage": "Use `sherpaIntent.export.browserPath` instead."
         },
-        "catalystIntent.export.html.imageMode": {
+        "sherpaIntent.export.html.imageMode": {
           "type": "string",
           "enum": [
             "embedded",
@@ -322,13 +320,13 @@
           "order": 8,
           "description": "How local images are handled during HTML export."
         },
-        "catalystIntent.imageFolder": {
+        "sherpaIntent.imageFolder": {
           "type": "string",
           "default": "assets",
           "order": 9,
           "description": "Folder name to save pasted images (relative to workspace root)."
         },
-        "catalystIntent.keymap": {
+        "sherpaIntent.keymap": {
           "type": "array",
           "default": [],
           "order": 10,
@@ -351,7 +349,7 @@
             }
           }
         },
-        "catalystIntent.theme": {
+        "sherpaIntent.theme": {
           "type": "object",
           "default": {
             "id": "one-monokai",
@@ -401,7 +399,7 @@
             }
           ],
           "description": "Theme payload containing the editor background, base palette colors, optional token overrides, and font settings.",
-          "markdownDescription": "[Select Theme](command:catalystIntent.selectTheme) | [Import Theme](command:catalystIntent.importTheme) | [Export Theme](command:catalystIntent.exportTheme) | [Delete Imported Theme](command:catalystIntent.deleteImportedTheme) | [Reset Theme to Default](command:catalystIntent.resetThemeToDefault)",
+          "markdownDescription": "[Select Theme](command:sherpaIntent.selectTheme) | [Import Theme](command:sherpaIntent.importTheme) | [Export Theme](command:sherpaIntent.exportTheme) | [Delete Imported Theme](command:sherpaIntent.deleteImportedTheme) | [Reset Theme to Default](command:sherpaIntent.resetThemeToDefault)",
           "properties": {
             "id": {
               "type": "string",

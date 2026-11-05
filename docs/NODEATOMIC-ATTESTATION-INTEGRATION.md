@@ -1,6 +1,6 @@
 # nodeatomic integration handoff: attestation badge and signed intent view
 
-> **Historical integration notes:** Since Catalyst 0.2.12, native packaging guidance in this document is superseded by the README's universal-VSIX workflow. The VSIX bundles only the JavaScript consumer; nodeatomic dynamically loads a compatible platform library from the separate Atomic installation. Do not copy `libatomic.node` into the extension or assume its path is relative to the bundled consumer. The service/attestation design notes below retain their historical context.
+> **Historical integration notes:** Since Atomic Sherpa 0.2.12, native packaging guidance in this document is superseded by the README's universal-VSIX workflow. The VSIX bundles only the JavaScript consumer; nodeatomic dynamically loads a compatible platform library from the separate Atomic installation. Do not copy `libatomic.node` into the extension or assume its path is relative to the bundled consumer. The service/attestation design notes below retain their historical context.
 
 Applies to intent **CATA::continuouslee::2**
 (`01M4RQ7JR2CEK4QFJGV2B8K270`), “Add RPC-backed attestation badge and read-only
@@ -13,7 +13,7 @@ The user has since required **no service process**, and the Atomic/Node proof of
 concept now supports in-process service calls:
 
 ```text
-Catalyst extension host (Node)
+Atomic Sherpa extension host (Node)
   -> nodeatomic TypeScript API
   -> prebuilt libatomic.node
   -> libatomic local dispatch and existing handlers
@@ -167,7 +167,7 @@ UI state is distinct from inventing a backend fallback.
 For a local proof, build/install the addon in nodeatomic explicitly, then create
 an npm package artifact (`npm pack`) and consume that artifact in this project.
 Do not add Cargo invocation, an Atomic source lookup, or a native source build to
-Catalyst's build scripts. Package names/artifact publication aren't finalized.
+Atomic Sherpa's build scripts. Package names/artifact publication aren't finalized.
 
 The extension build currently bundles `src/extension.ts` into CommonJS with Bun.
 nodeatomic is ESM and loads `../native/libatomic.node` relative to its own module.
@@ -209,7 +209,7 @@ introduced by this plan.
 
 Following this handoff, the separate Atomic/nodeatomic projects now expose
 read-only GetVaultEntry, ListVaultEntries, GetVaultContext and VerifyAttestation
-through local dispatch. Catalyst can consume:
+through local dispatch. Atomic Sherpa can consume:
 
 ```ts
 import { openRepository } from 'nodeatomic';

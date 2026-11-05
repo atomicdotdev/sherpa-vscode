@@ -74,7 +74,7 @@ export async function verifyUniversalVsix(path, { expectedPackage, native } = {}
   }
   // Import the exact archived bundle from a fresh directory, not from dist or
   // node_modules. This catches accidental build-machine/sibling dependencies.
-  const directory = await mkdtemp(join(tmpdir(), 'catalyst-vsix-runtime-'));
+  const directory = await mkdtemp(join(tmpdir(), 'sherpa-vsix-runtime-'));
   try {
     const entry = join(directory, 'index.mjs');
     await writeFile(entry, consumer);

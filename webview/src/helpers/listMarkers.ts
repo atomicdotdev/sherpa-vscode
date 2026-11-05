@@ -1,6 +1,7 @@
 import { StateField, RangeSetBuilder, EditorState, Transaction } from '@codemirror/state';
 import { Decoration, WidgetType, EditorView } from '@codemirror/view';
 import { parseFrontmatter, isInsideFrontmatterContent } from './frontmatter';
+import { resolvedSyntaxTree } from './markdownSyntax';
 
 interface ListMarkerData {
   fromOffset: number;
@@ -819,12 +820,73 @@ export function handleEnterBeforeNestedList(view) {
   return true;
 }
 
-export function collectOrderedListRenumberChanges(state) {
-  const changes = [];
+export function collectOrderedListRenumberChanges(
+  state,
+  changedRanges: ReadonlyArray<{ fromB: number; toB: number }> = []
+) {
+  if (!changedRanges.length) {
+    return [];
+  }
+
   const stylesByLine = detectListIndentStylesByLine(state);
-  const orderedCountsByLevel: Array<number | null> = [];
+  const changedLines = new Set<number>();
+  for (const range of changedRanges) {
+    const from = Math.max(0, Math.min(range.fromB, state.doc.length));
+    const to = Math.max(from, Math.min(range.toB, state.doc.length));
+    const firstLine = state.doc.lineAt(from).number;
+    const lastLine = state.doc.lineAt(to).number;
+    for (let lineNo = Math.max(1, firstLine - 1); lineNo <= Math.min(state.doc.lines, lastLine + 1); lineNo += 1) {
+      changedLines.add(lineNo);
+    }
+  }
+
+  const frontmatter = parseFrontmatter(state);
+  const excludedRanges: Array<{ from: number; to: number }> = [];
+  if (frontmatter) {
+    excludedRanges.push({ from: frontmatter.from, to: frontmatter.to });
+  }
+  resolvedSyntaxTree(state).iterate({
+    enter(node) {
+      if (node.name === 'FencedCode' || node.name === 'CodeBlock' || node.name === 'Table') {
+        excludedRanges.push({ from: node.from, to: node.to });
+      }
+    }
+  });
+  const lineIsExcluded = (line) => excludedRanges.some((range) => line.from >= range.from && line.from < range.to);
+
+  const renumberLines = new Set<number>();
+  let block: number[] = [];
+  const flushBlock = () => {
+    if (block.length && block.some((lineNo) => changedLines.has(lineNo))) {
+      for (const lineNo of block) renumberLines.add(lineNo);
+    }
+    block = [];
+  };
 
   for (let lineNo = 1; lineNo <= state.doc.lines; lineNo += 1) {
+    const line = state.doc.line(lineNo);
+    if (lineIsExcluded(line)) {
+      flushBlock();
+      continue;
+    }
+    const lineText = state.doc.sliceString(line.from, line.to);
+    const style = lineIndentStyle(lineNo, stylesByLine);
+    if (!listMarkerData(lineText, null, style)) {
+      flushBlock();
+      continue;
+    }
+    block.push(lineNo);
+  }
+  flushBlock();
+
+  const changes = [];
+  const orderedCountsByLevel: Array<number | null> = [];
+  for (let lineNo = 1; lineNo <= state.doc.lines; lineNo += 1) {
+    if (!renumberLines.has(lineNo)) {
+      orderedCountsByLevel.length = 0;
+      continue;
+    }
+
     const line = state.doc.line(lineNo);
     const lineText = state.doc.sliceString(line.from, line.to);
     const style = lineIndentStyle(lineNo, stylesByLine);

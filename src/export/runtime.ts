@@ -9,6 +9,7 @@ import type { ThemeSettings } from '../shared/themeDefaults';
 export type ExportRuntimeBuildHtmlOptions = {
   markdownText: string;
   sourceDocumentPath: string;
+  workspaceRoot?: string;
   outputFilePath: string;
   target: 'html' | 'pdf';
   htmlImageMode: ExportHtmlImageMode;
@@ -31,6 +32,7 @@ function renderExportHtmlDocument(
   const { html: bodyHtml, hasMermaid, hasMath } = renderMarkdownToHtml({
     markdownText: options.markdownText,
     markdownFilePath: options.sourceDocumentPath,
+    workspaceRoot: options.workspaceRoot,
     outputFilePath: options.outputFilePath,
     target: options.target,
     htmlImageMode: options.htmlImageMode

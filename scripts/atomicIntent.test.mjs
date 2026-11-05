@@ -9,7 +9,7 @@ import {
 import { createAtomicBodyEdit, createAtomicMetadataEdit, createAtomicAttributeEdit } from '../webview/src/helpers/atomicIntentDocument.ts';
 import { normalizeAtomicFileReference } from '../src/shared/atomicFileReference.ts';
 
-const sample = readFileSync(new URL('../examples/catalyst.intent.md', import.meta.url), 'utf8');
+const sample = readFileSync(new URL('../examples/sherpa.intent.md', import.meta.url), 'utf8');
 const wrap = (body) => `---\nentry_type: intent\ntitle: Test intent\n---\n${body}`;
 const taskSource = (attributes) => wrap(`:::task{${attributes}}\nDo the work.\n:::\n`);
 const task = (source) => parseAtomicIntent(source).directives.find((item) => item.name === 'task');
@@ -20,7 +20,7 @@ test('the supplied fixture indexes metadata, six sections, and four file referen
   expect(parsed.isIntent).toBe(true);
   expect(parsed.id).toBe('VSCO::continuouslee::2');
   expect(parsed.status).toBe('needs-review');
-  expect(parsed.title).toBe('Rename the desktop application to Catalyst');
+  expect(parsed.title).toBe('Rename the desktop application to Sherpa');
   expect(parsed.directives.map((item) => item.name)).toEqual([
     'why', 'acceptance-criterion', 'task', 'file-ref', 'file-ref', 'file-ref', 'file-ref', 'scope-in', 'scope-out', 'constraint'
   ]);
@@ -29,7 +29,7 @@ test('the supplied fixture indexes metadata, six sections, and four file referen
   for (const item of parsed.directives) {
     expect(sample.slice(item.from, item.headerTo)).toBe(item.header);
   }
-  expect(readFileSync(new URL('../examples/catalyst.intent.md', import.meta.url), 'utf8')).toBe(sample);
+  expect(readFileSync(new URL('../examples/sherpa.intent.md', import.meta.url), 'utf8')).toBe(sample);
 });
 
 test('changing the supplied task status changes only its value', () => {
@@ -142,12 +142,12 @@ test('development manifest is opt-in and does not install default associations',
   const manifest = await Bun.file(new URL('../package.json', import.meta.url)).json();
   expect(manifest.contributes.customEditors[0].priority).toBe('option');
   expect(manifest.contributes.configurationDefaults).toBeUndefined();
-  expect(manifest.contributes.configuration.properties['catalystIntent.useAsDefault'].default).toBe(false);
+  expect(manifest.contributes.configuration.properties['sherpaIntent.useAsDefault'].default).toBe(false);
 });
 
 test('ticket selectors default only intent filenames and all IDs are isolated from MEO', async () => {
   const manifest = await Bun.file(new URL('../package.json', import.meta.url)).json();
-  const ticket = manifest.contributes.customEditors.find((item) => item.viewType === 'catalystIntent.ticket');
+  const ticket = manifest.contributes.customEditors.find((item) => item.viewType === 'sherpaIntent.ticket');
   expect(ticket.priority).toBe('default');
   expect(ticket.selector.map((item) => item.filenamePattern)).toEqual(['**/intent.md', '*.intent.md']);
   expect(JSON.stringify(manifest.contributes)).not.toContain('markdownEditorOptimized');

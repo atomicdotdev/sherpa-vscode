@@ -13,10 +13,8 @@ import {
 } from './themeDefaults';
 import { getActiveVscodeRawTheme, type RawVscodeTheme } from './vscodeTheme';
 
-export const EXTENSION_CONFIG_SECTION = 'catalystIntent';
+export const EXTENSION_CONFIG_SECTION = 'sherpaIntent';
 export const LINE_NUMBERS_SETTING_KEY = 'lineNumbers.visible';
-export const GIT_CHANGES_GUTTER_SETTING_KEY = 'gitChanges.visible';
-export const GIT_DIFF_LINE_HIGHLIGHTS_SETTING_KEY = 'gitChanges.lineHighlights';
 export const READ_ONLY_SETTING_KEY = 'readOnly';
 export const SPELL_CHECK_SETTING_KEY = 'spellCheck.enabled';
 export const VIM_MODE_BEHAVIOR_SETTING_KEY = 'vimMode.behavior';
@@ -26,11 +24,7 @@ export const REMEMBER_POSITION_LINES_SETTING_KEY = 'rememberPosition.lines';
 export const CONTENT_MAX_WIDTH_SETTING_KEY = 'contentMaxWidth.visible';
 export const LINE_NUMBERS_LEGACY_SETTING_KEY = 'lineNumbers.enabled';
 export const LINE_NUMBERS_LEGACY_VISIBLE_SETTING_KEY = 'lineNumbers.visibility';
-export const GIT_CHANGES_GUTTER_LEGACY_VISIBLE_SETTING_KEY = 'gitChanges.visibility';
-export const GIT_CHANGES_GUTTER_LEGACY_VISIBILITY_SETTING_KEY = 'gitChangesGutter.visibility';
-export const GIT_CHANGES_GUTTER_LEGACY_SETTING_KEY = 'gitChangesGutter.enabled';
 export const LINE_NUMBERS_KEY = 'lineNumbersEnabled';
-export const GIT_CHANGES_GUTTER_KEY = 'gitChangesGutterEnabled';
 export const VIM_MODE_KEY = 'vimModeEnabled';
 export const OUTLINE_VISIBLE_KEY = 'outlineVisible';
 export const CONTENT_MAX_WIDTH_ENABLED_KEY = 'contentMaxWidthEnabled';
@@ -63,18 +57,6 @@ export function getLineNumbersEnabled(context: vscode.ExtensionContext): boolean
     LINE_NUMBERS_LEGACY_SETTING_KEY,
     LINE_NUMBERS_LEGACY_VISIBLE_SETTING_KEY
   ]);
-}
-
-export function getGitChangesGutterEnabled(context: vscode.ExtensionContext): boolean {
-  return getToggleSettingValue(context, GIT_CHANGES_GUTTER_SETTING_KEY, GIT_CHANGES_GUTTER_KEY, [
-    GIT_CHANGES_GUTTER_LEGACY_VISIBLE_SETTING_KEY,
-    GIT_CHANGES_GUTTER_LEGACY_VISIBILITY_SETTING_KEY,
-    GIT_CHANGES_GUTTER_LEGACY_SETTING_KEY
-  ]);
-}
-
-export function getGitDiffLineHighlightsEnabled(): boolean {
-  return vscode.workspace.getConfiguration(EXTENSION_CONFIG_SECTION).get<boolean>(GIT_DIFF_LINE_HIGHLIGHTS_SETTING_KEY, true);
 }
 
 export function getReadOnlyEnabled(): boolean {
@@ -255,7 +237,6 @@ export function withMarkdownExtensions(basePath: string, preferExtensionlessFirs
 
 export async function migrateLegacyToggleSettings(context: vscode.ExtensionContext): Promise<void> {
   await migrateLegacyToggleSetting(context, LINE_NUMBERS_SETTING_KEY, LINE_NUMBERS_KEY);
-  await migrateLegacyToggleSetting(context, GIT_CHANGES_GUTTER_SETTING_KEY, GIT_CHANGES_GUTTER_KEY);
   await migrateLegacyToggleSetting(context, CONTENT_MAX_WIDTH_SETTING_KEY, CONTENT_MAX_WIDTH_ENABLED_KEY);
 }
 
@@ -278,7 +259,7 @@ export async function syncEditorAssociations(useAsDefault: boolean): Promise<voi
   }
   const config = vscode.workspace.getConfiguration('workbench');
   const inspected = config.inspect<Record<string, string>>('editorAssociations');
-  const markdownAssociation = useAsDefault ? 'catalystIntent.editor' : 'default';
+  const markdownAssociation = useAsDefault ? 'sherpaIntent.editor' : 'default';
 
   await syncEditorAssociationsForTarget(
     config,
@@ -388,14 +369,6 @@ async function syncEditorAssociationsForTarget(
     '*.markdown': markdownAssociation,
     '*.mdx': markdownAssociation,
     '*.mdc': markdownAssociation,
-    'git:/**/*.md': 'default',
-    'git:/**/*.markdown': 'default',
-    'git:/**/*.mdx': 'default',
-    'git:/**/*.mdc': 'default',
-    'git:**/*.md': 'default',
-    'git:**/*.markdown': 'default',
-    'git:**/*.mdx': 'default',
-    'git:**/*.mdc': 'default',
     'chat-editing-text-model:/**/*.md': 'default',
     'chat-editing-text-model:/**/*.markdown': 'default',
     'chat-editing-text-model:/**/*.mdx': 'default',

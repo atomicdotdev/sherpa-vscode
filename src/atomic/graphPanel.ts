@@ -18,7 +18,7 @@ export class AtomicGraphPanel implements vscode.Disposable {
   constructor(context: vscode.ExtensionContext, session: RepositorySession,
     private readonly isValid: () => boolean, onClosed: () => void, diffs: AtomicDiffEditor) {
     const resources = vscode.Uri.joinPath(context.extensionUri, 'dist');
-    this.panel = vscode.window.createWebviewPanel('catalystAtomic.graph', `Atomic Changes: ${path.basename(session.root)}`,
+    this.panel = vscode.window.createWebviewPanel('sherpaAtomic.graph', `Atomic Changes: ${path.basename(session.root)}`,
       vscode.ViewColumn.Active, { enableScripts: true, retainContextWhenHidden: true, localResourceRoots: [resources] });
     const webview = this.panel.webview;
     const nonce = randomBytes(24).toString('hex');
@@ -38,7 +38,7 @@ export class AtomicGraphPanel implements vscode.Disposable {
         }
       }, (snapshot) => {
         if (!this.isValid() || !vscode.workspace.isTrusted) return;
-        const viewer = vscode.window.createWebviewPanel('catalystAtomic.signedIntent', `Signed Intent: ${snapshot.intentId}`,
+        const viewer = vscode.window.createWebviewPanel('sherpaAtomic.signedIntent', `Signed Intent: ${snapshot.intentId}`,
           vscode.ViewColumn.Beside, { enableScripts: false, enableCommandUris: false, localResourceRoots: [] });
         viewer.webview.html = signedSnapshotHtml(snapshot);
       });
@@ -47,10 +47,11 @@ export class AtomicGraphPanel implements vscode.Disposable {
         if (message?.action === 'ready') { this.ready = true; void this.navigate(); }
         else if (message?.action === 'openIntent' && typeof message.id === 'string') {
           const file = this.explorer.intentFile(message.id);
-          if (file) void vscode.commands.executeCommand('catalystIntent.open', vscode.Uri.file(file));
+          if (file) void vscode.commands.executeCommand('sherpaIntent.open', vscode.Uri.file(file));
         } else if (message?.action === 'openDiff' && typeof message.id === 'string' && typeof message.path === 'string') {
           const diff = this.explorer.fileDiff(message.id, message.path);
           if (diff) void diffs.change(diff, message.id).catch((error) => vscode.window.showErrorMessage(`Atomic: ${String(error)}`));
+          else void vscode.window.showWarningMessage('Atomic: the selected change is no longer available. Select the change again or refresh.');
         } else {
           void this.explorer.handle(message);
         }

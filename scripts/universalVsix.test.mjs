@@ -25,8 +25,8 @@ test('source manifest and lockfile use Atomic Sherpa branding and a packaged PNG
   expect(icon.subarray(0, 8).toString('hex')).toBe('89504e470d0a1a0a');
   const { listFiles } = tooling('@vscode/vsce');
   expect(await listFiles({ packagedDependencies: [] })).toContain(manifest.icon);
-  expect(manifest.contributes.customEditors[0].viewType).toBe('catalystIntent.editor');
-  expect(manifest.contributes.configuration.properties['catalystIntent.useAsDefault']).toBeDefined();
+  expect(manifest.contributes.customEditors[0].viewType).toBe('sherpaIntent.editor');
+  expect(manifest.contributes.configuration.properties['sherpaIntent.useAsDefault']).toBeDefined();
 });
 
 test('VSCE packages the actual README without a repository URL', async () => {
@@ -72,7 +72,7 @@ test('rejects platform targets, private data, mismatched versions and missing as
 });
 
 test('VSCE ignore rules exclude stale native artifacts without deleting the working files', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'catalyst-ignore-'));
+  const root = await mkdtemp(join(tmpdir(), 'sherpa-ignore-'));
   try {
     await mkdir(join(root, 'dist/native'), { recursive: true });
     await mkdir(join(root, 'dist/nodeatomic'), { recursive: true });
@@ -95,7 +95,7 @@ test('VSCE ignore rules exclude stale native artifacts without deleting the work
 });
 
 test('verifies an archive and smoke-tests its extracted standalone JS consumer', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'catalyst-vsix-test-'));
+  const root = await mkdtemp(join(tmpdir(), 'sherpa-vsix-test-'));
   try {
     const zip = new ZipFile(), path = join(root, 'test.vsix');
     const complete = new Promise((resolve, reject) => {

@@ -250,7 +250,7 @@ test('unsafe prose blocks source switching rather than silently losing a draft',
 
 test('the actual MEO editor preserves the supplied fixture through live/source switching', async () => {
   const { createEditor } = await import('../webview/src/editor.ts');
-  const fixture = readFileSync(new URL('../examples/catalyst.intent.md', import.meta.url), 'utf8');
+  const fixture = readFileSync(new URL('../examples/sherpa.intent.md', import.meta.url), 'utf8');
   const outgoing = [];
   const parent = document.createElement('div');
   document.body.append(parent);

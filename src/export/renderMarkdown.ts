@@ -33,6 +33,7 @@ export type RenderMarkdownTarget = 'html' | 'pdf';
 export type RenderMarkdownOptions = {
   markdownText: string;
   markdownFilePath: string;
+  workspaceRoot?: string;
   outputFilePath?: string;
   target: RenderMarkdownTarget;
   htmlImageMode?: ExportHtmlImageMode;
@@ -108,6 +109,7 @@ export function renderMarkdownToHtml(options: RenderMarkdownOptions): RenderMark
     const src = token.attrGet('src') ?? '';
     const rewritten = rewriteExportImageSrc(src, {
       markdownFilePath: options.markdownFilePath,
+      workspaceRoot: options.workspaceRoot,
       outputFilePath: options.outputFilePath,
       target: options.target,
       htmlImageMode: options.htmlImageMode ?? 'embedded',

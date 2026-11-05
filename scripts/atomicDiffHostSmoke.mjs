@@ -28,7 +28,7 @@ mock.module('vscode', () => ({
     diffs.push({ left, right, title, options, before, after });
   } },
   window: { registerTreeDataProvider: (_id, provider) => { tree = provider; return disposable(); },
-    createOutputChannel: () => ({ appendLine() {}, show() {}, dispose() {} }), showErrorMessage: async (message) => { errors.push(message); },
+    createOutputChannel: () => ({ appendLine() {}, show() {}, dispose() {} }), showErrorMessage: async (message) => { errors.push(message); }, showWarningMessage: async () => undefined,
     createWebviewPanel: () => {
       let receive, onDispose, resolveSelection;
       const panel = { title: '', reveal() {}, dispose() { onDispose?.(); }, onDidDispose: (handler) => { onDispose = handler; return disposable(); },
@@ -58,7 +58,7 @@ try {
   const click = async (resource) => { const command = resource.command; await commands.get(command.command)(...command.arguments); };
   await writeFile(join(root, 'modified.ts'), 'working\n');
   const modified = await refresh('modified.ts', 1);
-  assert.equal(modified.command.command, 'catalystAtomic.openFileDiff');
+  assert.equal(modified.command.command, 'sherpaAtomic.openFileDiff');
   await click(modified);
   assert.equal(diffs.at(-1).before, 'recorded\n'); assert.equal(diffs.at(-1).right.scheme, 'file');
   assert.equal(diffs.at(-1).right.fsPath, join(root, 'modified.ts')); assert.match(diffs.at(-1).title, /Recorded \(main\).*Working Copy/);
@@ -77,7 +77,7 @@ try {
   await click(await refresh('linked.ts', 1)); assert.equal(diffs.length, count); assert.match(errors.pop(), /symlink/);
   await refresh('new.ts', 3); assert.equal(owner.untracked.resourceStates[0].command.command, 'vscode.open');
   await refresh('modified.ts', 1);
-  await commands.get('catalystAtomic.showChange')(owner, hash, 'main');
+  await commands.get('sherpaAtomic.showChange')(owner, hash, 'main');
   const panel = panels.at(-1), selected = panel.waitForSelection(); panel.receive({ action: 'ready' }); await selected;
   assert.deepEqual(panel.selection.diffPaths, ['modified.ts']);
   panel.receive({ action: 'openDiff', id, path: 'modified.ts' });

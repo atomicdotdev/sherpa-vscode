@@ -9,29 +9,6 @@ export function safeDecodeURIComponent(value: string): string {
   }
 }
 
-export function parseGitUriQuery(query: string): { path?: unknown; ref?: unknown } | undefined {
-  const parsed = parseLooseJson(query) ?? parseLooseJson(safeDecodeURIComponent(query));
-  if (!parsed || typeof parsed !== 'object') {
-    return undefined;
-  }
-  return parsed as { path?: unknown; ref?: unknown };
-}
-
-export function resolveWorktreeUriFromGitUri(uri: vscode.Uri): vscode.Uri | undefined {
-  if (uri.scheme !== 'git') {
-    return undefined;
-  }
-
-  const query = parseGitUriQuery(uri.query);
-  const queryRecord = query && typeof query === 'object' ? query as Record<string, unknown> : undefined;
-  const queryPath = queryRecord?.path;
-  if (typeof queryPath === 'string') {
-    return vscode.Uri.file(queryPath);
-  }
-
-  return uri.path ? vscode.Uri.file(uri.path) : undefined;
-}
-
 export function getPreferredCommandUri(value: unknown): vscode.Uri | undefined {
   const commandUri = coerceCommandUri(value);
   const activeContextUri = getActiveEditorContextUri();
@@ -71,11 +48,6 @@ export function getFileEditorAssociationGlobs(fileUri: vscode.Uri): string[] {
 export function getComparableResourceKey(uri: vscode.Uri): string | undefined {
   if (uri.scheme === 'file') {
     return path.normalize(uri.fsPath);
-  }
-
-  const gitUri = resolveWorktreeUriFromGitUri(uri);
-  if (gitUri) {
-    return path.normalize(gitUri.fsPath);
   }
 
   const hintedFileUri = findFileUriHintFromQuery(uri.query);

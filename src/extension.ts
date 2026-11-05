@@ -2,7 +2,6 @@ import * as path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
 import { registerAtomicSourceControl } from './atomic/sourceControl';
-import { createGitApiWatcher } from './git/gitApiWatch';
 import {
   AGENT_REVIEW_FILE_OVERRIDE_CLEANUP_DELAY_MS,
   AGENT_REVIEW_POST_REOPEN_DEDUP_DELAY_MS,
@@ -20,19 +19,12 @@ import {
   getComparableResourceKey,
   getOpenTextDocumentForComparableKey,
   getOpenTextDocumentForUri,
-  getPreferredCommandUri,
-  parseGitUriQuery,
-  resolveWorktreeUriFromGitUri
+  getPreferredCommandUri
 } from './agents/resourceMatching';
 import { AgentReviewOverrideController } from './agents/reviewOverrides';
 import { AgentReviewDocumentPrimer, isMarkdownFileUri } from './agents/documentPrimer';
 import {
   EXTENSION_CONFIG_SECTION,
-  GIT_CHANGES_GUTTER_LEGACY_SETTING_KEY,
-  GIT_CHANGES_GUTTER_LEGACY_VISIBLE_SETTING_KEY,
-  GIT_CHANGES_GUTTER_LEGACY_VISIBILITY_SETTING_KEY,
-  GIT_CHANGES_GUTTER_SETTING_KEY,
-  GIT_DIFF_LINE_HIGHLIGHTS_SETTING_KEY,
   LINE_NUMBERS_LEGACY_SETTING_KEY,
   LINE_NUMBERS_LEGACY_VISIBLE_SETTING_KEY,
   LINE_NUMBERS_SETTING_KEY,
@@ -52,8 +44,6 @@ import {
   getExportHtmlImageMode,
   getExportEditorFontEnvironment,
   getExportPdfBrowserPath,
-  getGitChangesGutterEnabled,
-  getGitDiffLineHighlightsEnabled,
   getLineNumbersEnabled,
   getOutlinePosition,
   getOutlineVisible,
@@ -82,9 +72,9 @@ import {
 } from './shared/timedUi';
 import type { ExportStyleEnvironment } from './export/runtime';
 
-const VIEW_TYPE = 'catalystIntent.editor';
-const TICKET_VIEW_TYPE = 'catalystIntent.ticket';
-const ACTIVE_EDITOR_CONTEXT_KEY = 'catalystIntent.activeEditor';
+const VIEW_TYPE = 'sherpaIntent.editor';
+const TICKET_VIEW_TYPE = 'sherpaIntent.ticket';
+const ACTIVE_EDITOR_CONTEXT_KEY = 'sherpaIntent.activeEditor';
 const FIND_OPTIONS_STATE_KEY = 'findOptions';
 const CUSTOM_THEMES_STATE_KEY = 'customThemes';
 
@@ -108,6 +98,7 @@ type ExportRuntimeModule = {
   renderExportHtmlDocument: (options: {
     markdownText: string;
     sourceDocumentPath: string;
+    workspaceRoot?: string;
     outputFilePath: string;
     target: ExportFormat;
     htmlImageMode: ExportHtmlImageMode;
@@ -168,7 +159,6 @@ export function activate(context: vscode.ExtensionContext): void {
   void agentReviewOverrides.syncNow();
 
   const provider = new MarkdownWebviewProvider(context, agentReviewHandoff);
-  void provider.initializeGitWatcher();
 
   context.subscriptions.push(
     vscode.window.registerCustomEditorProvider(VIEW_TYPE, provider, {
@@ -316,7 +306,7 @@ export function activate(context: vscode.ExtensionContext): void {
   void migrateLegacyToggleSettings(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.open', async (uriLike?: unknown) => {
+    vscode.commands.registerCommand('sherpaIntent.open', async (uriLike?: unknown) => {
       const targetUri = getPreferredCommandUri(uriLike);
       if (!targetUri) {
         return;
@@ -345,14 +335,14 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.setDefaultEditor', async () => {
+    vscode.commands.registerCommand('sherpaIntent.setDefaultEditor', async () => {
       await syncEditorAssociations(true);
       void showTimedInformationMessage('Markdown Editor Optimized is now set as the default editor for Markdown files.');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.resetThemeToDefault', async () => {
+    vscode.commands.registerCommand('sherpaIntent.resetThemeToDefault', async () => {
       await resetThemeSettingsToDefault();
       provider.notifyThemeChanged();
       void showTimedInformationMessage('Markdown Editor Optimized theme was reset to default.');
@@ -360,7 +350,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.selectTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.selectTheme', async () => {
       const themeItems = buildThemeQuickPickItems(context);
       const selectedTheme = await showTimedQuickPick(
         themeItems,
@@ -387,7 +377,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.importTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.importTheme', async () => {
       const openFiles = await vscode.window.showOpenDialog({
         title: 'Import Theme JSON',
         filters: { 'Theme JSON': ['json'] },
@@ -422,7 +412,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.exportTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.exportTheme', async () => {
       const uri = await vscode.window.showSaveDialog({
         title: 'Export Theme JSON',
         filters: { 'Theme JSON': ['json'] },
@@ -448,7 +438,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.deleteImportedTheme', async () => {
+    vscode.commands.registerCommand('sherpaIntent.deleteImportedTheme', async () => {
       const importedThemes = getImportedThemes(context);
       if (!importedThemes.length) {
         void showTimedInformationMessage('No imported themes to delete.');
@@ -501,22 +491,22 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.toggleReadOnly', async () => {
+    vscode.commands.registerCommand('sherpaIntent.toggleReadOnly', async () => {
       await provider.toggleReadOnly();
     }),
-    vscode.commands.registerCommand('catalystIntent.toggleMode', async () => {
+    vscode.commands.registerCommand('sherpaIntent.toggleMode', async () => {
       await provider.toggleActiveEditorMode();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.exportHtml', async () => {
+    vscode.commands.registerCommand('sherpaIntent.exportHtml', async () => {
       await provider.exportActiveDocument('html');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catalystIntent.exportPdf', async () => {
+    vscode.commands.registerCommand('sherpaIntent.exportPdf', async () => {
       await provider.exportActiveDocument('pdf');
     })
   );
@@ -628,20 +618,6 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
     }
   }
 
-  async initializeGitWatcher(): Promise<void> {
-    const watcher = await createGitApiWatcher((repoRootFsPath) => {
-      for (const session of this.panelSessions.values()) {
-        if (session.getGitRepoRoot() !== repoRootFsPath) {
-          continue;
-        }
-        session.refreshGitBaseline({ forceReload: true });
-      }
-    });
-    if (watcher) {
-      this.context.subscriptions.push(watcher);
-    }
-  }
-
   async exportActiveDocument(format: ExportFormat): Promise<void> {
     const session = this.getActiveSession();
     if (!session) {
@@ -700,23 +676,6 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${LINE_NUMBERS_LEGACY_VISIBLE_SETTING_KEY}`)
     ) {
       this.broadcast({ type: 'lineNumbersChanged', enabled: getLineNumbersEnabled(this.context) });
-    }
-
-    if (
-      event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${GIT_CHANGES_GUTTER_SETTING_KEY}`) ||
-      event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${GIT_CHANGES_GUTTER_LEGACY_VISIBLE_SETTING_KEY}`) ||
-      event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${GIT_CHANGES_GUTTER_LEGACY_VISIBILITY_SETTING_KEY}`) ||
-      event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${GIT_CHANGES_GUTTER_LEGACY_SETTING_KEY}`)
-    ) {
-      const enabled = getGitChangesGutterEnabled(this.context);
-      this.broadcast({ type: 'gitChangesGutterChanged', enabled });
-      for (const session of this.panelSessions.values()) {
-        session.refreshGitBaseline({ forcePost: true, forceReload: true, delayMs: enabled ? 150 : 0 });
-      }
-    }
-
-    if (event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${GIT_DIFF_LINE_HIGHLIGHTS_SETTING_KEY}`)) {
-      this.broadcast({ type: 'gitDiffLineHighlightsChanged', enabled: getGitDiffLineHighlightsEnabled() });
     }
 
     if (event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${CONTENT_MAX_WIDTH_SETTING_KEY}`)) {
@@ -814,13 +773,9 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       return;
     }
 
-    if (await this.redirectGitResourceToNativeEditor(document.uri, panel)) {
-      return;
-    }
-
     this.activePanels.add(panel);
 
-    const documentUri = resolveWorktreeUri(document.uri);
+    const documentUri = document.uri;
     const distRoot = vscode.Uri.joinPath(this.context.extensionUri, 'webview', 'dist');
     panel.webview.options = {
       enableScripts: true,
@@ -1028,9 +983,12 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       vscode.Uri.joinPath(this.context.extensionUri, 'webview', 'dist', 'katex', 'katex.min.css').fsPath
     ).toString();
     const baseHref = pathToFileURL(`${path.dirname(params.outputFileUri.fsPath)}${path.sep}`).toString();
+    const workspaceRoot = vscode.workspace.getWorkspaceFolder(params.sourceDocumentUri)?.uri.fsPath
+      ?? path.dirname(params.sourceDocumentUri.fsPath);
     return exportRuntime.renderExportHtmlDocument({
       markdownText: params.markdownText,
       sourceDocumentPath: params.sourceDocumentUri.fsPath,
+      workspaceRoot,
       outputFilePath: params.outputFileUri.fsPath,
       target: params.target,
       htmlImageMode: params.htmlImageMode,
@@ -1042,53 +1000,6 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       baseHref,
       title: path.basename(params.outputFileUri.fsPath)
     });
-  }
-
-  private async redirectGitResourceToNativeEditor(
-    uri: vscode.Uri,
-    panel: vscode.WebviewPanel
-  ): Promise<boolean> {
-    if (uri.scheme !== 'git') {
-      return false;
-    }
-
-    const viewColumn = panel.viewColumn ?? vscode.ViewColumn.Active;
-    const editorOptions = {
-      preserveFocus: false,
-      preview: true,
-      override: 'default'
-    };
-    const existingDiff = findDiffContextForGitUri(uri);
-
-    if (existingDiff) {
-      await vscode.commands.executeCommand(
-        '_workbench.diff',
-        existingDiff.original,
-        existingDiff.modified,
-        existingDiff.title,
-        [viewColumn, editorOptions]
-      );
-      panel.dispose();
-      return true;
-    }
-
-    const ref = getGitUriRef(uri);
-    if (isWorkingTreeOrIndexRef(ref)) {
-      const targetUri = resolveWorktreeUri(uri);
-      const title = getNativeWorkingTreeTitle(uri, targetUri);
-
-      await vscode.commands.executeCommand(
-        '_workbench.diff',
-        uri,
-        targetUri,
-        title,
-        [viewColumn, editorOptions]
-      );
-      panel.dispose();
-      return true;
-    }
-
-    return false;
   }
 
   private async redirectCopilotReviewToNativeEditor(
@@ -1265,64 +1176,10 @@ function replaceFileExtension(filePath: string, ext: '.html' | '.pdf'): string {
   return path.join(parsed.dir, `${parsed.name}${ext}`);
 }
 
-function resolveWorktreeUri(uri: vscode.Uri): vscode.Uri {
-  if (uri.scheme === 'file') {
-    return uri;
-  }
 
-  return resolveWorktreeUriFromGitUri(uri) ?? uri;
-}
 
-function findDiffContextForGitUri(uri: vscode.Uri): { original: vscode.Uri; modified: vscode.Uri; title: string } | undefined {
-  const target = uri.toString();
 
-  for (const group of vscode.window.tabGroups.all) {
-    for (const tab of group.tabs) {
-      const input = tab.input;
-      if (!(input instanceof vscode.TabInputTextDiff)) {
-        continue;
-      }
 
-      const original = input.original;
-      const modified = input.modified;
-      if (original.toString() !== target && modified.toString() !== target) {
-        continue;
-      }
-
-      return {
-        original,
-        modified,
-        title: tab.label
-      };
-    }
-  }
-
-  return undefined;
-}
-
-function getGitUriRef(uri: vscode.Uri): string | undefined {
-  const query = parseGitUriQuery(uri.query);
-  return typeof query?.ref === 'string' ? query.ref : undefined;
-}
-
-function isWorkingTreeOrIndexRef(ref: string | undefined): boolean {
-  return ref === '~' || ref === 'HEAD' || ref === '';
-}
-
-function getNativeWorkingTreeTitle(gitUri: vscode.Uri, fileUri: vscode.Uri): string {
-  const fileName = vscode.workspace.asRelativePath(fileUri, false) || fileUri.path;
-  const ref = getGitUriRef(gitUri);
-
-  if (ref === '~') {
-    return `${fileName} (Working Tree)`;
-  }
-
-  if (ref === 'HEAD' || ref === '') {
-    return `${fileName} (Index)`;
-  }
-
-  return fileName;
-}
 
 function buildThemeQuickPickItems(context: vscode.ExtensionContext): ThemeQuickPickItem[] {
   const builtInItems: ThemeQuickPickItem[] = themePresets.map((theme) => ({

@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 export type BuildExportHtmlDocumentOptions = {
   title: string;
   bodyHtml: string;
@@ -11,23 +13,37 @@ export type BuildExportHtmlDocumentOptions = {
 
 export function buildExportHtmlDocument(options: BuildExportHtmlDocumentOptions): string {
   const title = escapeHtml(options.title || 'Markdown Export');
+  const nonce = randomBytes(16).toString('hex');
   const baseTag = options.baseHref ? `<base href="${escapeHtmlAttr(options.baseHref)}" />` : '';
   const katexStylesTag = options.hasMath && options.katexStylesHref
     ? `<link rel="stylesheet" href="${escapeHtmlAttr(options.katexStylesHref)}" />`
     : '';
   const mermaidScriptTag = options.hasMermaid && options.mermaidRuntimeSrc
-    ? `<script data-meo-export-mermaid-runtime src="${escapeHtmlAttr(options.mermaidRuntimeSrc)}"></script>`
+    ? `<script data-meo-export-mermaid-runtime nonce="${nonce}" src="${escapeHtmlAttr(options.mermaidRuntimeSrc)}"></script>`
     : '';
+  const csp = [
+    "default-src 'none'",
+    `script-src 'nonce-${nonce}'`,
+    "style-src 'unsafe-inline' file:",
+    "img-src file: data: https: http:",
+    "font-src file: data:",
+    "connect-src 'none'",
+    "media-src 'none'",
+    "object-src 'none'",
+    "frame-src 'none'",
+    "form-action 'none'"
+  ].join('; ');
 
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="${escapeHtmlAttr(csp)}" />
     <title>${title}</title>
     ${baseTag}
     ${katexStylesTag}
-    <style>${options.stylesCss}</style>
+    <style>${options.stylesCss.replace(/</g, '\\3c ')}</style>
   </head>
   <body>
     <div class="meo-export-page">
@@ -36,7 +52,7 @@ ${options.bodyHtml}
       </main>
     </div>
     ${mermaidScriptTag}
-    <script data-meo-export-runtime>
+    <script data-meo-export-runtime nonce="${nonce}">
 ${buildRuntimeScript(options.hasMermaid)}
     </script>
   </body>

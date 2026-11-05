@@ -5,7 +5,7 @@ import { defaultThemeSettings } from '../src/shared/themeDefaults.ts';
 // CLI calls, or signature/validation simulation; editor changes stay in memory.
 const root = path.resolve(import.meta.dir, '..');
 const staticRoot = path.join(root, 'webview/dist');
-const text = await Bun.file(path.join(root, 'examples/catalyst.intent.md')).text();
+const text = await Bun.file(path.join(root, 'examples/sherpa.intent.md')).text();
 const init = {
   type: 'init', text, version: 1, diagnostics: [], theme: defaultThemeSettings,
   mode: 'live', outlinePosition: 'right', outlineVisible: false,

@@ -88,7 +88,7 @@ There is no daemon startup, socket, direct database access, or webview native ac
 
 ## Develop and package
 
-Build requirements: Node.js 22+/npm (for VSCE 4), Bun, a VS Code-compatible editor, and a **previously built universal nodeatomic JavaScript consumer**. The current development dependency is `file:../nodeatomic`; build that project independently using its README first. Its compiled codecs/fingerprint are bundled, so the resulting VSIX does not need that checkout. Atomic Sherpa never builds Rust or searches for Atomic producer sources. Building/packaging does not require a native library unless an explicit runtime override requests the native smoke.
+Build requirements: Node.js 22+/npm (for VSCE 4), Bun, and a VS Code-compatible editor. The universal nodeatomic JavaScript consumer and its generated codecs are vendored at `vendor/nodeatomic` from revision `6e50338c1d450cef8463113198d95c61e431a0b9`, so a clean checkout builds without a sibling repository. Refresh that directory from the nodeatomic producer when its descriptor or runtime loader changes. Its compiled codecs/fingerprint are bundled, so the resulting VSIX does not need the vendor directory. Atomic Sherpa never builds Rust or searches for Atomic producer sources. Building/packaging does not require a native library unless an explicit runtime override requests the native smoke.
 
 ```sh
 npm ci
@@ -124,8 +124,8 @@ The presentation parser never serializes the whole Markdown or YAML document. Fi
 
 Atomic CLI generation, JSON-LD lifting, SHACL validation, signing, and verification are not reimplemented. The version control panel and evidence inspector use the backend consumers; CLI-based intent workflows, signing, and ticket attestation badges remain separate work.
 
-Full VS Code save/recovery and external CLI synchronization testing is still required. CodeMirror normalizes line endings internally, so exact CRLF round trips through the entire editor are not yet guaranteed, although targeted edit helpers preserve CRLF.
+Platform-specific VS Code/Electron host smoke testing remains a release checklist; CI covers Node-level integration, typecheck, tests, build, and universal VSIX packaging on macOS, Linux, and Windows. CodeMirror normalizes line endings internally, so exact CRLF round trips through the entire editor are not yet guaranteed, although targeted edit helpers preserve CRLF.
 
-**Local development build, not production-ready:** the inherited dependency tree reports 22 advisories, including one critical. Review `npm audit` and harden dependencies before distribution. `sherpa-local` is a local publisher placeholder, not a registered Marketplace identity.
+**Production build:** production dependencies audit clean (`npm audit --omit=dev`); the publisher is `atomicdotdev`. CI runs typecheck, tests, build, packaging, and production audit on every pull request and release branch.
 
 Upstream revision and attribution are documented in `docs/UPSTREAM.md`; the upstream README is retained in `docs/MEO-README.md`. The original MIT `LICENSE` is retained unchanged.

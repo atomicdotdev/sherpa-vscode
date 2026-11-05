@@ -1,8 +1,14 @@
 # Atomic Sherpa
 
-## Unreleased
+## 1.0.0 - 2026-11-05
 - Rename the extension to Atomic Sherpa (`atomic-sherpa`) and use the backpack artwork as its icon.
 - Rename command, setting, and custom-editor IDs from `catalyst*` to `sherpa*` for the public release.
+- Fix blast-radius hop counting, webview message validation, evidence refresh/state, SCM path isolation, oversized-blame handling, and export/editor regressions from review intents 1–14.
+- Remove inherited Git editor integration; Atomic remains the SCM provider.
+- Add Atomic push, pull, insert-view, and add-remote commands through the installed Atomic CLI.
+- Upgrade vulnerable production dependencies (markdown-it, mermaid, sanitize-html, katex, Puppeteer, cspell, highlight.js, Shiki) and remove unused gRPC packages; `npm audit --omit=dev` is clean.
+- Load Puppeteer 25 as an ESM runtime and make webview/graph build steps cross-platform.
+- Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata and 1.0.0 version.
 
 ## 0.2.12
 - Package one universal, JavaScript-only VSIX; Atomic's platform library is supplied by the separate Atomic installation on the extension host.

@@ -1,4 +1,5 @@
 import { describe, test, expect } from 'bun:test';
+import nodePath from 'node:path';
 import { Window } from 'happy-dom';
 import { readChangeIntentContext } from '../src/atomic/changeIntentContext.ts';
 import { intentReferences } from '../src/shared/changeIntentContext.ts';
@@ -70,9 +71,10 @@ describe('Native change-local plan and intent context', () => {
       change: async () => ({ change: { hash: { value: bytes(1) }, message: 'Legacy hello', authors: [], dependencies: [] },
         provenanceLedger: [{ schema: 'atomic.prov.graph.v1', payload: Buffer.from(JSON.stringify(graph)) }], provenanceLedgerHashes: [{ value: bytes(2) }], intentContext: context() }),
       vault: { getIntent: async (reference) => { calls.push(reference); return { entry: { id: human, title: identity.title, body: ':::why\nBuild a runnable CLI.\n:::', vaultPath: null } }; } } };
-    const explorer = new EvidenceExplorer('/repo', client, (op) => op(), (event) => events.push(event), () => {});
+    const repo = nodePath.resolve('/repo');
+    const explorer = new EvidenceExplorer(repo, client, (op) => op(), (event) => events.push(event), () => {});
     await explorer.inspectView('main', true); await explorer.inspectHistoryHash(id);
-    expect(calls).toEqual([human]); expect(explorer.intentFile(human)).toBe(`/repo/${path}`);
+    expect(calls).toEqual([human]); expect(explorer.intentFile(human)).toBe(nodePath.join(repo, path));
     expect(events.at(-1).selection.intentContext.planId).toBeUndefined();
     const state = events.findLast((event) => event.type === 'state').state;
     expect(state.draft.intents[0].canOpenSource).toBe(true);

@@ -33,3 +33,14 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
+
+
+## nodeatomic
+
+The bundled `dist/nodeatomic/index.mjs` consumer is generated from
+[`atomicdotdev/nodeatomic`](https://github.com/atomicdotdev/nodeatomic), revision
+`6e50338c1d450cef8463113198d95c61e431a0b9`. The vendored build under
+`vendor/nodeatomic` is used only at build time and is excluded from the VSIX.
+
+nodeatomic is licensed under MIT OR Apache-2.0. The repository MIT license is in
+`LICENSE`; the Apache-2.0 text is in `THIRD_PARTY_APACHE_LICENSE.txt`.

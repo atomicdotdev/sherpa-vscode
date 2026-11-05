@@ -1,0 +1,8 @@
+Vendored nodeatomic JavaScript consumer and generated protobuf codecs.
+
+Source: https://github.com/atomicdotdev/nodeatomic
+Source revision: 6e50338c1d450cef8463113198d95c61e431a0b9
+License: MIT OR Apache-2.0
+
+The vendored files are distributed under the MIT license in the repository
+root LICENSE and the Apache-2.0 license in THIRD_PARTY_APACHE_LICENSE.txt.

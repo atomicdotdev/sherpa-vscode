@@ -126,7 +126,7 @@ async function withPreparedExportPage<T>(
 
 async function loadBundledPuppeteerRuntime(explicitRuntimePath?: string): Promise<any> {
   if (!puppeteerRuntimePromise) {
-    const runtimePath = explicitRuntimePath || path.join(__dirname, 'puppeteer-runtime.js');
+    const runtimePath = explicitRuntimePath || path.join(__dirname, 'puppeteer-runtime.mjs');
     const runtimeUrl = pathToFileURL(runtimePath).toString();
     puppeteerRuntimePromise = import(runtimeUrl)
       .then((mod: any) => unwrapPuppeteerRuntime(mod))

@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import path from 'node:path';
 import { Window } from 'happy-dom';
 import { EvidenceExplorer } from '../src/atomic/evidenceExplorer.ts';
 import { summarizeView, viewTreeDescription } from '../src/atomic/model.ts';
@@ -9,6 +10,7 @@ import { readAtomicWhy } from '../webview/src/helpers/atomicIntentDocument.ts';
 import { displayChangeHash } from '../src/shared/atomicHash.ts';
 
 const bytes = (n) => new Uint8Array(32).fill(n), hex = (n) => Buffer.from(bytes(n)).toString('hex');
+const repo = path.resolve('/repo');
 const graph = (index = 1, count = 2) => ({ version: 3, session_id: `session-${index}`, agent_name: 'OpenCode', plan_id: 'TEST::1',
   nodes: Array.from({ length: count }, (_, n) => ({ id: `${index}-${n}`, kind: n % 2 ? 'execution' : 'exploration', summary: `Action ${index}-${n}`,
     tool_name: n % 2 ? 'shell' : 'read', timestamp: 1000 + index * 100 + n, duration_ms: n, detail: '{"path":"read-only/context.ts"}' })), edges: [] });
@@ -26,7 +28,7 @@ function fixture(scope = 1) {
     vault: { listIntents: async () => { throw new Error('Never list unrelated repository intents'); },
       getIntent: async (id) => { calls.push(['getIntent', id]); return { entry: { id, title: 'Improve session handling', body: ':::why\nUsers need predictable sessions.\n:::', vaultPath: '.vault/intents/test/intent.md' } }; },
       getSignedIntent: async () => ({}) } };
-  return { client, calls, events, views, explorer: new EvidenceExplorer('/repo', client, (op) => op(), (event) => events.push(event), (snapshot) => paths.push(snapshot)) };
+  return { client, calls, events, views, explorer: new EvidenceExplorer(repo, client, (op) => op(), (event) => events.push(event), (snapshot) => paths.push(snapshot)) };
 }
 
 describe('Authoritative view classification and draft routing', () => {
@@ -43,7 +45,7 @@ describe('Authoritative view classification and draft routing', () => {
     expect(calls.filter(([name]) => name === 'change')).toHaveLength(1);
     expect(calls.filter(([name]) => name === 'getIntent')).toEqual([['getIntent', 'TEST::1']]);
     expect(events.at(-1).selection.id).toBe(hex(2));
-    expect(explorer.intentFile('TEST::1')).toBe('/repo/.vault/intents/test/intent.md');
+    expect(explorer.intentFile('TEST::1')).toBe(path.join(repo, '.vault/intents/test/intent.md'));
   });
   test('navigation fences an in-flight explicit hash read', async () => {
     const { explorer, client, events } = fixture();
@@ -83,7 +85,7 @@ describe('Authoritative view classification and draft routing', () => {
     expect(calls.filter(([name]) => name === 'change')).toHaveLength(4);
     expect(calls.filter(([name]) => name === 'change').every(([, , options]) => options.includeFileContents === true)).toBe(true);
     expect(calls.filter(([name]) => name === 'getIntent')).toEqual([['getIntent', 'TEST::1']]);
-    expect(explorer.intentFile('TEST::1')).toBe('/repo/.vault/intents/test/intent.md');
+    expect(explorer.intentFile('TEST::1')).toBe(path.join(repo, '.vault/intents/test/intent.md'));
     await explorer.inspectView('main');
     expect(explorer.intentFile('TEST::1')).toBeUndefined();
   });

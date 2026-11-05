@@ -2,10 +2,9 @@
   "name": "atomic-sherpa",
   "displayName": "Atomic Sherpa",
   "description": "Connect intent to source code with Atomic: edit intent tickets, manage Draft and Shared views, inspect change history, and explore code blast radius.",
-  "version": "0.2.12",
+  "version": "1.0.0",
   "publisher": "atomicdotdev",
   "license": "MIT",
-  "private": true,
   "icon": "backpack.png",
   "engines": {
     "vscode": "^1.97.0"
@@ -28,7 +27,9 @@
     "agent"
   ],
   "main": "./dist/extension.js",
-  "extensionKind": ["workspace"],
+  "extensionKind": [
+    "workspace"
+  ],
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -62,17 +63,61 @@
       }
     ],
     "commands": [
-      { "command": "sherpaAtomic.openGraph", "title": "Atomic: Inspect View Changes", "icon": "$(history)" },
-      { "command": "sherpaAtomic.refresh", "title": "Atomic: Refresh Version Control", "icon": "$(refresh)" },
-      { "command": "sherpaAtomic.record", "title": "Atomic: Record Tracked Changes", "icon": "$(check)" },
-      { "command": "sherpaAtomic.add", "title": "Atomic: Add File", "icon": "$(add)" },
-      { "command": "sherpaAtomic.createView", "title": "Atomic: Create View", "icon": "$(add)" },
-      { "command": "sherpaAtomic.switchView", "title": "Atomic: Switch View", "icon": "$(versions)" },
-      { "command": "sherpaAtomic.deleteView", "title": "Atomic: Delete View", "icon": "$(trash)" },
-      { "command": "sherpaAtomic.push", "title": "Atomic: Push View", "icon": "$(cloud-upload)" },
-      { "command": "sherpaAtomic.pull", "title": "Atomic: Pull View", "icon": "$(cloud-download)" },
-      { "command": "sherpaAtomic.insertView", "title": "Atomic: Insert View Into View", "icon": "$(arrow-right)" },
-      { "command": "sherpaAtomic.addRemote", "title": "Atomic: Add Remote", "icon": "$(plug)" },
+      {
+        "command": "sherpaAtomic.openGraph",
+        "title": "Atomic: Inspect View Changes",
+        "icon": "$(history)"
+      },
+      {
+        "command": "sherpaAtomic.refresh",
+        "title": "Atomic: Refresh Version Control",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sherpaAtomic.record",
+        "title": "Atomic: Record Tracked Changes",
+        "icon": "$(check)"
+      },
+      {
+        "command": "sherpaAtomic.add",
+        "title": "Atomic: Add File",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sherpaAtomic.createView",
+        "title": "Atomic: Create View",
+        "icon": "$(add)"
+      },
+      {
+        "command": "sherpaAtomic.switchView",
+        "title": "Atomic: Switch View",
+        "icon": "$(versions)"
+      },
+      {
+        "command": "sherpaAtomic.deleteView",
+        "title": "Atomic: Delete View",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "sherpaAtomic.push",
+        "title": "Atomic: Push View",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "sherpaAtomic.pull",
+        "title": "Atomic: Pull View",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sherpaAtomic.insertView",
+        "title": "Atomic: Insert View Into View",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "sherpaAtomic.addRemote",
+        "title": "Atomic: Add Remote",
+        "icon": "$(plug)"
+      },
       {
         "command": "sherpaIntent.open",
         "title": "Atomic: Open Intent as Ticket",
@@ -168,29 +213,88 @@
     ],
     "menus": {
       "view/title": [
-        { "command": "sherpaAtomic.refresh", "when": "view == sherpaAtomic.repository", "group": "navigation" }
+        {
+          "command": "sherpaAtomic.refresh",
+          "when": "view == sherpaAtomic.repository",
+          "group": "navigation"
+        }
       ],
       "view/item/context": [
-        { "command": "sherpaAtomic.openGraph", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "navigation" },
-        { "command": "sherpaAtomic.createView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "sherpaAtomic.switchView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "sherpaAtomic.deleteView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "sherpaAtomic.push", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "sherpaAtomic.pull", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "sherpaAtomic.insertView", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" },
-        { "command": "sherpaAtomic.addRemote", "when": "view == sherpaAtomic.repository && viewItem == atomicRepository", "group": "atomic" }
+        {
+          "command": "sherpaAtomic.openGraph",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "navigation"
+        },
+        {
+          "command": "sherpaAtomic.createView",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        },
+        {
+          "command": "sherpaAtomic.switchView",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        },
+        {
+          "command": "sherpaAtomic.deleteView",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        },
+        {
+          "command": "sherpaAtomic.push",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        },
+        {
+          "command": "sherpaAtomic.pull",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        },
+        {
+          "command": "sherpaAtomic.insertView",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        },
+        {
+          "command": "sherpaAtomic.addRemote",
+          "when": "view == sherpaAtomic.repository && viewItem == atomicRepository",
+          "group": "atomic"
+        }
       ],
       "scm/title": [
-        { "command": "sherpaAtomic.record", "when": "scmProvider == atomic", "group": "navigation" },
-        { "command": "sherpaAtomic.push", "when": "scmProvider == atomic", "group": "navigation" },
-        { "command": "sherpaAtomic.pull", "when": "scmProvider == atomic", "group": "navigation" },
-        { "command": "sherpaAtomic.refresh", "when": "scmProvider == atomic", "group": "navigation" }
+        {
+          "command": "sherpaAtomic.record",
+          "when": "scmProvider == atomic",
+          "group": "navigation"
+        },
+        {
+          "command": "sherpaAtomic.push",
+          "when": "scmProvider == atomic",
+          "group": "navigation"
+        },
+        {
+          "command": "sherpaAtomic.pull",
+          "when": "scmProvider == atomic",
+          "group": "navigation"
+        },
+        {
+          "command": "sherpaAtomic.refresh",
+          "when": "scmProvider == atomic",
+          "group": "navigation"
+        }
       ],
       "scm/resourceState/context": [
-        { "command": "sherpaAtomic.add", "when": "scmProvider == atomic && scmResourceState == atomicUntracked", "group": "inline" }
+        {
+          "command": "sherpaAtomic.add",
+          "when": "scmProvider == atomic && scmResourceState == atomicUntracked",
+          "group": "inline"
+        }
       ],
       "commandPalette": [
-        { "command": "sherpaAtomic.add", "when": "false" }
+        {
+          "command": "sherpaAtomic.add",
+          "when": "false"
+        }
       ],
       "explorer/context": [
         {
@@ -834,17 +938,18 @@
     "typecheck": "tsc --noEmit && tsc -p webview/tsconfig.json --noEmit",
     "typecheck:webview": "tsc -p webview/tsconfig.json --noEmit",
     "build": "bun run build:webview && bun run build:extension",
-    "build:webview": "rm -rf webview/dist && mkdir -p webview/dist webview/dist/katex && bun build webview/src/index.ts --target=browser --format=esm --splitting --minify --outdir=webview/dist && cp webview/src/styles.css webview/dist/index.css && cp node_modules/mermaid/dist/mermaid.min.js webview/dist/mermaid.min.js && cp node_modules/katex/dist/katex.min.css webview/dist/katex/katex.min.css && cp -R node_modules/katex/dist/fonts webview/dist/katex/fonts",
-    "build:extension": "bun run build:extension:graph && bun run build:extension:atomic && bun run build:extension:main && bun run build:extension:export-runtime && bun run build:extension:puppeteer-runtime",
-    "build:extension:graph": "bun build webview/src/atomicGraph.ts --target=browser --format=iife --minify --outfile=dist/atomic-graph.js && cp webview/src/atomicGraph.css dist/atomic-graph.css",
+    "build:webview": "bun scripts/build-webview.mjs",
+    "build:extension": "bun scripts/clean-dist.mjs && bun run build:extension:graph && bun run build:extension:atomic && bun run build:extension:main && bun run build:extension:export-runtime && bun run build:extension:puppeteer-runtime",
+    "build:extension:graph": "bun scripts/build-graph.mjs",
     "build:extension:atomic": "bun scripts/build-nodeatomic.mjs",
     "build:extension:main": "bun build src/extension.ts --target=node --format=cjs --minify --outfile=dist/extension.js -e vscode",
     "build:extension:main:debug": "bun build src/extension.ts --target=node --format=cjs --minify --outfile=dist/extension.js -e vscode --sourcemap=inline",
     "build:extension:export-runtime": "bun build src/export/runtime.ts --target=node --format=cjs --minify --outfile=dist/export-runtime.js",
-    "build:extension:puppeteer-runtime": "bun build src/export/puppeteerRuntime.ts --target=node --format=cjs --minify --outfile=dist/puppeteer-runtime.js",
+    "build:extension:puppeteer-runtime": "bun build src/export/puppeteerRuntime.mts --target=node --format=esm --minify --outfile=dist/puppeteer-runtime.mjs",
     "release:prep": "bun scripts/release-prep.mjs",
     "release:finalize": "bun scripts/release-prep.mjs finalize",
-    "vscode:publish": "npm run package:vsix"
+    "vscode:publish": "npm run package:vsix",
+    "ci:verify": "npm run typecheck && npm test && npm run build && npm run package:vsix && node scripts/verify-universal-vsix.mjs"
   },
   "dependencies": {
     "@codemirror/commands": "6.8.1",
@@ -863,29 +968,27 @@
     "@codemirror/search": "6.6.0",
     "@codemirror/state": "6.5.2",
     "@codemirror/view": "6.36.4",
-    "@grpc/grpc-js": "^1.14.6",
-    "@grpc/proto-loader": "^0.8.1",
-    "@lezer/highlight": "^1.2.3",
-    "@replit/codemirror-vim": "^6.3.0",
+    "@lezer/highlight": "^1.2.5",
+    "@replit/codemirror-vim": "^6.4.0",
     "@types/vscode": "^1.109.0",
-    "cspell-lib": "^10.0.1",
+    "cspell-lib": "^10.4.0",
     "d3-drag": "3.0.0",
     "d3-force": "3.0.0",
     "d3-selection": "3.0.0",
     "d3-zoom": "3.0.0",
-    "highlight.js": "^11.11.1",
-    "katex": "^0.16.28",
+    "highlight.js": "^11.12.0",
+    "katex": "^0.19.1",
     "lucide": "^0.564.0",
-    "markdown-it": "^14.1.0",
-    "markdown-it-emoji": "^3.0.0",
-    "mermaid": "^11.4.1",
-    "nodeatomic": "file:../nodeatomic",
-    "puppeteer-core": "^24.1.1",
+    "markdown-it": "^14.3.3",
+    "markdown-it-emoji": "^3.1.0",
+    "mermaid": "^11.17.2",
+    "nodeatomic": "file:vendor/nodeatomic",
+    "puppeteer-core": "^25.16.0",
     "remark-directive": "^4.0.0",
     "remark-frontmatter": "^5.0.0",
     "remark-parse": "^11.0.0",
-    "sanitize-html": "^2.17.0",
-    "shiki": "^4.2.0",
+    "sanitize-html": "^2.18.1",
+    "shiki": "^4.6.0",
     "unified": "^11.0.5",
     "yaml": "^2.9.1"
   },
@@ -897,8 +1000,20 @@
     "@types/markdown-it": "^14.1.2",
     "@types/markdown-it-emoji": "^3.0.1",
     "@types/sanitize-html": "^2.16.0",
-    "@vscode/vsce": "^4.0.0",
-    "happy-dom": "^21.0.1",
+    "@vscode/vsce": "^4.1.0",
+    "happy-dom": "^21.0.4",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "katex": "^0.19.1",
+    "uuid": "^11.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atomicdotdev/sherpa-vscode.git"
+  },
+  "homepage": "https://github.com/atomicdotdev/sherpa-vscode#readme",
+  "bugs": {
+    "url": "https://github.com/atomicdotdev/sherpa-vscode/issues"
   }
 }

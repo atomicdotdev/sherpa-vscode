@@ -77,6 +77,29 @@ export class AtomicRepository {
         const response = proto.PreviewMutationResponse.decode(await call('/atomic.RepositoryQueryService/PreviewRestore', proto.PreviewRestoreRequest.encode({ repository: this.reference, paths: [path], contentPath: path }).finish()));
         return { content: response.pristineContent ?? undefined, view: response.view ?? undefined };
     }
+    /** Synchronize through native canonical sync; native code resolves credentials. */
+    async push(options = {}) {
+        const { repository: _repository, authHeaders: _headers, remoteUrl: _url, ...request } = options;
+        return proto.PushChangesResponse.decode(await call('/atomic.SyncService/PushChanges', proto.PushChangesRequest.encode({ ...request, timeoutSecs: options.timeoutSecs ?? 300,
+            repository: this.reference }).finish()));
+    }
+    /** Synchronize graph/view state and report any native materialization outcome. */
+    async pull(options = {}) {
+        const { repository: _repository, authHeaders: _headers, remoteUrl: _url, ...request } = options;
+        return proto.PullChangesResponse.decode(await call('/atomic.SyncService/PullChanges', proto.PullChangesRequest.encode({ ...request, timeoutSecs: options.timeoutSecs ?? 300,
+            importSidecars: options.importSidecars ?? true, repository: this.reference }).finish()));
+    }
+    remotes = {
+        list: async () => proto.ListRemotesResponse.decode(await call('/atomic.SyncService/ListRemotes', proto.ListRemotesRequest.encode({ repository: this.reference }).finish())),
+        add: async (name, url, options = {}) => {
+            if (typeof name !== 'string' || !name.trim())
+                throw new TypeError('a non-empty remote name is required');
+            if (typeof url !== 'string' || !url.trim())
+                throw new TypeError('a non-empty remote URL is required');
+            return proto.ManageRemotesResponse.decode(await call('/atomic.SyncService/ManageRemotes', proto.ManageRemotesRequest.encode({ setDefault: options.setDefault, name, url,
+                action: proto.RemoteAction.REMOTE_ACTION_ADD, repository: this.reference }).finish()));
+        },
+    };
     views = {
         list: async (options = {}) => proto.ListViewsResponse.decode(await call('/atomic.ViewService/ListViews', proto.ListViewsRequest.encode({ ...options, repository: this.reference }).finish())),
         create: async (name, options = {}) => {
@@ -93,6 +116,21 @@ export class AtomicRepository {
         delete: async (name, options = {}) => {
             requireName(name);
             return proto.DeleteViewResponse.decode(await call('/atomic.ViewService/DeleteView', proto.DeleteViewRequest.encode({ ...options, view: name, repository: this.reference }).finish()));
+        },
+        /** Insert source membership/dependencies into target, never promote scope. */
+        insert: async (source, target, options = {}) => {
+            requireName(source);
+            requireName(target);
+            if (source === target)
+                throw new TypeError('source and target views must differ');
+            const views = await this.views.list();
+            const targetRef = views.views.find((view) => view.name === target)?.ref;
+            if (!targetRef)
+                throw new Error(`target view not found: ${target}`);
+            return proto.InsertChangesResponse.decode(await call('/atomic.RepositoryMutationService/InsertChanges', proto.InsertChangesRequest.encode({ meta: options.meta, allowConflicts: options.allowConflicts,
+                expectedSnapshot: options.expectedSnapshot, sourceSnapshot: options.sourceSnapshot,
+                applyDependencies: options.applyDependencies, dryRun: options.dryRun,
+                fromView: source, targetView: target, target: targetRef, repository: this.reference }).finish()));
         },
     };
     vault = {

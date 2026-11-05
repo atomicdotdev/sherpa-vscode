@@ -24,6 +24,13 @@ export type ListViewsOptions = Omit<Contract.ListViewsRequest.$Properties, 'repo
 export type CreateViewOptions = Omit<Contract.CreateViewRequest.$Properties, 'repository' | 'name'>;
 export type SwitchViewOptions = Omit<Contract.SwitchViewRequest.$Properties, 'repository' | 'view'>;
 export type DeleteViewOptions = Omit<Contract.DeleteViewRequest.$Properties, 'repository' | 'view'>;
+export type PushOptions = Omit<Contract.PushChangesRequest.$Properties, 'repository' | 'authHeaders' | 'remoteUrl'>;
+export type PullOptions = Omit<Contract.PullChangesRequest.$Properties, 'repository' | 'authHeaders' | 'remoteUrl'>;
+export type AddRemoteOptions = Pick<Contract.ManageRemotesRequest.$Properties, 'setDefault'>;
+export type InsertViewOptions = Pick<Contract.InsertChangesRequest.$Properties, 'meta' | 'allowConflicts' | 'expectedSnapshot' | 'sourceSnapshot' | 'applyDependencies' | 'dryRun'>;
+export type PushResponse = Contract.PushChangesResponse;
+export type PullResponse = Contract.PullChangesResponse;
+export type InsertViewResponse = Contract.InsertChangesResponse;
 /** A full binary hash, an unambiguous base32 prefix, or a view-log sequence. */
 export type ChangeReference = {
     hash: Uint8Array;
@@ -61,11 +68,21 @@ export declare class AtomicRepository {
         content?: Uint8Array;
         view?: string;
     }>;
+    /** Synchronize through native canonical sync; native code resolves credentials. */
+    push(options?: PushOptions): Promise<PushResponse>;
+    /** Synchronize graph/view state and report any native materialization outcome. */
+    pull(options?: PullOptions): Promise<PullResponse>;
+    readonly remotes: {
+        list: () => Promise<Contract.ListRemotesResponse>;
+        add: (name: string, url: string, options?: AddRemoteOptions) => Promise<Contract.ManageRemotesResponse>;
+    };
     readonly views: {
         list: (options?: ListViewsOptions) => Promise<Contract.ListViewsResponse>;
         create: (name: string, options?: CreateViewOptions) => Promise<Contract.CreateViewResponse>;
         switch: (name: string, options?: SwitchViewOptions) => Promise<Contract.SwitchViewResponse>;
         delete: (name: string, options?: DeleteViewOptions) => Promise<Contract.DeleteViewResponse>;
+        /** Insert source membership/dependencies into target, never promote scope. */
+        insert: (source: string, target: string, options?: InsertViewOptions) => Promise<InsertViewResponse>;
     };
     readonly vault: {
         /** Equivalent stored-entry lookup to vault show / intent show / memory show. */

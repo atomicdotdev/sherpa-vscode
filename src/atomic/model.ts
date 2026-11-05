@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import type { ViewSummary } from '../shared/atomicEvidence';
 
-export type RepositoryClient = Pick<AtomicRepository, 'status' | 'add' | 'record' | 'log' | 'change' | 'views' | 'vault' | 'recordedFile'>;
+export type RepositoryClient = Pick<AtomicRepository, 'status' | 'add' | 'record' | 'log' | 'change' | 'views' | 'vault' | 'recordedFile' | 'push' | 'pull' | 'remotes'>;
 export type Status = Awaited<ReturnType<RepositoryClient['status']>>;
 export type History = Awaited<ReturnType<RepositoryClient['log']>>;
 export type Views = Awaited<ReturnType<RepositoryClient['views']['list']>>;

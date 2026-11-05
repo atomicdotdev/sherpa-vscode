@@ -3712,6 +3712,10 @@ $root.atomic = (function() {
                 case 5:
                     message.status = 5;
                     break;
+                case "FILE_STATUS_PENDING_UNTRACK":
+                case 6:
+                    message.status = 6;
+                    break;
                 default:
                     if (typeof object.status === "number" && (object.status | 0) === object.status)
                         message.status = object.status;
@@ -3819,6 +3823,7 @@ $root.atomic = (function() {
      * @property {number} FILE_STATUS_UNTRACKED=3 FILE_STATUS_UNTRACKED value
      * @property {number} FILE_STATUS_ADDED=4 FILE_STATUS_ADDED value
      * @property {number} FILE_STATUS_CONFLICTED=5 FILE_STATUS_CONFLICTED value
+     * @property {number} FILE_STATUS_PENDING_UNTRACK=6 FILE_STATUS_PENDING_UNTRACK value
      */
     atomic.FileStatus = (function() {
         var valuesById = $Object.create(null), values = $Object.create(valuesById);
@@ -3828,6 +3833,7 @@ $root.atomic = (function() {
         values[valuesById[3] = "FILE_STATUS_UNTRACKED"] = 3;
         values[valuesById[4] = "FILE_STATUS_ADDED"] = 4;
         values[valuesById[5] = "FILE_STATUS_CONFLICTED"] = 5;
+        values[valuesById[6] = "FILE_STATUS_PENDING_UNTRACK"] = 6;
         return values;
     })();
 
@@ -24086,6 +24092,11971 @@ $root.atomic = (function() {
         return DeleteViewResponse;
     })();
 
+    atomic.PushChangesRequest = (function() {
+
+        /**
+         * Properties of a PushChangesRequest.
+         * @typedef {Object} atomic.PushChangesRequest.$Properties
+         * @property {atomic.RepositoryRef.$Properties|null} [repository] PushChangesRequest repository
+         * @property {atomic.RequestMeta.$Properties|null} [meta] PushChangesRequest meta
+         * @property {string|null} [remote] PushChangesRequest remote
+         * @property {Array.<string>|null} [views] PushChangesRequest views
+         * @property {atomic.ExpectedState.$Properties|null} [expected] PushChangesRequest expected
+         * @property {string|null} [toView] PushChangesRequest toView
+         * @property {string|null} [fromView] PushChangesRequest fromView
+         * @property {boolean|null} [dryRun] PushChangesRequest dryRun
+         * @property {boolean|null} [force] PushChangesRequest force
+         * @property {boolean|null} [all] PushChangesRequest all
+         * @property {boolean|null} [insecure] PushChangesRequest insecure
+         * @property {number|Long|null} [timeoutSecs] PushChangesRequest timeoutSecs
+         * @property {Object.<string,string>|null} [authHeaders] PushChangesRequest authHeaders
+         * @property {string|null} [remoteUrl] PushChangesRequest remoteUrl
+         * @property {string|null} [identity] PushChangesRequest identity
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushChangesRequest.
+         * @memberof atomic
+         * @interface IPushChangesRequest
+         * @augments atomic.PushChangesRequest.$Properties
+         * @deprecated Use atomic.PushChangesRequest.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushChangesRequest.
+         * @typedef {{
+         *   repository?: atomic.RepositoryRef.$Shape|null;
+         *   meta?: atomic.RequestMeta.$Shape|null;
+         *   remote?: string|null;
+         *   views?: Array.<string>|null;
+         *   expected?: atomic.ExpectedState.$Shape|null;
+         *   toView?: string|null;
+         *   fromView?: string|null;
+         *   dryRun?: boolean|null;
+         *   force?: boolean|null;
+         *   all?: boolean|null;
+         *   insecure?: boolean|null;
+         *   timeoutSecs?: number|Long|null;
+         *   authHeaders?: Object.<string,string>|null;
+         *   remoteUrl?: string|null;
+         *   identity?: string|null;
+         *   $unknowns?: Array.<Uint8Array>;
+         * }} atomic.PushChangesRequest.$Shape
+         */
+
+        /**
+         * Constructs a new PushChangesRequest.
+         * @memberof atomic
+         * @classdesc Represents a PushChangesRequest.
+         * @constructor
+         * @param {atomic.PushChangesRequest.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushChangesRequest = function (properties) {
+            this.views = [];
+            this.authHeaders = {};
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushChangesRequest repository.
+         * @member {atomic.RepositoryRef.$Properties|null|undefined} repository
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.repository = null;
+
+        /**
+         * PushChangesRequest meta.
+         * @member {atomic.RequestMeta.$Properties|null|undefined} meta
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.meta = null;
+
+        /**
+         * PushChangesRequest remote.
+         * @member {string} remote
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.remote = "";
+
+        /**
+         * PushChangesRequest views.
+         * @member {Array.<string>} views
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.views = $util.emptyArray;
+
+        /**
+         * PushChangesRequest expected.
+         * @member {atomic.ExpectedState.$Properties|null|undefined} expected
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.expected = null;
+
+        /**
+         * PushChangesRequest toView.
+         * @member {string|null|undefined} toView
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.toView = null;
+
+        /**
+         * PushChangesRequest fromView.
+         * @member {string|null|undefined} fromView
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.fromView = null;
+
+        /**
+         * PushChangesRequest dryRun.
+         * @member {boolean} dryRun
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.dryRun = false;
+
+        /**
+         * PushChangesRequest force.
+         * @member {boolean} force
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.force = false;
+
+        /**
+         * PushChangesRequest all.
+         * @member {boolean} all
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.all = false;
+
+        /**
+         * PushChangesRequest insecure.
+         * @member {boolean} insecure
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.insecure = false;
+
+        /**
+         * PushChangesRequest timeoutSecs.
+         * @member {number|Long} timeoutSecs
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.timeoutSecs = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushChangesRequest authHeaders.
+         * @member {Object.<string,string>} authHeaders
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.authHeaders = $util.emptyObject;
+
+        /**
+         * PushChangesRequest remoteUrl.
+         * @member {string|null|undefined} remoteUrl
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.remoteUrl = null;
+
+        /**
+         * PushChangesRequest identity.
+         * @member {string|null|undefined} identity
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         */
+        PushChangesRequest.prototype.identity = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesRequest.prototype, "_expected", {
+            get: $util.oneOfGetter($oneOfFields = ["expected"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesRequest.prototype, "_to_view", {
+            get: $util.oneOfGetter($oneOfFields = ["toView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesRequest.prototype, "_from_view", {
+            get: $util.oneOfGetter($oneOfFields = ["fromView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesRequest.prototype, "_remote_url", {
+            get: $util.oneOfGetter($oneOfFields = ["remoteUrl"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesRequest.prototype, "_identity", {
+            get: $util.oneOfGetter($oneOfFields = ["identity"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PushChangesRequest instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {atomic.PushChangesRequest.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushChangesRequest} PushChangesRequest instance
+         * @type {{
+         *   (properties: atomic.PushChangesRequest.$Shape): atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape;
+         *   (properties?: atomic.PushChangesRequest.$Properties): atomic.PushChangesRequest;
+         * }}
+         */
+        PushChangesRequest.create = function(properties) {
+            return new PushChangesRequest(properties);
+        };
+
+        /**
+         * Encodes the specified PushChangesRequest message. Does not implicitly {@link atomic.PushChangesRequest.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {atomic.PushChangesRequest.$Properties} message PushChangesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushChangesRequest.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                $root.atomic.RepositoryRef.encode(message.repository, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.RequestMeta.encode(message.meta, writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote") && message.remote !== "")
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.remote);
+            if (message.views != null && message.views.length)
+                for (var i = 0; i < message.views.length; ++i)
+                    writer.uint32(/* id 4, wireType 2 =*/34).string(message.views[i]);
+            if (message.expected != null && $Object.hasOwnProperty.call(message, "expected"))
+                $root.atomic.ExpectedState.encode(message.expected, writer.uint32(/* id 5, wireType 2 =*/42).fork(), _depth + 1).ldelim();
+            if (message.toView != null && $Object.hasOwnProperty.call(message, "toView"))
+                writer.uint32(/* id 6, wireType 2 =*/50).string(message.toView);
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView"))
+                writer.uint32(/* id 7, wireType 2 =*/58).string(message.fromView);
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun") && message.dryRun !== false)
+                writer.uint32(/* id 8, wireType 0 =*/64).bool(message.dryRun);
+            if (message.force != null && $Object.hasOwnProperty.call(message, "force") && message.force !== false)
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.force);
+            if (message.all != null && $Object.hasOwnProperty.call(message, "all") && message.all !== false)
+                writer.uint32(/* id 10, wireType 0 =*/80).bool(message.all);
+            if (message.insecure != null && $Object.hasOwnProperty.call(message, "insecure") && message.insecure !== false)
+                writer.uint32(/* id 11, wireType 0 =*/88).bool(message.insecure);
+            if (message.timeoutSecs != null && $Object.hasOwnProperty.call(message, "timeoutSecs") && (typeof message.timeoutSecs === "object" ? message.timeoutSecs.low || message.timeoutSecs.high : message.timeoutSecs !== 0))
+                writer.uint32(/* id 12, wireType 0 =*/96).uint64(message.timeoutSecs);
+            if (message.authHeaders != null && $Object.hasOwnProperty.call(message, "authHeaders"))
+                for (var keys = $Object.keys(message.authHeaders), i = 0; i < keys.length; ++i)
+                    writer.uint32(/* id 13, wireType 2 =*/106).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).string(message.authHeaders[keys[i]]).ldelim();
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                writer.uint32(/* id 14, wireType 2 =*/114).string(message.remoteUrl);
+            if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                writer.uint32(/* id 15, wireType 2 =*/122).string(message.identity);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushChangesRequest message, length delimited. Does not implicitly {@link atomic.PushChangesRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {atomic.PushChangesRequest.$Properties} message PushChangesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushChangesRequest.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushChangesRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape} PushChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushChangesRequest.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, key, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushChangesRequest();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.repository = $root.atomic.RepositoryRef.decode(reader, reader.size(), $undefined, _depth + 1, message.repository);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.RequestMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remote = value;
+                        else
+                            delete message.remote;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.views && message.views.length))
+                            message.views = [];
+                        message.views.push(reader.stringVerify());
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.expected = $root.atomic.ExpectedState.decode(reader, reader.size(), $undefined, _depth + 1, message.expected);
+                        message._expected = "expected";
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 2)
+                            break;
+                        message.toView = reader.stringVerify();
+                        message._to_view = "toView";
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 2)
+                            break;
+                        message.fromView = reader.stringVerify();
+                        message._from_view = "fromView";
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.dryRun = value;
+                        else
+                            delete message.dryRun;
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.force = value;
+                        else
+                            delete message.force;
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.all = value;
+                        else
+                            delete message.all;
+                        continue;
+                    }
+                case 11: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.insecure = value;
+                        else
+                            delete message.insecure;
+                        continue;
+                    }
+                case 12: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.timeoutSecs = value;
+                        else
+                            delete message.timeoutSecs;
+                        continue;
+                    }
+                case 13: {
+                        if (wireType !== 2)
+                            break;
+                        if (message.authHeaders === $util.emptyObject)
+                            message.authHeaders = {};
+                        var end2 = reader.size() + reader.pos;
+                        if (end2 > reader.len)
+                            throw $RangeError("index out of range");
+                        reader.len = end2;
+                        key = "";
+                        value = "";
+                        while (reader.pos < end2) {
+                            var tag2 = reader.tag();
+                            wireType = tag2 & 7;
+                            switch (tag2 >>>= 3) {
+                            case 1:
+                                if (wireType !== 2)
+                                    break;
+                                key = reader.stringVerify();
+                                continue;
+                            case 2:
+                                if (wireType !== 2)
+                                    break;
+                                value = reader.stringVerify();
+                                continue;
+                            }
+                            reader.skipType(wireType, _depth, tag2);
+                        }
+                        if (reader.pos !== end2)
+                            throw $RangeError("index out of range");
+                        reader.len = end;
+                        if (key === "__proto__")
+                            $util.makeProp(message.authHeaders, key);
+                        message.authHeaders[key] = value;
+                        continue;
+                    }
+                case 14: {
+                        if (wireType !== 2)
+                            break;
+                        message.remoteUrl = reader.stringVerify();
+                        message._remote_url = "remoteUrl";
+                        continue;
+                    }
+                case 15: {
+                        if (wireType !== 2)
+                            break;
+                        message.identity = reader.stringVerify();
+                        message._identity = "identity";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushChangesRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape} PushChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushChangesRequest.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushChangesRequest message.
+         * @function verify
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushChangesRequest.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository")) {
+                var error = $root.atomic.RepositoryRef.verify(message.repository, _depth + 1);
+                if (error)
+                    return "repository." + error;
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.RequestMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote"))
+                if (!$util.isString(message.remote))
+                    return "remote: string expected";
+            if (message.views != null && $Object.hasOwnProperty.call(message, "views")) {
+                if (!$Array.isArray(message.views))
+                    return "views: array expected";
+                for (var i = 0; i < message.views.length; ++i)
+                    if (!$util.isString(message.views[i]))
+                        return "views: string[] expected";
+            }
+            if (message.expected != null && $Object.hasOwnProperty.call(message, "expected")) {
+                properties._expected = 1;
+                {
+                    var error = $root.atomic.ExpectedState.verify(message.expected, _depth + 1);
+                    if (error)
+                        return "expected." + error;
+                }
+            }
+            if (message.toView != null && $Object.hasOwnProperty.call(message, "toView")) {
+                properties._to_view = 1;
+                if (!$util.isString(message.toView))
+                    return "toView: string expected";
+            }
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView")) {
+                properties._from_view = 1;
+                if (!$util.isString(message.fromView))
+                    return "fromView: string expected";
+            }
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun"))
+                if (typeof message.dryRun !== "boolean")
+                    return "dryRun: boolean expected";
+            if (message.force != null && $Object.hasOwnProperty.call(message, "force"))
+                if (typeof message.force !== "boolean")
+                    return "force: boolean expected";
+            if (message.all != null && $Object.hasOwnProperty.call(message, "all"))
+                if (typeof message.all !== "boolean")
+                    return "all: boolean expected";
+            if (message.insecure != null && $Object.hasOwnProperty.call(message, "insecure"))
+                if (typeof message.insecure !== "boolean")
+                    return "insecure: boolean expected";
+            if (message.timeoutSecs != null && $Object.hasOwnProperty.call(message, "timeoutSecs"))
+                if (!$util.isInteger(message.timeoutSecs) && !(message.timeoutSecs && $util.isInteger(message.timeoutSecs.low) && $util.isInteger(message.timeoutSecs.high)))
+                    return "timeoutSecs: integer|Long expected";
+            if (message.authHeaders != null && $Object.hasOwnProperty.call(message, "authHeaders")) {
+                if (!$util.isObject(message.authHeaders))
+                    return "authHeaders: object expected";
+                var key = $Object.keys(message.authHeaders);
+                for (var i = 0; i < key.length; ++i)
+                    if (!$util.isString(message.authHeaders[key[i]]))
+                        return "authHeaders: string{k:string} expected";
+            }
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl")) {
+                properties._remote_url = 1;
+                if (!$util.isString(message.remoteUrl))
+                    return "remoteUrl: string expected";
+            }
+            if (message.identity != null && $Object.hasOwnProperty.call(message, "identity")) {
+                properties._identity = 1;
+                if (!$util.isString(message.identity))
+                    return "identity: string expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PushChangesRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushChangesRequest} PushChangesRequest
+         */
+        PushChangesRequest.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushChangesRequest)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushChangesRequest: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushChangesRequest();
+            if (object.repository != null) {
+                if (!$util.isObject(object.repository))
+                    throw $TypeError(".atomic.PushChangesRequest.repository: object expected");
+                message.repository = $root.atomic.RepositoryRef.fromObject(object.repository, _depth + 1);
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.PushChangesRequest.meta: object expected");
+                message.meta = $root.atomic.RequestMeta.fromObject(object.meta, _depth + 1);
+            }
+            if (object.remote != null)
+                if (typeof object.remote !== "string" || object.remote.length)
+                    message.remote = $String(object.remote);
+            if (object.views) {
+                if (!$Array.isArray(object.views))
+                    throw $TypeError(".atomic.PushChangesRequest.views: array expected");
+                message.views = $Array(object.views.length);
+                for (var i = 0; i < object.views.length; ++i)
+                    message.views[i] = $String(object.views[i]);
+            }
+            if (object.expected != null) {
+                if (!$util.isObject(object.expected))
+                    throw $TypeError(".atomic.PushChangesRequest.expected: object expected");
+                message.expected = $root.atomic.ExpectedState.fromObject(object.expected, _depth + 1);
+            }
+            if (object.toView != null)
+                message.toView = $String(object.toView);
+            if (object.fromView != null)
+                message.fromView = $String(object.fromView);
+            if (object.dryRun != null)
+                if (object.dryRun)
+                    message.dryRun = $Boolean(object.dryRun);
+            if (object.force != null)
+                if (object.force)
+                    message.force = $Boolean(object.force);
+            if (object.all != null)
+                if (object.all)
+                    message.all = $Boolean(object.all);
+            if (object.insecure != null)
+                if (object.insecure)
+                    message.insecure = $Boolean(object.insecure);
+            if (object.timeoutSecs != null)
+                if (typeof object.timeoutSecs === "object" ? object.timeoutSecs.low || object.timeoutSecs.high : $Number(object.timeoutSecs) !== 0)
+                    if ($util.Long)
+                        message.timeoutSecs = $util.Long.fromValue(object.timeoutSecs, true);
+                    else if (typeof object.timeoutSecs === "string")
+                        message.timeoutSecs = $parseInt(object.timeoutSecs, 10);
+                    else if (typeof object.timeoutSecs === "number")
+                        message.timeoutSecs = object.timeoutSecs;
+                    else if (typeof object.timeoutSecs === "object")
+                        message.timeoutSecs = new $util.LongBits(object.timeoutSecs.low >>> 0, object.timeoutSecs.high >>> 0).toNumber(true);
+            if (object.authHeaders) {
+                if (!$util.isObject(object.authHeaders))
+                    throw $TypeError(".atomic.PushChangesRequest.authHeaders: object expected");
+                message.authHeaders = {};
+                for (var keys = $Object.keys(object.authHeaders), i = 0; i < keys.length; ++i) {
+                    if (keys[i] === "__proto__")
+                        $util.makeProp(message.authHeaders, keys[i]);
+                    message.authHeaders[keys[i]] = $String(object.authHeaders[keys[i]]);
+                }
+            }
+            if (object.remoteUrl != null)
+                message.remoteUrl = $String(object.remoteUrl);
+            if (object.identity != null)
+                message.identity = $String(object.identity);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushChangesRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {atomic.PushChangesRequest} message PushChangesRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushChangesRequest.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.views = [];
+            if (options.objects || options.defaults)
+                object.authHeaders = {};
+            if (options.defaults) {
+                object.repository = null;
+                object.meta = null;
+                object.remote = "";
+                object.dryRun = false;
+                object.force = false;
+                object.all = false;
+                object.insecure = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.timeoutSecs = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.timeoutSecs = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                object.repository = $root.atomic.RepositoryRef.toObject(message.repository, options, _depth + 1);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.RequestMeta.toObject(message.meta, options, _depth + 1);
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote"))
+                object.remote = message.remote;
+            if (message.views && message.views.length) {
+                object.views = $Array(message.views.length);
+                for (var j = 0; j < message.views.length; ++j)
+                    object.views[j] = message.views[j];
+            }
+            if (message.expected != null && $Object.hasOwnProperty.call(message, "expected"))
+                object.expected = $root.atomic.ExpectedState.toObject(message.expected, options, _depth + 1);
+            if (message.toView != null && $Object.hasOwnProperty.call(message, "toView"))
+                object.toView = message.toView;
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView"))
+                object.fromView = message.fromView;
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun"))
+                object.dryRun = message.dryRun;
+            if (message.force != null && $Object.hasOwnProperty.call(message, "force"))
+                object.force = message.force;
+            if (message.all != null && $Object.hasOwnProperty.call(message, "all"))
+                object.all = message.all;
+            if (message.insecure != null && $Object.hasOwnProperty.call(message, "insecure"))
+                object.insecure = message.insecure;
+            if (message.timeoutSecs != null && $Object.hasOwnProperty.call(message, "timeoutSecs"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.timeoutSecs = typeof message.timeoutSecs === "number" ? $BigInt(message.timeoutSecs) : $util.Long.fromBits(message.timeoutSecs.low >>> 0, message.timeoutSecs.high >>> 0, true).toBigInt();
+                else if (typeof message.timeoutSecs === "number")
+                    object.timeoutSecs = options.longs === $String ? $String(message.timeoutSecs) : message.timeoutSecs;
+                else
+                    object.timeoutSecs = options.longs === $String ? $util.Long.prototype.toString.call(message.timeoutSecs) : options.longs === $Number ? new $util.LongBits(message.timeoutSecs.low >>> 0, message.timeoutSecs.high >>> 0).toNumber(true) : message.timeoutSecs;
+            var keys2;
+            if (message.authHeaders && (keys2 = $Object.keys(message.authHeaders)).length) {
+                object.authHeaders = {};
+                for (var j = 0; j < keys2.length; ++j) {
+                    if (keys2[j] === "__proto__")
+                        $util.makeProp(object.authHeaders, keys2[j]);
+                    object.authHeaders[keys2[j]] = message.authHeaders[keys2[j]];
+                }
+            }
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                object.remoteUrl = message.remoteUrl;
+            if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                object.identity = message.identity;
+            return object;
+        };
+
+        /**
+         * Converts this PushChangesRequest to JSON.
+         * @function toJSON
+         * @memberof atomic.PushChangesRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushChangesRequest.prototype.toJSON = function() {
+            return PushChangesRequest.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushChangesRequest
+         * @function getTypeUrl
+         * @memberof atomic.PushChangesRequest
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushChangesRequest.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushChangesRequest";
+        };
+
+        return PushChangesRequest;
+    })();
+
+    atomic.PushChangesResponse = (function() {
+
+        /**
+         * Properties of a PushChangesResponse.
+         * @typedef {Object} atomic.PushChangesResponse.$Properties
+         * @property {number|Long|null} [pushedChanges] PushChangesResponse pushedChanges
+         * @property {Array.<string>|null} [manifests] PushChangesResponse manifests
+         * @property {atomic.ResponseMeta.$Properties|null} [meta] PushChangesResponse meta
+         * @property {atomic.PushReport.$Properties|null} [report] PushChangesResponse report
+         * @property {atomic.PushConflict.$Properties|null} [conflict] PushChangesResponse conflict
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushChangesResponse.
+         * @memberof atomic
+         * @interface IPushChangesResponse
+         * @augments atomic.PushChangesResponse.$Properties
+         * @deprecated Use atomic.PushChangesResponse.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushChangesResponse.
+         * @typedef {atomic.PushChangesResponse.$Properties} atomic.PushChangesResponse.$Shape
+         */
+
+        /**
+         * Constructs a new PushChangesResponse.
+         * @memberof atomic
+         * @classdesc Represents a PushChangesResponse.
+         * @constructor
+         * @param {atomic.PushChangesResponse.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushChangesResponse = function (properties) {
+            this.manifests = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushChangesResponse pushedChanges.
+         * @member {number|Long} pushedChanges
+         * @memberof atomic.PushChangesResponse
+         * @instance
+         */
+        PushChangesResponse.prototype.pushedChanges = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushChangesResponse manifests.
+         * @member {Array.<string>} manifests
+         * @memberof atomic.PushChangesResponse
+         * @instance
+         */
+        PushChangesResponse.prototype.manifests = $util.emptyArray;
+
+        /**
+         * PushChangesResponse meta.
+         * @member {atomic.ResponseMeta.$Properties|null|undefined} meta
+         * @memberof atomic.PushChangesResponse
+         * @instance
+         */
+        PushChangesResponse.prototype.meta = null;
+
+        /**
+         * PushChangesResponse report.
+         * @member {atomic.PushReport.$Properties|null|undefined} report
+         * @memberof atomic.PushChangesResponse
+         * @instance
+         */
+        PushChangesResponse.prototype.report = null;
+
+        /**
+         * PushChangesResponse conflict.
+         * @member {atomic.PushConflict.$Properties|null|undefined} conflict
+         * @memberof atomic.PushChangesResponse
+         * @instance
+         */
+        PushChangesResponse.prototype.conflict = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesResponse.prototype, "_report", {
+            get: $util.oneOfGetter($oneOfFields = ["report"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChangesResponse.prototype, "_conflict", {
+            get: $util.oneOfGetter($oneOfFields = ["conflict"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PushChangesResponse instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {atomic.PushChangesResponse.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushChangesResponse} PushChangesResponse instance
+         * @type {{
+         *   (properties: atomic.PushChangesResponse.$Shape): atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape;
+         *   (properties?: atomic.PushChangesResponse.$Properties): atomic.PushChangesResponse;
+         * }}
+         */
+        PushChangesResponse.create = function(properties) {
+            return new PushChangesResponse(properties);
+        };
+
+        /**
+         * Encodes the specified PushChangesResponse message. Does not implicitly {@link atomic.PushChangesResponse.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {atomic.PushChangesResponse.$Properties} message PushChangesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushChangesResponse.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.pushedChanges != null && $Object.hasOwnProperty.call(message, "pushedChanges") && (typeof message.pushedChanges === "object" ? message.pushedChanges.low || message.pushedChanges.high : message.pushedChanges !== 0))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.pushedChanges);
+            if (message.manifests != null && message.manifests.length)
+                for (var i = 0; i < message.manifests.length; ++i)
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.manifests[i]);
+            if (message.report != null && $Object.hasOwnProperty.call(message, "report"))
+                $root.atomic.PushReport.encode(message.report, writer.uint32(/* id 3, wireType 2 =*/26).fork(), _depth + 1).ldelim();
+            if (message.conflict != null && $Object.hasOwnProperty.call(message, "conflict"))
+                $root.atomic.PushConflict.encode(message.conflict, writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.ResponseMeta.encode(message.meta, writer.uint32(/* id 100, wireType 2 =*/802).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushChangesResponse message, length delimited. Does not implicitly {@link atomic.PushChangesResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {atomic.PushChangesResponse.$Properties} message PushChangesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushChangesResponse.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushChangesResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape} PushChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushChangesResponse.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushChangesResponse();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.pushedChanges = value;
+                        else
+                            delete message.pushedChanges;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.manifests && message.manifests.length))
+                            message.manifests = [];
+                        message.manifests.push(reader.stringVerify());
+                        continue;
+                    }
+                case 100: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.ResponseMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        message.report = $root.atomic.PushReport.decode(reader, reader.size(), $undefined, _depth + 1, message.report);
+                        message._report = "report";
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.conflict = $root.atomic.PushConflict.decode(reader, reader.size(), $undefined, _depth + 1, message.conflict);
+                        message._conflict = "conflict";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushChangesResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape} PushChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushChangesResponse.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushChangesResponse message.
+         * @function verify
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushChangesResponse.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.pushedChanges != null && $Object.hasOwnProperty.call(message, "pushedChanges"))
+                if (!$util.isInteger(message.pushedChanges) && !(message.pushedChanges && $util.isInteger(message.pushedChanges.low) && $util.isInteger(message.pushedChanges.high)))
+                    return "pushedChanges: integer|Long expected";
+            if (message.manifests != null && $Object.hasOwnProperty.call(message, "manifests")) {
+                if (!$Array.isArray(message.manifests))
+                    return "manifests: array expected";
+                for (var i = 0; i < message.manifests.length; ++i)
+                    if (!$util.isString(message.manifests[i]))
+                        return "manifests: string[] expected";
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.ResponseMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            if (message.report != null && $Object.hasOwnProperty.call(message, "report")) {
+                properties._report = 1;
+                {
+                    var error = $root.atomic.PushReport.verify(message.report, _depth + 1);
+                    if (error)
+                        return "report." + error;
+                }
+            }
+            if (message.conflict != null && $Object.hasOwnProperty.call(message, "conflict")) {
+                properties._conflict = 1;
+                {
+                    var error = $root.atomic.PushConflict.verify(message.conflict, _depth + 1);
+                    if (error)
+                        return "conflict." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PushChangesResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushChangesResponse} PushChangesResponse
+         */
+        PushChangesResponse.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushChangesResponse)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushChangesResponse: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushChangesResponse();
+            if (object.pushedChanges != null)
+                if (typeof object.pushedChanges === "object" ? object.pushedChanges.low || object.pushedChanges.high : $Number(object.pushedChanges) !== 0)
+                    if ($util.Long)
+                        message.pushedChanges = $util.Long.fromValue(object.pushedChanges, true);
+                    else if (typeof object.pushedChanges === "string")
+                        message.pushedChanges = $parseInt(object.pushedChanges, 10);
+                    else if (typeof object.pushedChanges === "number")
+                        message.pushedChanges = object.pushedChanges;
+                    else if (typeof object.pushedChanges === "object")
+                        message.pushedChanges = new $util.LongBits(object.pushedChanges.low >>> 0, object.pushedChanges.high >>> 0).toNumber(true);
+            if (object.manifests) {
+                if (!$Array.isArray(object.manifests))
+                    throw $TypeError(".atomic.PushChangesResponse.manifests: array expected");
+                message.manifests = $Array(object.manifests.length);
+                for (var i = 0; i < object.manifests.length; ++i)
+                    message.manifests[i] = $String(object.manifests[i]);
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.PushChangesResponse.meta: object expected");
+                message.meta = $root.atomic.ResponseMeta.fromObject(object.meta, _depth + 1);
+            }
+            if (object.report != null) {
+                if (!$util.isObject(object.report))
+                    throw $TypeError(".atomic.PushChangesResponse.report: object expected");
+                message.report = $root.atomic.PushReport.fromObject(object.report, _depth + 1);
+            }
+            if (object.conflict != null) {
+                if (!$util.isObject(object.conflict))
+                    throw $TypeError(".atomic.PushChangesResponse.conflict: object expected");
+                message.conflict = $root.atomic.PushConflict.fromObject(object.conflict, _depth + 1);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushChangesResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {atomic.PushChangesResponse} message PushChangesResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushChangesResponse.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.manifests = [];
+            if (options.defaults) {
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.pushedChanges = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.pushedChanges = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.meta = null;
+            }
+            if (message.pushedChanges != null && $Object.hasOwnProperty.call(message, "pushedChanges"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.pushedChanges = typeof message.pushedChanges === "number" ? $BigInt(message.pushedChanges) : $util.Long.fromBits(message.pushedChanges.low >>> 0, message.pushedChanges.high >>> 0, true).toBigInt();
+                else if (typeof message.pushedChanges === "number")
+                    object.pushedChanges = options.longs === $String ? $String(message.pushedChanges) : message.pushedChanges;
+                else
+                    object.pushedChanges = options.longs === $String ? $util.Long.prototype.toString.call(message.pushedChanges) : options.longs === $Number ? new $util.LongBits(message.pushedChanges.low >>> 0, message.pushedChanges.high >>> 0).toNumber(true) : message.pushedChanges;
+            if (message.manifests && message.manifests.length) {
+                object.manifests = $Array(message.manifests.length);
+                for (var j = 0; j < message.manifests.length; ++j)
+                    object.manifests[j] = message.manifests[j];
+            }
+            if (message.report != null && $Object.hasOwnProperty.call(message, "report"))
+                object.report = $root.atomic.PushReport.toObject(message.report, options, _depth + 1);
+            if (message.conflict != null && $Object.hasOwnProperty.call(message, "conflict"))
+                object.conflict = $root.atomic.PushConflict.toObject(message.conflict, options, _depth + 1);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.ResponseMeta.toObject(message.meta, options, _depth + 1);
+            return object;
+        };
+
+        /**
+         * Converts this PushChangesResponse to JSON.
+         * @function toJSON
+         * @memberof atomic.PushChangesResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushChangesResponse.prototype.toJSON = function() {
+            return PushChangesResponse.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushChangesResponse
+         * @function getTypeUrl
+         * @memberof atomic.PushChangesResponse
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushChangesResponse.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushChangesResponse";
+        };
+
+        return PushChangesResponse;
+    })();
+
+    atomic.PushReport = (function() {
+
+        /**
+         * Properties of a PushReport.
+         * @typedef {Object} atomic.PushReport.$Properties
+         * @property {string|null} [remoteName] PushReport remoteName
+         * @property {string|null} [remoteUrl] PushReport remoteUrl
+         * @property {Array.<atomic.PushViewReport.$Properties>|null} [views] PushReport views
+         * @property {number|Long|null} [totalStored] PushReport totalStored
+         * @property {number|Long|null} [viewsDeclared] PushReport viewsDeclared
+         * @property {Array.<atomic.PushSidecar.$Properties>|null} [attestations] PushReport attestations
+         * @property {Array.<atomic.PushSidecar.$Properties>|null} [provenance] PushReport provenance
+         * @property {Array.<atomic.PushTag.$Properties>|null} [tags] PushReport tags
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushReport.
+         * @memberof atomic
+         * @interface IPushReport
+         * @augments atomic.PushReport.$Properties
+         * @deprecated Use atomic.PushReport.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushReport.
+         * @typedef {atomic.PushReport.$Properties} atomic.PushReport.$Shape
+         */
+
+        /**
+         * Constructs a new PushReport.
+         * @memberof atomic
+         * @classdesc Represents a PushReport.
+         * @constructor
+         * @param {atomic.PushReport.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushReport = function (properties) {
+            this.views = [];
+            this.attestations = [];
+            this.provenance = [];
+            this.tags = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushReport remoteName.
+         * @member {string} remoteName
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.remoteName = "";
+
+        /**
+         * PushReport remoteUrl.
+         * @member {string} remoteUrl
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.remoteUrl = "";
+
+        /**
+         * PushReport views.
+         * @member {Array.<atomic.PushViewReport.$Properties>} views
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.views = $util.emptyArray;
+
+        /**
+         * PushReport totalStored.
+         * @member {number|Long} totalStored
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.totalStored = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushReport viewsDeclared.
+         * @member {number|Long} viewsDeclared
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.viewsDeclared = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushReport attestations.
+         * @member {Array.<atomic.PushSidecar.$Properties>} attestations
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.attestations = $util.emptyArray;
+
+        /**
+         * PushReport provenance.
+         * @member {Array.<atomic.PushSidecar.$Properties>} provenance
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.provenance = $util.emptyArray;
+
+        /**
+         * PushReport tags.
+         * @member {Array.<atomic.PushTag.$Properties>} tags
+         * @memberof atomic.PushReport
+         * @instance
+         */
+        PushReport.prototype.tags = $util.emptyArray;
+
+        /**
+         * Creates a new PushReport instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushReport
+         * @static
+         * @param {atomic.PushReport.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushReport} PushReport instance
+         * @type {{
+         *   (properties: atomic.PushReport.$Shape): atomic.PushReport & atomic.PushReport.$Shape;
+         *   (properties?: atomic.PushReport.$Properties): atomic.PushReport;
+         * }}
+         */
+        PushReport.create = function(properties) {
+            return new PushReport(properties);
+        };
+
+        /**
+         * Encodes the specified PushReport message. Does not implicitly {@link atomic.PushReport.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushReport
+         * @static
+         * @param {atomic.PushReport.$Properties} message PushReport message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushReport.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName") && message.remoteName !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.remoteName);
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl") && message.remoteUrl !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.remoteUrl);
+            if (message.views != null && message.views.length)
+                for (var i = 0; i < message.views.length; ++i)
+                    $root.atomic.PushViewReport.encode(message.views[i], writer.uint32(/* id 3, wireType 2 =*/26).fork(), _depth + 1).ldelim();
+            if (message.totalStored != null && $Object.hasOwnProperty.call(message, "totalStored") && (typeof message.totalStored === "object" ? message.totalStored.low || message.totalStored.high : message.totalStored !== 0))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.totalStored);
+            if (message.viewsDeclared != null && $Object.hasOwnProperty.call(message, "viewsDeclared") && (typeof message.viewsDeclared === "object" ? message.viewsDeclared.low || message.viewsDeclared.high : message.viewsDeclared !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.viewsDeclared);
+            if (message.attestations != null && message.attestations.length)
+                for (var i = 0; i < message.attestations.length; ++i)
+                    $root.atomic.PushSidecar.encode(message.attestations[i], writer.uint32(/* id 6, wireType 2 =*/50).fork(), _depth + 1).ldelim();
+            if (message.provenance != null && message.provenance.length)
+                for (var i = 0; i < message.provenance.length; ++i)
+                    $root.atomic.PushSidecar.encode(message.provenance[i], writer.uint32(/* id 7, wireType 2 =*/58).fork(), _depth + 1).ldelim();
+            if (message.tags != null && message.tags.length)
+                for (var i = 0; i < message.tags.length; ++i)
+                    $root.atomic.PushTag.encode(message.tags[i], writer.uint32(/* id 8, wireType 2 =*/66).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushReport message, length delimited. Does not implicitly {@link atomic.PushReport.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushReport
+         * @static
+         * @param {atomic.PushReport.$Properties} message PushReport message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushReport.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushReport message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushReport
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushReport & atomic.PushReport.$Shape} PushReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushReport.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushReport();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remoteName = value;
+                        else
+                            delete message.remoteName;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remoteUrl = value;
+                        else
+                            delete message.remoteUrl;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.views && message.views.length))
+                            message.views = [];
+                        message.views.push($root.atomic.PushViewReport.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.totalStored = value;
+                        else
+                            delete message.totalStored;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.viewsDeclared = value;
+                        else
+                            delete message.viewsDeclared;
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.attestations && message.attestations.length))
+                            message.attestations = [];
+                        message.attestations.push($root.atomic.PushSidecar.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.provenance && message.provenance.length))
+                            message.provenance = [];
+                        message.provenance.push($root.atomic.PushSidecar.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.tags && message.tags.length))
+                            message.tags = [];
+                        message.tags.push($root.atomic.PushTag.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushReport message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushReport
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushReport & atomic.PushReport.$Shape} PushReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushReport.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushReport message.
+         * @function verify
+         * @memberof atomic.PushReport
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushReport.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName"))
+                if (!$util.isString(message.remoteName))
+                    return "remoteName: string expected";
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                if (!$util.isString(message.remoteUrl))
+                    return "remoteUrl: string expected";
+            if (message.views != null && $Object.hasOwnProperty.call(message, "views")) {
+                if (!$Array.isArray(message.views))
+                    return "views: array expected";
+                for (var i = 0; i < message.views.length; ++i) {
+                    var error = $root.atomic.PushViewReport.verify(message.views[i], _depth + 1);
+                    if (error)
+                        return "views." + error;
+                }
+            }
+            if (message.totalStored != null && $Object.hasOwnProperty.call(message, "totalStored"))
+                if (!$util.isInteger(message.totalStored) && !(message.totalStored && $util.isInteger(message.totalStored.low) && $util.isInteger(message.totalStored.high)))
+                    return "totalStored: integer|Long expected";
+            if (message.viewsDeclared != null && $Object.hasOwnProperty.call(message, "viewsDeclared"))
+                if (!$util.isInteger(message.viewsDeclared) && !(message.viewsDeclared && $util.isInteger(message.viewsDeclared.low) && $util.isInteger(message.viewsDeclared.high)))
+                    return "viewsDeclared: integer|Long expected";
+            if (message.attestations != null && $Object.hasOwnProperty.call(message, "attestations")) {
+                if (!$Array.isArray(message.attestations))
+                    return "attestations: array expected";
+                for (var i = 0; i < message.attestations.length; ++i) {
+                    var error = $root.atomic.PushSidecar.verify(message.attestations[i], _depth + 1);
+                    if (error)
+                        return "attestations." + error;
+                }
+            }
+            if (message.provenance != null && $Object.hasOwnProperty.call(message, "provenance")) {
+                if (!$Array.isArray(message.provenance))
+                    return "provenance: array expected";
+                for (var i = 0; i < message.provenance.length; ++i) {
+                    var error = $root.atomic.PushSidecar.verify(message.provenance[i], _depth + 1);
+                    if (error)
+                        return "provenance." + error;
+                }
+            }
+            if (message.tags != null && $Object.hasOwnProperty.call(message, "tags")) {
+                if (!$Array.isArray(message.tags))
+                    return "tags: array expected";
+                for (var i = 0; i < message.tags.length; ++i) {
+                    var error = $root.atomic.PushTag.verify(message.tags[i], _depth + 1);
+                    if (error)
+                        return "tags." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PushReport message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushReport
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushReport} PushReport
+         */
+        PushReport.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushReport)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushReport: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushReport();
+            if (object.remoteName != null)
+                if (typeof object.remoteName !== "string" || object.remoteName.length)
+                    message.remoteName = $String(object.remoteName);
+            if (object.remoteUrl != null)
+                if (typeof object.remoteUrl !== "string" || object.remoteUrl.length)
+                    message.remoteUrl = $String(object.remoteUrl);
+            if (object.views) {
+                if (!$Array.isArray(object.views))
+                    throw $TypeError(".atomic.PushReport.views: array expected");
+                message.views = $Array(object.views.length);
+                for (var i = 0; i < object.views.length; ++i) {
+                    if (!$util.isObject(object.views[i]))
+                        throw $TypeError(".atomic.PushReport.views: object expected");
+                    message.views[i] = $root.atomic.PushViewReport.fromObject(object.views[i], _depth + 1);
+                }
+            }
+            if (object.totalStored != null)
+                if (typeof object.totalStored === "object" ? object.totalStored.low || object.totalStored.high : $Number(object.totalStored) !== 0)
+                    if ($util.Long)
+                        message.totalStored = $util.Long.fromValue(object.totalStored, true);
+                    else if (typeof object.totalStored === "string")
+                        message.totalStored = $parseInt(object.totalStored, 10);
+                    else if (typeof object.totalStored === "number")
+                        message.totalStored = object.totalStored;
+                    else if (typeof object.totalStored === "object")
+                        message.totalStored = new $util.LongBits(object.totalStored.low >>> 0, object.totalStored.high >>> 0).toNumber(true);
+            if (object.viewsDeclared != null)
+                if (typeof object.viewsDeclared === "object" ? object.viewsDeclared.low || object.viewsDeclared.high : $Number(object.viewsDeclared) !== 0)
+                    if ($util.Long)
+                        message.viewsDeclared = $util.Long.fromValue(object.viewsDeclared, true);
+                    else if (typeof object.viewsDeclared === "string")
+                        message.viewsDeclared = $parseInt(object.viewsDeclared, 10);
+                    else if (typeof object.viewsDeclared === "number")
+                        message.viewsDeclared = object.viewsDeclared;
+                    else if (typeof object.viewsDeclared === "object")
+                        message.viewsDeclared = new $util.LongBits(object.viewsDeclared.low >>> 0, object.viewsDeclared.high >>> 0).toNumber(true);
+            if (object.attestations) {
+                if (!$Array.isArray(object.attestations))
+                    throw $TypeError(".atomic.PushReport.attestations: array expected");
+                message.attestations = $Array(object.attestations.length);
+                for (var i = 0; i < object.attestations.length; ++i) {
+                    if (!$util.isObject(object.attestations[i]))
+                        throw $TypeError(".atomic.PushReport.attestations: object expected");
+                    message.attestations[i] = $root.atomic.PushSidecar.fromObject(object.attestations[i], _depth + 1);
+                }
+            }
+            if (object.provenance) {
+                if (!$Array.isArray(object.provenance))
+                    throw $TypeError(".atomic.PushReport.provenance: array expected");
+                message.provenance = $Array(object.provenance.length);
+                for (var i = 0; i < object.provenance.length; ++i) {
+                    if (!$util.isObject(object.provenance[i]))
+                        throw $TypeError(".atomic.PushReport.provenance: object expected");
+                    message.provenance[i] = $root.atomic.PushSidecar.fromObject(object.provenance[i], _depth + 1);
+                }
+            }
+            if (object.tags) {
+                if (!$Array.isArray(object.tags))
+                    throw $TypeError(".atomic.PushReport.tags: array expected");
+                message.tags = $Array(object.tags.length);
+                for (var i = 0; i < object.tags.length; ++i) {
+                    if (!$util.isObject(object.tags[i]))
+                        throw $TypeError(".atomic.PushReport.tags: object expected");
+                    message.tags[i] = $root.atomic.PushTag.fromObject(object.tags[i], _depth + 1);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushReport message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushReport
+         * @static
+         * @param {atomic.PushReport} message PushReport
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushReport.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults) {
+                object.views = [];
+                object.attestations = [];
+                object.provenance = [];
+                object.tags = [];
+            }
+            if (options.defaults) {
+                object.remoteName = "";
+                object.remoteUrl = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.totalStored = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.totalStored = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.viewsDeclared = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.viewsDeclared = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName"))
+                object.remoteName = message.remoteName;
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                object.remoteUrl = message.remoteUrl;
+            if (message.views && message.views.length) {
+                object.views = $Array(message.views.length);
+                for (var j = 0; j < message.views.length; ++j)
+                    object.views[j] = $root.atomic.PushViewReport.toObject(message.views[j], options, _depth + 1);
+            }
+            if (message.totalStored != null && $Object.hasOwnProperty.call(message, "totalStored"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.totalStored = typeof message.totalStored === "number" ? $BigInt(message.totalStored) : $util.Long.fromBits(message.totalStored.low >>> 0, message.totalStored.high >>> 0, true).toBigInt();
+                else if (typeof message.totalStored === "number")
+                    object.totalStored = options.longs === $String ? $String(message.totalStored) : message.totalStored;
+                else
+                    object.totalStored = options.longs === $String ? $util.Long.prototype.toString.call(message.totalStored) : options.longs === $Number ? new $util.LongBits(message.totalStored.low >>> 0, message.totalStored.high >>> 0).toNumber(true) : message.totalStored;
+            if (message.viewsDeclared != null && $Object.hasOwnProperty.call(message, "viewsDeclared"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.viewsDeclared = typeof message.viewsDeclared === "number" ? $BigInt(message.viewsDeclared) : $util.Long.fromBits(message.viewsDeclared.low >>> 0, message.viewsDeclared.high >>> 0, true).toBigInt();
+                else if (typeof message.viewsDeclared === "number")
+                    object.viewsDeclared = options.longs === $String ? $String(message.viewsDeclared) : message.viewsDeclared;
+                else
+                    object.viewsDeclared = options.longs === $String ? $util.Long.prototype.toString.call(message.viewsDeclared) : options.longs === $Number ? new $util.LongBits(message.viewsDeclared.low >>> 0, message.viewsDeclared.high >>> 0).toNumber(true) : message.viewsDeclared;
+            if (message.attestations && message.attestations.length) {
+                object.attestations = $Array(message.attestations.length);
+                for (var j = 0; j < message.attestations.length; ++j)
+                    object.attestations[j] = $root.atomic.PushSidecar.toObject(message.attestations[j], options, _depth + 1);
+            }
+            if (message.provenance && message.provenance.length) {
+                object.provenance = $Array(message.provenance.length);
+                for (var j = 0; j < message.provenance.length; ++j)
+                    object.provenance[j] = $root.atomic.PushSidecar.toObject(message.provenance[j], options, _depth + 1);
+            }
+            if (message.tags && message.tags.length) {
+                object.tags = $Array(message.tags.length);
+                for (var j = 0; j < message.tags.length; ++j)
+                    object.tags[j] = $root.atomic.PushTag.toObject(message.tags[j], options, _depth + 1);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this PushReport to JSON.
+         * @function toJSON
+         * @memberof atomic.PushReport
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushReport.prototype.toJSON = function() {
+            return PushReport.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushReport
+         * @function getTypeUrl
+         * @memberof atomic.PushReport
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushReport.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushReport";
+        };
+
+        return PushReport;
+    })();
+
+    atomic.PushViewReport = (function() {
+
+        /**
+         * Properties of a PushViewReport.
+         * @typedef {Object} atomic.PushViewReport.$Properties
+         * @property {string|null} [remoteName] PushViewReport remoteName
+         * @property {string|null} [scope] PushViewReport scope
+         * @property {string|null} [parent] PushViewReport parent
+         * @property {boolean|null} [existsOnRemote] PushViewReport existsOnRemote
+         * @property {number|Long|null} [remoteChangeCount] PushViewReport remoteChangeCount
+         * @property {boolean|null} [noop] PushViewReport noop
+         * @property {boolean|null} [shrink] PushViewReport shrink
+         * @property {boolean|null} [forced] PushViewReport forced
+         * @property {Array.<atomic.PushChange.$Properties>|null} [toStore] PushViewReport toStore
+         * @property {number|Long|null} [logCount] PushViewReport logCount
+         * @property {boolean|null} [declared] PushViewReport declared
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushViewReport.
+         * @memberof atomic
+         * @interface IPushViewReport
+         * @augments atomic.PushViewReport.$Properties
+         * @deprecated Use atomic.PushViewReport.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushViewReport.
+         * @typedef {atomic.PushViewReport.$Properties} atomic.PushViewReport.$Shape
+         */
+
+        /**
+         * Constructs a new PushViewReport.
+         * @memberof atomic
+         * @classdesc Represents a PushViewReport.
+         * @constructor
+         * @param {atomic.PushViewReport.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushViewReport = function (properties) {
+            this.toStore = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushViewReport remoteName.
+         * @member {string} remoteName
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.remoteName = "";
+
+        /**
+         * PushViewReport scope.
+         * @member {string} scope
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.scope = "";
+
+        /**
+         * PushViewReport parent.
+         * @member {string|null|undefined} parent
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.parent = null;
+
+        /**
+         * PushViewReport existsOnRemote.
+         * @member {boolean} existsOnRemote
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.existsOnRemote = false;
+
+        /**
+         * PushViewReport remoteChangeCount.
+         * @member {number|Long} remoteChangeCount
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.remoteChangeCount = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushViewReport noop.
+         * @member {boolean} noop
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.noop = false;
+
+        /**
+         * PushViewReport shrink.
+         * @member {boolean} shrink
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.shrink = false;
+
+        /**
+         * PushViewReport forced.
+         * @member {boolean} forced
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.forced = false;
+
+        /**
+         * PushViewReport toStore.
+         * @member {Array.<atomic.PushChange.$Properties>} toStore
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.toStore = $util.emptyArray;
+
+        /**
+         * PushViewReport logCount.
+         * @member {number|Long} logCount
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.logCount = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushViewReport declared.
+         * @member {boolean} declared
+         * @memberof atomic.PushViewReport
+         * @instance
+         */
+        PushViewReport.prototype.declared = false;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushViewReport.prototype, "_parent", {
+            get: $util.oneOfGetter($oneOfFields = ["parent"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PushViewReport instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {atomic.PushViewReport.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushViewReport} PushViewReport instance
+         * @type {{
+         *   (properties: atomic.PushViewReport.$Shape): atomic.PushViewReport & atomic.PushViewReport.$Shape;
+         *   (properties?: atomic.PushViewReport.$Properties): atomic.PushViewReport;
+         * }}
+         */
+        PushViewReport.create = function(properties) {
+            return new PushViewReport(properties);
+        };
+
+        /**
+         * Encodes the specified PushViewReport message. Does not implicitly {@link atomic.PushViewReport.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {atomic.PushViewReport.$Properties} message PushViewReport message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushViewReport.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName") && message.remoteName !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.remoteName);
+            if (message.scope != null && $Object.hasOwnProperty.call(message, "scope") && message.scope !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.scope);
+            if (message.parent != null && $Object.hasOwnProperty.call(message, "parent"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.parent);
+            if (message.existsOnRemote != null && $Object.hasOwnProperty.call(message, "existsOnRemote") && message.existsOnRemote !== false)
+                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.existsOnRemote);
+            if (message.remoteChangeCount != null && $Object.hasOwnProperty.call(message, "remoteChangeCount") && (typeof message.remoteChangeCount === "object" ? message.remoteChangeCount.low || message.remoteChangeCount.high : message.remoteChangeCount !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.remoteChangeCount);
+            if (message.noop != null && $Object.hasOwnProperty.call(message, "noop") && message.noop !== false)
+                writer.uint32(/* id 6, wireType 0 =*/48).bool(message.noop);
+            if (message.shrink != null && $Object.hasOwnProperty.call(message, "shrink") && message.shrink !== false)
+                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.shrink);
+            if (message.forced != null && $Object.hasOwnProperty.call(message, "forced") && message.forced !== false)
+                writer.uint32(/* id 8, wireType 0 =*/64).bool(message.forced);
+            if (message.toStore != null && message.toStore.length)
+                for (var i = 0; i < message.toStore.length; ++i)
+                    $root.atomic.PushChange.encode(message.toStore[i], writer.uint32(/* id 9, wireType 2 =*/74).fork(), _depth + 1).ldelim();
+            if (message.logCount != null && $Object.hasOwnProperty.call(message, "logCount") && (typeof message.logCount === "object" ? message.logCount.low || message.logCount.high : message.logCount !== 0))
+                writer.uint32(/* id 10, wireType 0 =*/80).uint64(message.logCount);
+            if (message.declared != null && $Object.hasOwnProperty.call(message, "declared") && message.declared !== false)
+                writer.uint32(/* id 11, wireType 0 =*/88).bool(message.declared);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushViewReport message, length delimited. Does not implicitly {@link atomic.PushViewReport.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {atomic.PushViewReport.$Properties} message PushViewReport message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushViewReport.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushViewReport message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushViewReport & atomic.PushViewReport.$Shape} PushViewReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushViewReport.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushViewReport();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remoteName = value;
+                        else
+                            delete message.remoteName;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.scope = value;
+                        else
+                            delete message.scope;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        message.parent = reader.stringVerify();
+                        message._parent = "parent";
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.existsOnRemote = value;
+                        else
+                            delete message.existsOnRemote;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.remoteChangeCount = value;
+                        else
+                            delete message.remoteChangeCount;
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.noop = value;
+                        else
+                            delete message.noop;
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.shrink = value;
+                        else
+                            delete message.shrink;
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.forced = value;
+                        else
+                            delete message.forced;
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.toStore && message.toStore.length))
+                            message.toStore = [];
+                        message.toStore.push($root.atomic.PushChange.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.logCount = value;
+                        else
+                            delete message.logCount;
+                        continue;
+                    }
+                case 11: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.declared = value;
+                        else
+                            delete message.declared;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushViewReport message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushViewReport & atomic.PushViewReport.$Shape} PushViewReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushViewReport.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushViewReport message.
+         * @function verify
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushViewReport.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName"))
+                if (!$util.isString(message.remoteName))
+                    return "remoteName: string expected";
+            if (message.scope != null && $Object.hasOwnProperty.call(message, "scope"))
+                if (!$util.isString(message.scope))
+                    return "scope: string expected";
+            if (message.parent != null && $Object.hasOwnProperty.call(message, "parent")) {
+                properties._parent = 1;
+                if (!$util.isString(message.parent))
+                    return "parent: string expected";
+            }
+            if (message.existsOnRemote != null && $Object.hasOwnProperty.call(message, "existsOnRemote"))
+                if (typeof message.existsOnRemote !== "boolean")
+                    return "existsOnRemote: boolean expected";
+            if (message.remoteChangeCount != null && $Object.hasOwnProperty.call(message, "remoteChangeCount"))
+                if (!$util.isInteger(message.remoteChangeCount) && !(message.remoteChangeCount && $util.isInteger(message.remoteChangeCount.low) && $util.isInteger(message.remoteChangeCount.high)))
+                    return "remoteChangeCount: integer|Long expected";
+            if (message.noop != null && $Object.hasOwnProperty.call(message, "noop"))
+                if (typeof message.noop !== "boolean")
+                    return "noop: boolean expected";
+            if (message.shrink != null && $Object.hasOwnProperty.call(message, "shrink"))
+                if (typeof message.shrink !== "boolean")
+                    return "shrink: boolean expected";
+            if (message.forced != null && $Object.hasOwnProperty.call(message, "forced"))
+                if (typeof message.forced !== "boolean")
+                    return "forced: boolean expected";
+            if (message.toStore != null && $Object.hasOwnProperty.call(message, "toStore")) {
+                if (!$Array.isArray(message.toStore))
+                    return "toStore: array expected";
+                for (var i = 0; i < message.toStore.length; ++i) {
+                    var error = $root.atomic.PushChange.verify(message.toStore[i], _depth + 1);
+                    if (error)
+                        return "toStore." + error;
+                }
+            }
+            if (message.logCount != null && $Object.hasOwnProperty.call(message, "logCount"))
+                if (!$util.isInteger(message.logCount) && !(message.logCount && $util.isInteger(message.logCount.low) && $util.isInteger(message.logCount.high)))
+                    return "logCount: integer|Long expected";
+            if (message.declared != null && $Object.hasOwnProperty.call(message, "declared"))
+                if (typeof message.declared !== "boolean")
+                    return "declared: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a PushViewReport message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushViewReport} PushViewReport
+         */
+        PushViewReport.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushViewReport)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushViewReport: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushViewReport();
+            if (object.remoteName != null)
+                if (typeof object.remoteName !== "string" || object.remoteName.length)
+                    message.remoteName = $String(object.remoteName);
+            if (object.scope != null)
+                if (typeof object.scope !== "string" || object.scope.length)
+                    message.scope = $String(object.scope);
+            if (object.parent != null)
+                message.parent = $String(object.parent);
+            if (object.existsOnRemote != null)
+                if (object.existsOnRemote)
+                    message.existsOnRemote = $Boolean(object.existsOnRemote);
+            if (object.remoteChangeCount != null)
+                if (typeof object.remoteChangeCount === "object" ? object.remoteChangeCount.low || object.remoteChangeCount.high : $Number(object.remoteChangeCount) !== 0)
+                    if ($util.Long)
+                        message.remoteChangeCount = $util.Long.fromValue(object.remoteChangeCount, true);
+                    else if (typeof object.remoteChangeCount === "string")
+                        message.remoteChangeCount = $parseInt(object.remoteChangeCount, 10);
+                    else if (typeof object.remoteChangeCount === "number")
+                        message.remoteChangeCount = object.remoteChangeCount;
+                    else if (typeof object.remoteChangeCount === "object")
+                        message.remoteChangeCount = new $util.LongBits(object.remoteChangeCount.low >>> 0, object.remoteChangeCount.high >>> 0).toNumber(true);
+            if (object.noop != null)
+                if (object.noop)
+                    message.noop = $Boolean(object.noop);
+            if (object.shrink != null)
+                if (object.shrink)
+                    message.shrink = $Boolean(object.shrink);
+            if (object.forced != null)
+                if (object.forced)
+                    message.forced = $Boolean(object.forced);
+            if (object.toStore) {
+                if (!$Array.isArray(object.toStore))
+                    throw $TypeError(".atomic.PushViewReport.toStore: array expected");
+                message.toStore = $Array(object.toStore.length);
+                for (var i = 0; i < object.toStore.length; ++i) {
+                    if (!$util.isObject(object.toStore[i]))
+                        throw $TypeError(".atomic.PushViewReport.toStore: object expected");
+                    message.toStore[i] = $root.atomic.PushChange.fromObject(object.toStore[i], _depth + 1);
+                }
+            }
+            if (object.logCount != null)
+                if (typeof object.logCount === "object" ? object.logCount.low || object.logCount.high : $Number(object.logCount) !== 0)
+                    if ($util.Long)
+                        message.logCount = $util.Long.fromValue(object.logCount, true);
+                    else if (typeof object.logCount === "string")
+                        message.logCount = $parseInt(object.logCount, 10);
+                    else if (typeof object.logCount === "number")
+                        message.logCount = object.logCount;
+                    else if (typeof object.logCount === "object")
+                        message.logCount = new $util.LongBits(object.logCount.low >>> 0, object.logCount.high >>> 0).toNumber(true);
+            if (object.declared != null)
+                if (object.declared)
+                    message.declared = $Boolean(object.declared);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushViewReport message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {atomic.PushViewReport} message PushViewReport
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushViewReport.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.toStore = [];
+            if (options.defaults) {
+                object.remoteName = "";
+                object.scope = "";
+                object.existsOnRemote = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.remoteChangeCount = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.remoteChangeCount = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.noop = false;
+                object.shrink = false;
+                object.forced = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.logCount = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.logCount = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.declared = false;
+            }
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName"))
+                object.remoteName = message.remoteName;
+            if (message.scope != null && $Object.hasOwnProperty.call(message, "scope"))
+                object.scope = message.scope;
+            if (message.parent != null && $Object.hasOwnProperty.call(message, "parent"))
+                object.parent = message.parent;
+            if (message.existsOnRemote != null && $Object.hasOwnProperty.call(message, "existsOnRemote"))
+                object.existsOnRemote = message.existsOnRemote;
+            if (message.remoteChangeCount != null && $Object.hasOwnProperty.call(message, "remoteChangeCount"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.remoteChangeCount = typeof message.remoteChangeCount === "number" ? $BigInt(message.remoteChangeCount) : $util.Long.fromBits(message.remoteChangeCount.low >>> 0, message.remoteChangeCount.high >>> 0, true).toBigInt();
+                else if (typeof message.remoteChangeCount === "number")
+                    object.remoteChangeCount = options.longs === $String ? $String(message.remoteChangeCount) : message.remoteChangeCount;
+                else
+                    object.remoteChangeCount = options.longs === $String ? $util.Long.prototype.toString.call(message.remoteChangeCount) : options.longs === $Number ? new $util.LongBits(message.remoteChangeCount.low >>> 0, message.remoteChangeCount.high >>> 0).toNumber(true) : message.remoteChangeCount;
+            if (message.noop != null && $Object.hasOwnProperty.call(message, "noop"))
+                object.noop = message.noop;
+            if (message.shrink != null && $Object.hasOwnProperty.call(message, "shrink"))
+                object.shrink = message.shrink;
+            if (message.forced != null && $Object.hasOwnProperty.call(message, "forced"))
+                object.forced = message.forced;
+            if (message.toStore && message.toStore.length) {
+                object.toStore = $Array(message.toStore.length);
+                for (var j = 0; j < message.toStore.length; ++j)
+                    object.toStore[j] = $root.atomic.PushChange.toObject(message.toStore[j], options, _depth + 1);
+            }
+            if (message.logCount != null && $Object.hasOwnProperty.call(message, "logCount"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.logCount = typeof message.logCount === "number" ? $BigInt(message.logCount) : $util.Long.fromBits(message.logCount.low >>> 0, message.logCount.high >>> 0, true).toBigInt();
+                else if (typeof message.logCount === "number")
+                    object.logCount = options.longs === $String ? $String(message.logCount) : message.logCount;
+                else
+                    object.logCount = options.longs === $String ? $util.Long.prototype.toString.call(message.logCount) : options.longs === $Number ? new $util.LongBits(message.logCount.low >>> 0, message.logCount.high >>> 0).toNumber(true) : message.logCount;
+            if (message.declared != null && $Object.hasOwnProperty.call(message, "declared"))
+                object.declared = message.declared;
+            return object;
+        };
+
+        /**
+         * Converts this PushViewReport to JSON.
+         * @function toJSON
+         * @memberof atomic.PushViewReport
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushViewReport.prototype.toJSON = function() {
+            return PushViewReport.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushViewReport
+         * @function getTypeUrl
+         * @memberof atomic.PushViewReport
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushViewReport.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushViewReport";
+        };
+
+        return PushViewReport;
+    })();
+
+    atomic.PushChange = (function() {
+
+        /**
+         * Properties of a PushChange.
+         * @typedef {Object} atomic.PushChange.$Properties
+         * @property {atomic.Hash.$Properties|null} [hash] PushChange hash
+         * @property {string|null} [message] PushChange message
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushChange.
+         * @memberof atomic
+         * @interface IPushChange
+         * @augments atomic.PushChange.$Properties
+         * @deprecated Use atomic.PushChange.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushChange.
+         * @typedef {atomic.PushChange.$Properties} atomic.PushChange.$Shape
+         */
+
+        /**
+         * Constructs a new PushChange.
+         * @memberof atomic
+         * @classdesc Represents a PushChange.
+         * @constructor
+         * @param {atomic.PushChange.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushChange = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushChange hash.
+         * @member {atomic.Hash.$Properties|null|undefined} hash
+         * @memberof atomic.PushChange
+         * @instance
+         */
+        PushChange.prototype.hash = null;
+
+        /**
+         * PushChange message.
+         * @member {string|null|undefined} message
+         * @memberof atomic.PushChange
+         * @instance
+         */
+        PushChange.prototype.message = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushChange.prototype, "_message", {
+            get: $util.oneOfGetter($oneOfFields = ["message"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PushChange instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushChange
+         * @static
+         * @param {atomic.PushChange.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushChange} PushChange instance
+         * @type {{
+         *   (properties: atomic.PushChange.$Shape): atomic.PushChange & atomic.PushChange.$Shape;
+         *   (properties?: atomic.PushChange.$Properties): atomic.PushChange;
+         * }}
+         */
+        PushChange.create = function(properties) {
+            return new PushChange(properties);
+        };
+
+        /**
+         * Encodes the specified PushChange message. Does not implicitly {@link atomic.PushChange.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushChange
+         * @static
+         * @param {atomic.PushChange.$Properties} message PushChange message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushChange.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                $root.atomic.Hash.encode(message.hash, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushChange message, length delimited. Does not implicitly {@link atomic.PushChange.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushChange
+         * @static
+         * @param {atomic.PushChange.$Properties} message PushChange message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushChange.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushChange message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushChange
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushChange & atomic.PushChange.$Shape} PushChange
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushChange.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushChange();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.hash = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.hash);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.message = reader.stringVerify();
+                        message._message = "message";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushChange message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushChange
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushChange & atomic.PushChange.$Shape} PushChange
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushChange.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushChange message.
+         * @function verify
+         * @memberof atomic.PushChange
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushChange.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash")) {
+                var error = $root.atomic.Hash.verify(message.hash, _depth + 1);
+                if (error)
+                    return "hash." + error;
+            }
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message")) {
+                properties._message = 1;
+                if (!$util.isString(message.message))
+                    return "message: string expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PushChange message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushChange
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushChange} PushChange
+         */
+        PushChange.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushChange)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushChange: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushChange();
+            if (object.hash != null) {
+                if (!$util.isObject(object.hash))
+                    throw $TypeError(".atomic.PushChange.hash: object expected");
+                message.hash = $root.atomic.Hash.fromObject(object.hash, _depth + 1);
+            }
+            if (object.message != null)
+                message.message = $String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushChange message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushChange
+         * @static
+         * @param {atomic.PushChange} message PushChange
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushChange.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults)
+                object.hash = null;
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                object.hash = $root.atomic.Hash.toObject(message.hash, options, _depth + 1);
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this PushChange to JSON.
+         * @function toJSON
+         * @memberof atomic.PushChange
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushChange.prototype.toJSON = function() {
+            return PushChange.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushChange
+         * @function getTypeUrl
+         * @memberof atomic.PushChange
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushChange.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushChange";
+        };
+
+        return PushChange;
+    })();
+
+    atomic.PushSidecar = (function() {
+
+        /**
+         * Properties of a PushSidecar.
+         * @typedef {Object} atomic.PushSidecar.$Properties
+         * @property {atomic.Hash.$Properties|null} [hash] PushSidecar hash
+         * @property {string|null} [cost] PushSidecar cost
+         * @property {number|Long|null} [covered] PushSidecar covered
+         * @property {number|Long|null} [nodes] PushSidecar nodes
+         * @property {number|Long|null} [explained] PushSidecar explained
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushSidecar.
+         * @memberof atomic
+         * @interface IPushSidecar
+         * @augments atomic.PushSidecar.$Properties
+         * @deprecated Use atomic.PushSidecar.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushSidecar.
+         * @typedef {atomic.PushSidecar.$Properties} atomic.PushSidecar.$Shape
+         */
+
+        /**
+         * Constructs a new PushSidecar.
+         * @memberof atomic
+         * @classdesc Represents a PushSidecar.
+         * @constructor
+         * @param {atomic.PushSidecar.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushSidecar = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushSidecar hash.
+         * @member {atomic.Hash.$Properties|null|undefined} hash
+         * @memberof atomic.PushSidecar
+         * @instance
+         */
+        PushSidecar.prototype.hash = null;
+
+        /**
+         * PushSidecar cost.
+         * @member {string|null|undefined} cost
+         * @memberof atomic.PushSidecar
+         * @instance
+         */
+        PushSidecar.prototype.cost = null;
+
+        /**
+         * PushSidecar covered.
+         * @member {number|Long} covered
+         * @memberof atomic.PushSidecar
+         * @instance
+         */
+        PushSidecar.prototype.covered = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushSidecar nodes.
+         * @member {number|Long} nodes
+         * @memberof atomic.PushSidecar
+         * @instance
+         */
+        PushSidecar.prototype.nodes = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PushSidecar explained.
+         * @member {number|Long} explained
+         * @memberof atomic.PushSidecar
+         * @instance
+         */
+        PushSidecar.prototype.explained = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushSidecar.prototype, "_cost", {
+            get: $util.oneOfGetter($oneOfFields = ["cost"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PushSidecar instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {atomic.PushSidecar.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushSidecar} PushSidecar instance
+         * @type {{
+         *   (properties: atomic.PushSidecar.$Shape): atomic.PushSidecar & atomic.PushSidecar.$Shape;
+         *   (properties?: atomic.PushSidecar.$Properties): atomic.PushSidecar;
+         * }}
+         */
+        PushSidecar.create = function(properties) {
+            return new PushSidecar(properties);
+        };
+
+        /**
+         * Encodes the specified PushSidecar message. Does not implicitly {@link atomic.PushSidecar.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {atomic.PushSidecar.$Properties} message PushSidecar message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushSidecar.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                $root.atomic.Hash.encode(message.hash, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.cost != null && $Object.hasOwnProperty.call(message, "cost"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.cost);
+            if (message.covered != null && $Object.hasOwnProperty.call(message, "covered") && (typeof message.covered === "object" ? message.covered.low || message.covered.high : message.covered !== 0))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.covered);
+            if (message.nodes != null && $Object.hasOwnProperty.call(message, "nodes") && (typeof message.nodes === "object" ? message.nodes.low || message.nodes.high : message.nodes !== 0))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.nodes);
+            if (message.explained != null && $Object.hasOwnProperty.call(message, "explained") && (typeof message.explained === "object" ? message.explained.low || message.explained.high : message.explained !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.explained);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushSidecar message, length delimited. Does not implicitly {@link atomic.PushSidecar.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {atomic.PushSidecar.$Properties} message PushSidecar message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushSidecar.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushSidecar message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushSidecar & atomic.PushSidecar.$Shape} PushSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushSidecar.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushSidecar();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.hash = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.hash);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.cost = reader.stringVerify();
+                        message._cost = "cost";
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.covered = value;
+                        else
+                            delete message.covered;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.nodes = value;
+                        else
+                            delete message.nodes;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.explained = value;
+                        else
+                            delete message.explained;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushSidecar message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushSidecar & atomic.PushSidecar.$Shape} PushSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushSidecar.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushSidecar message.
+         * @function verify
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushSidecar.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash")) {
+                var error = $root.atomic.Hash.verify(message.hash, _depth + 1);
+                if (error)
+                    return "hash." + error;
+            }
+            if (message.cost != null && $Object.hasOwnProperty.call(message, "cost")) {
+                properties._cost = 1;
+                if (!$util.isString(message.cost))
+                    return "cost: string expected";
+            }
+            if (message.covered != null && $Object.hasOwnProperty.call(message, "covered"))
+                if (!$util.isInteger(message.covered) && !(message.covered && $util.isInteger(message.covered.low) && $util.isInteger(message.covered.high)))
+                    return "covered: integer|Long expected";
+            if (message.nodes != null && $Object.hasOwnProperty.call(message, "nodes"))
+                if (!$util.isInteger(message.nodes) && !(message.nodes && $util.isInteger(message.nodes.low) && $util.isInteger(message.nodes.high)))
+                    return "nodes: integer|Long expected";
+            if (message.explained != null && $Object.hasOwnProperty.call(message, "explained"))
+                if (!$util.isInteger(message.explained) && !(message.explained && $util.isInteger(message.explained.low) && $util.isInteger(message.explained.high)))
+                    return "explained: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a PushSidecar message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushSidecar} PushSidecar
+         */
+        PushSidecar.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushSidecar)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushSidecar: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushSidecar();
+            if (object.hash != null) {
+                if (!$util.isObject(object.hash))
+                    throw $TypeError(".atomic.PushSidecar.hash: object expected");
+                message.hash = $root.atomic.Hash.fromObject(object.hash, _depth + 1);
+            }
+            if (object.cost != null)
+                message.cost = $String(object.cost);
+            if (object.covered != null)
+                if (typeof object.covered === "object" ? object.covered.low || object.covered.high : $Number(object.covered) !== 0)
+                    if ($util.Long)
+                        message.covered = $util.Long.fromValue(object.covered, true);
+                    else if (typeof object.covered === "string")
+                        message.covered = $parseInt(object.covered, 10);
+                    else if (typeof object.covered === "number")
+                        message.covered = object.covered;
+                    else if (typeof object.covered === "object")
+                        message.covered = new $util.LongBits(object.covered.low >>> 0, object.covered.high >>> 0).toNumber(true);
+            if (object.nodes != null)
+                if (typeof object.nodes === "object" ? object.nodes.low || object.nodes.high : $Number(object.nodes) !== 0)
+                    if ($util.Long)
+                        message.nodes = $util.Long.fromValue(object.nodes, true);
+                    else if (typeof object.nodes === "string")
+                        message.nodes = $parseInt(object.nodes, 10);
+                    else if (typeof object.nodes === "number")
+                        message.nodes = object.nodes;
+                    else if (typeof object.nodes === "object")
+                        message.nodes = new $util.LongBits(object.nodes.low >>> 0, object.nodes.high >>> 0).toNumber(true);
+            if (object.explained != null)
+                if (typeof object.explained === "object" ? object.explained.low || object.explained.high : $Number(object.explained) !== 0)
+                    if ($util.Long)
+                        message.explained = $util.Long.fromValue(object.explained, true);
+                    else if (typeof object.explained === "string")
+                        message.explained = $parseInt(object.explained, 10);
+                    else if (typeof object.explained === "number")
+                        message.explained = object.explained;
+                    else if (typeof object.explained === "object")
+                        message.explained = new $util.LongBits(object.explained.low >>> 0, object.explained.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushSidecar message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {atomic.PushSidecar} message PushSidecar
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushSidecar.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.hash = null;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.covered = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.covered = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.nodes = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.nodes = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.explained = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.explained = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                object.hash = $root.atomic.Hash.toObject(message.hash, options, _depth + 1);
+            if (message.cost != null && $Object.hasOwnProperty.call(message, "cost"))
+                object.cost = message.cost;
+            if (message.covered != null && $Object.hasOwnProperty.call(message, "covered"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.covered = typeof message.covered === "number" ? $BigInt(message.covered) : $util.Long.fromBits(message.covered.low >>> 0, message.covered.high >>> 0, true).toBigInt();
+                else if (typeof message.covered === "number")
+                    object.covered = options.longs === $String ? $String(message.covered) : message.covered;
+                else
+                    object.covered = options.longs === $String ? $util.Long.prototype.toString.call(message.covered) : options.longs === $Number ? new $util.LongBits(message.covered.low >>> 0, message.covered.high >>> 0).toNumber(true) : message.covered;
+            if (message.nodes != null && $Object.hasOwnProperty.call(message, "nodes"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.nodes = typeof message.nodes === "number" ? $BigInt(message.nodes) : $util.Long.fromBits(message.nodes.low >>> 0, message.nodes.high >>> 0, true).toBigInt();
+                else if (typeof message.nodes === "number")
+                    object.nodes = options.longs === $String ? $String(message.nodes) : message.nodes;
+                else
+                    object.nodes = options.longs === $String ? $util.Long.prototype.toString.call(message.nodes) : options.longs === $Number ? new $util.LongBits(message.nodes.low >>> 0, message.nodes.high >>> 0).toNumber(true) : message.nodes;
+            if (message.explained != null && $Object.hasOwnProperty.call(message, "explained"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.explained = typeof message.explained === "number" ? $BigInt(message.explained) : $util.Long.fromBits(message.explained.low >>> 0, message.explained.high >>> 0, true).toBigInt();
+                else if (typeof message.explained === "number")
+                    object.explained = options.longs === $String ? $String(message.explained) : message.explained;
+                else
+                    object.explained = options.longs === $String ? $util.Long.prototype.toString.call(message.explained) : options.longs === $Number ? new $util.LongBits(message.explained.low >>> 0, message.explained.high >>> 0).toNumber(true) : message.explained;
+            return object;
+        };
+
+        /**
+         * Converts this PushSidecar to JSON.
+         * @function toJSON
+         * @memberof atomic.PushSidecar
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushSidecar.prototype.toJSON = function() {
+            return PushSidecar.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushSidecar
+         * @function getTypeUrl
+         * @memberof atomic.PushSidecar
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushSidecar.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushSidecar";
+        };
+
+        return PushSidecar;
+    })();
+
+    atomic.PushTag = (function() {
+
+        /**
+         * Properties of a PushTag.
+         * @typedef {Object} atomic.PushTag.$Properties
+         * @property {atomic.Hash.$Properties|null} [hash] PushTag hash
+         * @property {string|null} [name] PushTag name
+         * @property {string|null} [kind] PushTag kind
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushTag.
+         * @memberof atomic
+         * @interface IPushTag
+         * @augments atomic.PushTag.$Properties
+         * @deprecated Use atomic.PushTag.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushTag.
+         * @typedef {atomic.PushTag.$Properties} atomic.PushTag.$Shape
+         */
+
+        /**
+         * Constructs a new PushTag.
+         * @memberof atomic
+         * @classdesc Represents a PushTag.
+         * @constructor
+         * @param {atomic.PushTag.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushTag = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushTag hash.
+         * @member {atomic.Hash.$Properties|null|undefined} hash
+         * @memberof atomic.PushTag
+         * @instance
+         */
+        PushTag.prototype.hash = null;
+
+        /**
+         * PushTag name.
+         * @member {string} name
+         * @memberof atomic.PushTag
+         * @instance
+         */
+        PushTag.prototype.name = "";
+
+        /**
+         * PushTag kind.
+         * @member {string} kind
+         * @memberof atomic.PushTag
+         * @instance
+         */
+        PushTag.prototype.kind = "";
+
+        /**
+         * Creates a new PushTag instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushTag
+         * @static
+         * @param {atomic.PushTag.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushTag} PushTag instance
+         * @type {{
+         *   (properties: atomic.PushTag.$Shape): atomic.PushTag & atomic.PushTag.$Shape;
+         *   (properties?: atomic.PushTag.$Properties): atomic.PushTag;
+         * }}
+         */
+        PushTag.create = function(properties) {
+            return new PushTag(properties);
+        };
+
+        /**
+         * Encodes the specified PushTag message. Does not implicitly {@link atomic.PushTag.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushTag
+         * @static
+         * @param {atomic.PushTag.$Properties} message PushTag message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushTag.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                $root.atomic.Hash.encode(message.hash, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name") && message.name !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind") && message.kind !== "")
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.kind);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushTag message, length delimited. Does not implicitly {@link atomic.PushTag.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushTag
+         * @static
+         * @param {atomic.PushTag.$Properties} message PushTag message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushTag.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushTag message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushTag
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushTag & atomic.PushTag.$Shape} PushTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushTag.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushTag();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.hash = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.hash);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.name = value;
+                        else
+                            delete message.name;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.kind = value;
+                        else
+                            delete message.kind;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushTag message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushTag
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushTag & atomic.PushTag.$Shape} PushTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushTag.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushTag message.
+         * @function verify
+         * @memberof atomic.PushTag
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushTag.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash")) {
+                var error = $root.atomic.Hash.verify(message.hash, _depth + 1);
+                if (error)
+                    return "hash." + error;
+            }
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind"))
+                if (!$util.isString(message.kind))
+                    return "kind: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a PushTag message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushTag
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushTag} PushTag
+         */
+        PushTag.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushTag)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushTag: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushTag();
+            if (object.hash != null) {
+                if (!$util.isObject(object.hash))
+                    throw $TypeError(".atomic.PushTag.hash: object expected");
+                message.hash = $root.atomic.Hash.fromObject(object.hash, _depth + 1);
+            }
+            if (object.name != null)
+                if (typeof object.name !== "string" || object.name.length)
+                    message.name = $String(object.name);
+            if (object.kind != null)
+                if (typeof object.kind !== "string" || object.kind.length)
+                    message.kind = $String(object.kind);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushTag message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushTag
+         * @static
+         * @param {atomic.PushTag} message PushTag
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushTag.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.hash = null;
+                object.name = "";
+                object.kind = "";
+            }
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                object.hash = $root.atomic.Hash.toObject(message.hash, options, _depth + 1);
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                object.name = message.name;
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind"))
+                object.kind = message.kind;
+            return object;
+        };
+
+        /**
+         * Converts this PushTag to JSON.
+         * @function toJSON
+         * @memberof atomic.PushTag
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushTag.prototype.toJSON = function() {
+            return PushTag.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushTag
+         * @function getTypeUrl
+         * @memberof atomic.PushTag
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushTag.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushTag";
+        };
+
+        return PushTag;
+    })();
+
+    atomic.PushConflict = (function() {
+
+        /**
+         * Properties of a PushConflict.
+         * @typedef {Object} atomic.PushConflict.$Properties
+         * @property {string|null} [view] PushConflict view
+         * @property {boolean|null} [identityMismatch] PushConflict identityMismatch
+         * @property {string|null} [description] PushConflict description
+         * @property {atomic.ManifestState.$Properties|null} [local] PushConflict local
+         * @property {atomic.ManifestState.$Properties|null} [remote] PushConflict remote
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PushConflict.
+         * @memberof atomic
+         * @interface IPushConflict
+         * @augments atomic.PushConflict.$Properties
+         * @deprecated Use atomic.PushConflict.$Properties instead.
+         */
+
+        /**
+         * Shape of a PushConflict.
+         * @typedef {atomic.PushConflict.$Properties} atomic.PushConflict.$Shape
+         */
+
+        /**
+         * Constructs a new PushConflict.
+         * @memberof atomic
+         * @classdesc Represents a PushConflict.
+         * @constructor
+         * @param {atomic.PushConflict.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PushConflict = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PushConflict view.
+         * @member {string} view
+         * @memberof atomic.PushConflict
+         * @instance
+         */
+        PushConflict.prototype.view = "";
+
+        /**
+         * PushConflict identityMismatch.
+         * @member {boolean} identityMismatch
+         * @memberof atomic.PushConflict
+         * @instance
+         */
+        PushConflict.prototype.identityMismatch = false;
+
+        /**
+         * PushConflict description.
+         * @member {string} description
+         * @memberof atomic.PushConflict
+         * @instance
+         */
+        PushConflict.prototype.description = "";
+
+        /**
+         * PushConflict local.
+         * @member {atomic.ManifestState.$Properties|null|undefined} local
+         * @memberof atomic.PushConflict
+         * @instance
+         */
+        PushConflict.prototype.local = null;
+
+        /**
+         * PushConflict remote.
+         * @member {atomic.ManifestState.$Properties|null|undefined} remote
+         * @memberof atomic.PushConflict
+         * @instance
+         */
+        PushConflict.prototype.remote = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushConflict.prototype, "_local", {
+            get: $util.oneOfGetter($oneOfFields = ["local"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PushConflict.prototype, "_remote", {
+            get: $util.oneOfGetter($oneOfFields = ["remote"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PushConflict instance using the specified properties.
+         * @function create
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {atomic.PushConflict.$Properties=} [properties] Properties to set
+         * @returns {atomic.PushConflict} PushConflict instance
+         * @type {{
+         *   (properties: atomic.PushConflict.$Shape): atomic.PushConflict & atomic.PushConflict.$Shape;
+         *   (properties?: atomic.PushConflict.$Properties): atomic.PushConflict;
+         * }}
+         */
+        PushConflict.create = function(properties) {
+            return new PushConflict(properties);
+        };
+
+        /**
+         * Encodes the specified PushConflict message. Does not implicitly {@link atomic.PushConflict.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {atomic.PushConflict.$Properties} message PushConflict message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushConflict.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.view != null && $Object.hasOwnProperty.call(message, "view") && message.view !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.view);
+            if (message.identityMismatch != null && $Object.hasOwnProperty.call(message, "identityMismatch") && message.identityMismatch !== false)
+                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.identityMismatch);
+            if (message.description != null && $Object.hasOwnProperty.call(message, "description") && message.description !== "")
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.local != null && $Object.hasOwnProperty.call(message, "local"))
+                $root.atomic.ManifestState.encode(message.local, writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote"))
+                $root.atomic.ManifestState.encode(message.remote, writer.uint32(/* id 5, wireType 2 =*/42).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PushConflict message, length delimited. Does not implicitly {@link atomic.PushConflict.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {atomic.PushConflict.$Properties} message PushConflict message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PushConflict.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PushConflict message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PushConflict & atomic.PushConflict.$Shape} PushConflict
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushConflict.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PushConflict();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.view = value;
+                        else
+                            delete message.view;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.identityMismatch = value;
+                        else
+                            delete message.identityMismatch;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.description = value;
+                        else
+                            delete message.description;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.local = $root.atomic.ManifestState.decode(reader, reader.size(), $undefined, _depth + 1, message.local);
+                        message._local = "local";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.remote = $root.atomic.ManifestState.decode(reader, reader.size(), $undefined, _depth + 1, message.remote);
+                        message._remote = "remote";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PushConflict message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PushConflict & atomic.PushConflict.$Shape} PushConflict
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PushConflict.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PushConflict message.
+         * @function verify
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PushConflict.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
+                if (!$util.isString(message.view))
+                    return "view: string expected";
+            if (message.identityMismatch != null && $Object.hasOwnProperty.call(message, "identityMismatch"))
+                if (typeof message.identityMismatch !== "boolean")
+                    return "identityMismatch: boolean expected";
+            if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.local != null && $Object.hasOwnProperty.call(message, "local")) {
+                properties._local = 1;
+                {
+                    var error = $root.atomic.ManifestState.verify(message.local, _depth + 1);
+                    if (error)
+                        return "local." + error;
+                }
+            }
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote")) {
+                properties._remote = 1;
+                {
+                    var error = $root.atomic.ManifestState.verify(message.remote, _depth + 1);
+                    if (error)
+                        return "remote." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PushConflict message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PushConflict} PushConflict
+         */
+        PushConflict.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PushConflict)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PushConflict: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PushConflict();
+            if (object.view != null)
+                if (typeof object.view !== "string" || object.view.length)
+                    message.view = $String(object.view);
+            if (object.identityMismatch != null)
+                if (object.identityMismatch)
+                    message.identityMismatch = $Boolean(object.identityMismatch);
+            if (object.description != null)
+                if (typeof object.description !== "string" || object.description.length)
+                    message.description = $String(object.description);
+            if (object.local != null) {
+                if (!$util.isObject(object.local))
+                    throw $TypeError(".atomic.PushConflict.local: object expected");
+                message.local = $root.atomic.ManifestState.fromObject(object.local, _depth + 1);
+            }
+            if (object.remote != null) {
+                if (!$util.isObject(object.remote))
+                    throw $TypeError(".atomic.PushConflict.remote: object expected");
+                message.remote = $root.atomic.ManifestState.fromObject(object.remote, _depth + 1);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PushConflict message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {atomic.PushConflict} message PushConflict
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PushConflict.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.view = "";
+                object.identityMismatch = false;
+                object.description = "";
+            }
+            if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
+                object.view = message.view;
+            if (message.identityMismatch != null && $Object.hasOwnProperty.call(message, "identityMismatch"))
+                object.identityMismatch = message.identityMismatch;
+            if (message.description != null && $Object.hasOwnProperty.call(message, "description"))
+                object.description = message.description;
+            if (message.local != null && $Object.hasOwnProperty.call(message, "local"))
+                object.local = $root.atomic.ManifestState.toObject(message.local, options, _depth + 1);
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote"))
+                object.remote = $root.atomic.ManifestState.toObject(message.remote, options, _depth + 1);
+            return object;
+        };
+
+        /**
+         * Converts this PushConflict to JSON.
+         * @function toJSON
+         * @memberof atomic.PushConflict
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PushConflict.prototype.toJSON = function() {
+            return PushConflict.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PushConflict
+         * @function getTypeUrl
+         * @memberof atomic.PushConflict
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PushConflict.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PushConflict";
+        };
+
+        return PushConflict;
+    })();
+
+    atomic.ManifestState = (function() {
+
+        /**
+         * Properties of a ManifestState.
+         * @typedef {Object} atomic.ManifestState.$Properties
+         * @property {string|null} [view] ManifestState view
+         * @property {string|null} [state] ManifestState state
+         * @property {number|Long|null} [changeCount] ManifestState changeCount
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ManifestState.
+         * @memberof atomic
+         * @interface IManifestState
+         * @augments atomic.ManifestState.$Properties
+         * @deprecated Use atomic.ManifestState.$Properties instead.
+         */
+
+        /**
+         * Shape of a ManifestState.
+         * @typedef {atomic.ManifestState.$Properties} atomic.ManifestState.$Shape
+         */
+
+        /**
+         * Constructs a new ManifestState.
+         * @memberof atomic
+         * @classdesc Represents a ManifestState.
+         * @constructor
+         * @param {atomic.ManifestState.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ManifestState = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ManifestState view.
+         * @member {string} view
+         * @memberof atomic.ManifestState
+         * @instance
+         */
+        ManifestState.prototype.view = "";
+
+        /**
+         * ManifestState state.
+         * @member {string} state
+         * @memberof atomic.ManifestState
+         * @instance
+         */
+        ManifestState.prototype.state = "";
+
+        /**
+         * ManifestState changeCount.
+         * @member {number|Long} changeCount
+         * @memberof atomic.ManifestState
+         * @instance
+         */
+        ManifestState.prototype.changeCount = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new ManifestState instance using the specified properties.
+         * @function create
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {atomic.ManifestState.$Properties=} [properties] Properties to set
+         * @returns {atomic.ManifestState} ManifestState instance
+         * @type {{
+         *   (properties: atomic.ManifestState.$Shape): atomic.ManifestState & atomic.ManifestState.$Shape;
+         *   (properties?: atomic.ManifestState.$Properties): atomic.ManifestState;
+         * }}
+         */
+        ManifestState.create = function(properties) {
+            return new ManifestState(properties);
+        };
+
+        /**
+         * Encodes the specified ManifestState message. Does not implicitly {@link atomic.ManifestState.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {atomic.ManifestState.$Properties} message ManifestState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ManifestState.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.view != null && $Object.hasOwnProperty.call(message, "view") && message.view !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.view);
+            if (message.state != null && $Object.hasOwnProperty.call(message, "state") && message.state !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.state);
+            if (message.changeCount != null && $Object.hasOwnProperty.call(message, "changeCount") && (typeof message.changeCount === "object" ? message.changeCount.low || message.changeCount.high : message.changeCount !== 0))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.changeCount);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ManifestState message, length delimited. Does not implicitly {@link atomic.ManifestState.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {atomic.ManifestState.$Properties} message ManifestState message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ManifestState.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ManifestState message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ManifestState & atomic.ManifestState.$Shape} ManifestState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ManifestState.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ManifestState();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.view = value;
+                        else
+                            delete message.view;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.state = value;
+                        else
+                            delete message.state;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.changeCount = value;
+                        else
+                            delete message.changeCount;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ManifestState message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ManifestState & atomic.ManifestState.$Shape} ManifestState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ManifestState.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ManifestState message.
+         * @function verify
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ManifestState.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
+                if (!$util.isString(message.view))
+                    return "view: string expected";
+            if (message.state != null && $Object.hasOwnProperty.call(message, "state"))
+                if (!$util.isString(message.state))
+                    return "state: string expected";
+            if (message.changeCount != null && $Object.hasOwnProperty.call(message, "changeCount"))
+                if (!$util.isInteger(message.changeCount) && !(message.changeCount && $util.isInteger(message.changeCount.low) && $util.isInteger(message.changeCount.high)))
+                    return "changeCount: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a ManifestState message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ManifestState} ManifestState
+         */
+        ManifestState.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ManifestState)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ManifestState: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ManifestState();
+            if (object.view != null)
+                if (typeof object.view !== "string" || object.view.length)
+                    message.view = $String(object.view);
+            if (object.state != null)
+                if (typeof object.state !== "string" || object.state.length)
+                    message.state = $String(object.state);
+            if (object.changeCount != null)
+                if (typeof object.changeCount === "object" ? object.changeCount.low || object.changeCount.high : $Number(object.changeCount) !== 0)
+                    if ($util.Long)
+                        message.changeCount = $util.Long.fromValue(object.changeCount, true);
+                    else if (typeof object.changeCount === "string")
+                        message.changeCount = $parseInt(object.changeCount, 10);
+                    else if (typeof object.changeCount === "number")
+                        message.changeCount = object.changeCount;
+                    else if (typeof object.changeCount === "object")
+                        message.changeCount = new $util.LongBits(object.changeCount.low >>> 0, object.changeCount.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ManifestState message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {atomic.ManifestState} message ManifestState
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ManifestState.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.view = "";
+                object.state = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.changeCount = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.changeCount = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
+                object.view = message.view;
+            if (message.state != null && $Object.hasOwnProperty.call(message, "state"))
+                object.state = message.state;
+            if (message.changeCount != null && $Object.hasOwnProperty.call(message, "changeCount"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.changeCount = typeof message.changeCount === "number" ? $BigInt(message.changeCount) : $util.Long.fromBits(message.changeCount.low >>> 0, message.changeCount.high >>> 0, true).toBigInt();
+                else if (typeof message.changeCount === "number")
+                    object.changeCount = options.longs === $String ? $String(message.changeCount) : message.changeCount;
+                else
+                    object.changeCount = options.longs === $String ? $util.Long.prototype.toString.call(message.changeCount) : options.longs === $Number ? new $util.LongBits(message.changeCount.low >>> 0, message.changeCount.high >>> 0).toNumber(true) : message.changeCount;
+            return object;
+        };
+
+        /**
+         * Converts this ManifestState to JSON.
+         * @function toJSON
+         * @memberof atomic.ManifestState
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ManifestState.prototype.toJSON = function() {
+            return ManifestState.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ManifestState
+         * @function getTypeUrl
+         * @memberof atomic.ManifestState
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ManifestState.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ManifestState";
+        };
+
+        return ManifestState;
+    })();
+
+    atomic.PullChangesRequest = (function() {
+
+        /**
+         * Properties of a PullChangesRequest.
+         * @typedef {Object} atomic.PullChangesRequest.$Properties
+         * @property {atomic.RepositoryRef.$Properties|null} [repository] PullChangesRequest repository
+         * @property {atomic.RequestMeta.$Properties|null} [meta] PullChangesRequest meta
+         * @property {string|null} [remote] PullChangesRequest remote
+         * @property {boolean|null} [importSidecars] PullChangesRequest importSidecars
+         * @property {string|null} [toView] PullChangesRequest toView
+         * @property {string|null} [fromView] PullChangesRequest fromView
+         * @property {boolean|null} [dryRun] PullChangesRequest dryRun
+         * @property {boolean|null} [all] PullChangesRequest all
+         * @property {boolean|null} [insecure] PullChangesRequest insecure
+         * @property {number|Long|null} [timeoutSecs] PullChangesRequest timeoutSecs
+         * @property {string|null} [identity] PullChangesRequest identity
+         * @property {boolean|null} [downloadOnly] PullChangesRequest downloadOnly
+         * @property {Object.<string,string>|null} [authHeaders] PullChangesRequest authHeaders
+         * @property {string|null} [remoteUrl] PullChangesRequest remoteUrl
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullChangesRequest.
+         * @memberof atomic
+         * @interface IPullChangesRequest
+         * @augments atomic.PullChangesRequest.$Properties
+         * @deprecated Use atomic.PullChangesRequest.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullChangesRequest.
+         * @typedef {atomic.PullChangesRequest.$Properties} atomic.PullChangesRequest.$Shape
+         */
+
+        /**
+         * Constructs a new PullChangesRequest.
+         * @memberof atomic
+         * @classdesc Represents a PullChangesRequest.
+         * @constructor
+         * @param {atomic.PullChangesRequest.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullChangesRequest = function (properties) {
+            this.authHeaders = {};
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullChangesRequest repository.
+         * @member {atomic.RepositoryRef.$Properties|null|undefined} repository
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.repository = null;
+
+        /**
+         * PullChangesRequest meta.
+         * @member {atomic.RequestMeta.$Properties|null|undefined} meta
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.meta = null;
+
+        /**
+         * PullChangesRequest remote.
+         * @member {string} remote
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.remote = "";
+
+        /**
+         * PullChangesRequest importSidecars.
+         * @member {boolean} importSidecars
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.importSidecars = false;
+
+        /**
+         * PullChangesRequest toView.
+         * @member {string|null|undefined} toView
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.toView = null;
+
+        /**
+         * PullChangesRequest fromView.
+         * @member {string|null|undefined} fromView
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.fromView = null;
+
+        /**
+         * PullChangesRequest dryRun.
+         * @member {boolean} dryRun
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.dryRun = false;
+
+        /**
+         * PullChangesRequest all.
+         * @member {boolean} all
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.all = false;
+
+        /**
+         * PullChangesRequest insecure.
+         * @member {boolean} insecure
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.insecure = false;
+
+        /**
+         * PullChangesRequest timeoutSecs.
+         * @member {number|Long} timeoutSecs
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.timeoutSecs = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullChangesRequest identity.
+         * @member {string|null|undefined} identity
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.identity = null;
+
+        /**
+         * PullChangesRequest downloadOnly.
+         * @member {boolean} downloadOnly
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.downloadOnly = false;
+
+        /**
+         * PullChangesRequest authHeaders.
+         * @member {Object.<string,string>} authHeaders
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.authHeaders = $util.emptyObject;
+
+        /**
+         * PullChangesRequest remoteUrl.
+         * @member {string|null|undefined} remoteUrl
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         */
+        PullChangesRequest.prototype.remoteUrl = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullChangesRequest.prototype, "_to_view", {
+            get: $util.oneOfGetter($oneOfFields = ["toView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullChangesRequest.prototype, "_from_view", {
+            get: $util.oneOfGetter($oneOfFields = ["fromView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullChangesRequest.prototype, "_identity", {
+            get: $util.oneOfGetter($oneOfFields = ["identity"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullChangesRequest.prototype, "_remote_url", {
+            get: $util.oneOfGetter($oneOfFields = ["remoteUrl"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PullChangesRequest instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {atomic.PullChangesRequest.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullChangesRequest} PullChangesRequest instance
+         * @type {{
+         *   (properties: atomic.PullChangesRequest.$Shape): atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape;
+         *   (properties?: atomic.PullChangesRequest.$Properties): atomic.PullChangesRequest;
+         * }}
+         */
+        PullChangesRequest.create = function(properties) {
+            return new PullChangesRequest(properties);
+        };
+
+        /**
+         * Encodes the specified PullChangesRequest message. Does not implicitly {@link atomic.PullChangesRequest.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {atomic.PullChangesRequest.$Properties} message PullChangesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullChangesRequest.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                $root.atomic.RepositoryRef.encode(message.repository, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.RequestMeta.encode(message.meta, writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote") && message.remote !== "")
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.remote);
+            if (message.importSidecars != null && $Object.hasOwnProperty.call(message, "importSidecars") && message.importSidecars !== false)
+                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.importSidecars);
+            if (message.toView != null && $Object.hasOwnProperty.call(message, "toView"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.toView);
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView"))
+                writer.uint32(/* id 6, wireType 2 =*/50).string(message.fromView);
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun") && message.dryRun !== false)
+                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.dryRun);
+            if (message.all != null && $Object.hasOwnProperty.call(message, "all") && message.all !== false)
+                writer.uint32(/* id 8, wireType 0 =*/64).bool(message.all);
+            if (message.insecure != null && $Object.hasOwnProperty.call(message, "insecure") && message.insecure !== false)
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.insecure);
+            if (message.timeoutSecs != null && $Object.hasOwnProperty.call(message, "timeoutSecs") && (typeof message.timeoutSecs === "object" ? message.timeoutSecs.low || message.timeoutSecs.high : message.timeoutSecs !== 0))
+                writer.uint32(/* id 10, wireType 0 =*/80).uint64(message.timeoutSecs);
+            if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                writer.uint32(/* id 11, wireType 2 =*/90).string(message.identity);
+            if (message.downloadOnly != null && $Object.hasOwnProperty.call(message, "downloadOnly") && message.downloadOnly !== false)
+                writer.uint32(/* id 12, wireType 0 =*/96).bool(message.downloadOnly);
+            if (message.authHeaders != null && $Object.hasOwnProperty.call(message, "authHeaders"))
+                for (var keys = $Object.keys(message.authHeaders), i = 0; i < keys.length; ++i)
+                    writer.uint32(/* id 13, wireType 2 =*/106).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).string(message.authHeaders[keys[i]]).ldelim();
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                writer.uint32(/* id 14, wireType 2 =*/114).string(message.remoteUrl);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullChangesRequest message, length delimited. Does not implicitly {@link atomic.PullChangesRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {atomic.PullChangesRequest.$Properties} message PullChangesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullChangesRequest.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullChangesRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape} PullChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullChangesRequest.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, key, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullChangesRequest();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.repository = $root.atomic.RepositoryRef.decode(reader, reader.size(), $undefined, _depth + 1, message.repository);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.RequestMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remote = value;
+                        else
+                            delete message.remote;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.importSidecars = value;
+                        else
+                            delete message.importSidecars;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.toView = reader.stringVerify();
+                        message._to_view = "toView";
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 2)
+                            break;
+                        message.fromView = reader.stringVerify();
+                        message._from_view = "fromView";
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.dryRun = value;
+                        else
+                            delete message.dryRun;
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.all = value;
+                        else
+                            delete message.all;
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.insecure = value;
+                        else
+                            delete message.insecure;
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.timeoutSecs = value;
+                        else
+                            delete message.timeoutSecs;
+                        continue;
+                    }
+                case 11: {
+                        if (wireType !== 2)
+                            break;
+                        message.identity = reader.stringVerify();
+                        message._identity = "identity";
+                        continue;
+                    }
+                case 12: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.downloadOnly = value;
+                        else
+                            delete message.downloadOnly;
+                        continue;
+                    }
+                case 13: {
+                        if (wireType !== 2)
+                            break;
+                        if (message.authHeaders === $util.emptyObject)
+                            message.authHeaders = {};
+                        var end2 = reader.size() + reader.pos;
+                        if (end2 > reader.len)
+                            throw $RangeError("index out of range");
+                        reader.len = end2;
+                        key = "";
+                        value = "";
+                        while (reader.pos < end2) {
+                            var tag2 = reader.tag();
+                            wireType = tag2 & 7;
+                            switch (tag2 >>>= 3) {
+                            case 1:
+                                if (wireType !== 2)
+                                    break;
+                                key = reader.stringVerify();
+                                continue;
+                            case 2:
+                                if (wireType !== 2)
+                                    break;
+                                value = reader.stringVerify();
+                                continue;
+                            }
+                            reader.skipType(wireType, _depth, tag2);
+                        }
+                        if (reader.pos !== end2)
+                            throw $RangeError("index out of range");
+                        reader.len = end;
+                        if (key === "__proto__")
+                            $util.makeProp(message.authHeaders, key);
+                        message.authHeaders[key] = value;
+                        continue;
+                    }
+                case 14: {
+                        if (wireType !== 2)
+                            break;
+                        message.remoteUrl = reader.stringVerify();
+                        message._remote_url = "remoteUrl";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullChangesRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape} PullChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullChangesRequest.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullChangesRequest message.
+         * @function verify
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullChangesRequest.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository")) {
+                var error = $root.atomic.RepositoryRef.verify(message.repository, _depth + 1);
+                if (error)
+                    return "repository." + error;
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.RequestMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote"))
+                if (!$util.isString(message.remote))
+                    return "remote: string expected";
+            if (message.importSidecars != null && $Object.hasOwnProperty.call(message, "importSidecars"))
+                if (typeof message.importSidecars !== "boolean")
+                    return "importSidecars: boolean expected";
+            if (message.toView != null && $Object.hasOwnProperty.call(message, "toView")) {
+                properties._to_view = 1;
+                if (!$util.isString(message.toView))
+                    return "toView: string expected";
+            }
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView")) {
+                properties._from_view = 1;
+                if (!$util.isString(message.fromView))
+                    return "fromView: string expected";
+            }
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun"))
+                if (typeof message.dryRun !== "boolean")
+                    return "dryRun: boolean expected";
+            if (message.all != null && $Object.hasOwnProperty.call(message, "all"))
+                if (typeof message.all !== "boolean")
+                    return "all: boolean expected";
+            if (message.insecure != null && $Object.hasOwnProperty.call(message, "insecure"))
+                if (typeof message.insecure !== "boolean")
+                    return "insecure: boolean expected";
+            if (message.timeoutSecs != null && $Object.hasOwnProperty.call(message, "timeoutSecs"))
+                if (!$util.isInteger(message.timeoutSecs) && !(message.timeoutSecs && $util.isInteger(message.timeoutSecs.low) && $util.isInteger(message.timeoutSecs.high)))
+                    return "timeoutSecs: integer|Long expected";
+            if (message.identity != null && $Object.hasOwnProperty.call(message, "identity")) {
+                properties._identity = 1;
+                if (!$util.isString(message.identity))
+                    return "identity: string expected";
+            }
+            if (message.downloadOnly != null && $Object.hasOwnProperty.call(message, "downloadOnly"))
+                if (typeof message.downloadOnly !== "boolean")
+                    return "downloadOnly: boolean expected";
+            if (message.authHeaders != null && $Object.hasOwnProperty.call(message, "authHeaders")) {
+                if (!$util.isObject(message.authHeaders))
+                    return "authHeaders: object expected";
+                var key = $Object.keys(message.authHeaders);
+                for (var i = 0; i < key.length; ++i)
+                    if (!$util.isString(message.authHeaders[key[i]]))
+                        return "authHeaders: string{k:string} expected";
+            }
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl")) {
+                properties._remote_url = 1;
+                if (!$util.isString(message.remoteUrl))
+                    return "remoteUrl: string expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PullChangesRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullChangesRequest} PullChangesRequest
+         */
+        PullChangesRequest.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullChangesRequest)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullChangesRequest: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullChangesRequest();
+            if (object.repository != null) {
+                if (!$util.isObject(object.repository))
+                    throw $TypeError(".atomic.PullChangesRequest.repository: object expected");
+                message.repository = $root.atomic.RepositoryRef.fromObject(object.repository, _depth + 1);
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.PullChangesRequest.meta: object expected");
+                message.meta = $root.atomic.RequestMeta.fromObject(object.meta, _depth + 1);
+            }
+            if (object.remote != null)
+                if (typeof object.remote !== "string" || object.remote.length)
+                    message.remote = $String(object.remote);
+            if (object.importSidecars != null)
+                if (object.importSidecars)
+                    message.importSidecars = $Boolean(object.importSidecars);
+            if (object.toView != null)
+                message.toView = $String(object.toView);
+            if (object.fromView != null)
+                message.fromView = $String(object.fromView);
+            if (object.dryRun != null)
+                if (object.dryRun)
+                    message.dryRun = $Boolean(object.dryRun);
+            if (object.all != null)
+                if (object.all)
+                    message.all = $Boolean(object.all);
+            if (object.insecure != null)
+                if (object.insecure)
+                    message.insecure = $Boolean(object.insecure);
+            if (object.timeoutSecs != null)
+                if (typeof object.timeoutSecs === "object" ? object.timeoutSecs.low || object.timeoutSecs.high : $Number(object.timeoutSecs) !== 0)
+                    if ($util.Long)
+                        message.timeoutSecs = $util.Long.fromValue(object.timeoutSecs, true);
+                    else if (typeof object.timeoutSecs === "string")
+                        message.timeoutSecs = $parseInt(object.timeoutSecs, 10);
+                    else if (typeof object.timeoutSecs === "number")
+                        message.timeoutSecs = object.timeoutSecs;
+                    else if (typeof object.timeoutSecs === "object")
+                        message.timeoutSecs = new $util.LongBits(object.timeoutSecs.low >>> 0, object.timeoutSecs.high >>> 0).toNumber(true);
+            if (object.identity != null)
+                message.identity = $String(object.identity);
+            if (object.downloadOnly != null)
+                if (object.downloadOnly)
+                    message.downloadOnly = $Boolean(object.downloadOnly);
+            if (object.authHeaders) {
+                if (!$util.isObject(object.authHeaders))
+                    throw $TypeError(".atomic.PullChangesRequest.authHeaders: object expected");
+                message.authHeaders = {};
+                for (var keys = $Object.keys(object.authHeaders), i = 0; i < keys.length; ++i) {
+                    if (keys[i] === "__proto__")
+                        $util.makeProp(message.authHeaders, keys[i]);
+                    message.authHeaders[keys[i]] = $String(object.authHeaders[keys[i]]);
+                }
+            }
+            if (object.remoteUrl != null)
+                message.remoteUrl = $String(object.remoteUrl);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullChangesRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {atomic.PullChangesRequest} message PullChangesRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullChangesRequest.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.objects || options.defaults)
+                object.authHeaders = {};
+            if (options.defaults) {
+                object.repository = null;
+                object.meta = null;
+                object.remote = "";
+                object.importSidecars = false;
+                object.dryRun = false;
+                object.all = false;
+                object.insecure = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.timeoutSecs = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.timeoutSecs = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.downloadOnly = false;
+            }
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                object.repository = $root.atomic.RepositoryRef.toObject(message.repository, options, _depth + 1);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.RequestMeta.toObject(message.meta, options, _depth + 1);
+            if (message.remote != null && $Object.hasOwnProperty.call(message, "remote"))
+                object.remote = message.remote;
+            if (message.importSidecars != null && $Object.hasOwnProperty.call(message, "importSidecars"))
+                object.importSidecars = message.importSidecars;
+            if (message.toView != null && $Object.hasOwnProperty.call(message, "toView"))
+                object.toView = message.toView;
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView"))
+                object.fromView = message.fromView;
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun"))
+                object.dryRun = message.dryRun;
+            if (message.all != null && $Object.hasOwnProperty.call(message, "all"))
+                object.all = message.all;
+            if (message.insecure != null && $Object.hasOwnProperty.call(message, "insecure"))
+                object.insecure = message.insecure;
+            if (message.timeoutSecs != null && $Object.hasOwnProperty.call(message, "timeoutSecs"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.timeoutSecs = typeof message.timeoutSecs === "number" ? $BigInt(message.timeoutSecs) : $util.Long.fromBits(message.timeoutSecs.low >>> 0, message.timeoutSecs.high >>> 0, true).toBigInt();
+                else if (typeof message.timeoutSecs === "number")
+                    object.timeoutSecs = options.longs === $String ? $String(message.timeoutSecs) : message.timeoutSecs;
+                else
+                    object.timeoutSecs = options.longs === $String ? $util.Long.prototype.toString.call(message.timeoutSecs) : options.longs === $Number ? new $util.LongBits(message.timeoutSecs.low >>> 0, message.timeoutSecs.high >>> 0).toNumber(true) : message.timeoutSecs;
+            if (message.identity != null && $Object.hasOwnProperty.call(message, "identity"))
+                object.identity = message.identity;
+            if (message.downloadOnly != null && $Object.hasOwnProperty.call(message, "downloadOnly"))
+                object.downloadOnly = message.downloadOnly;
+            var keys2;
+            if (message.authHeaders && (keys2 = $Object.keys(message.authHeaders)).length) {
+                object.authHeaders = {};
+                for (var j = 0; j < keys2.length; ++j) {
+                    if (keys2[j] === "__proto__")
+                        $util.makeProp(object.authHeaders, keys2[j]);
+                    object.authHeaders[keys2[j]] = message.authHeaders[keys2[j]];
+                }
+            }
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                object.remoteUrl = message.remoteUrl;
+            return object;
+        };
+
+        /**
+         * Converts this PullChangesRequest to JSON.
+         * @function toJSON
+         * @memberof atomic.PullChangesRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullChangesRequest.prototype.toJSON = function() {
+            return PullChangesRequest.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullChangesRequest
+         * @function getTypeUrl
+         * @memberof atomic.PullChangesRequest
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullChangesRequest.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullChangesRequest";
+        };
+
+        return PullChangesRequest;
+    })();
+
+    atomic.PullChangesResponse = (function() {
+
+        /**
+         * Properties of a PullChangesResponse.
+         * @typedef {Object} atomic.PullChangesResponse.$Properties
+         * @property {number|Long|null} [appliedChanges] PullChangesResponse appliedChanges
+         * @property {Array.<string>|null} [updatedViews] PullChangesResponse updatedViews
+         * @property {atomic.ResponseMeta.$Properties|null} [meta] PullChangesResponse meta
+         * @property {atomic.PullReport.$Properties|null} [report] PullChangesResponse report
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullChangesResponse.
+         * @memberof atomic
+         * @interface IPullChangesResponse
+         * @augments atomic.PullChangesResponse.$Properties
+         * @deprecated Use atomic.PullChangesResponse.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullChangesResponse.
+         * @typedef {atomic.PullChangesResponse.$Properties} atomic.PullChangesResponse.$Shape
+         */
+
+        /**
+         * Constructs a new PullChangesResponse.
+         * @memberof atomic
+         * @classdesc Represents a PullChangesResponse.
+         * @constructor
+         * @param {atomic.PullChangesResponse.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullChangesResponse = function (properties) {
+            this.updatedViews = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullChangesResponse appliedChanges.
+         * @member {number|Long} appliedChanges
+         * @memberof atomic.PullChangesResponse
+         * @instance
+         */
+        PullChangesResponse.prototype.appliedChanges = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullChangesResponse updatedViews.
+         * @member {Array.<string>} updatedViews
+         * @memberof atomic.PullChangesResponse
+         * @instance
+         */
+        PullChangesResponse.prototype.updatedViews = $util.emptyArray;
+
+        /**
+         * PullChangesResponse meta.
+         * @member {atomic.ResponseMeta.$Properties|null|undefined} meta
+         * @memberof atomic.PullChangesResponse
+         * @instance
+         */
+        PullChangesResponse.prototype.meta = null;
+
+        /**
+         * PullChangesResponse report.
+         * @member {atomic.PullReport.$Properties|null|undefined} report
+         * @memberof atomic.PullChangesResponse
+         * @instance
+         */
+        PullChangesResponse.prototype.report = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullChangesResponse.prototype, "_report", {
+            get: $util.oneOfGetter($oneOfFields = ["report"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PullChangesResponse instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {atomic.PullChangesResponse.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullChangesResponse} PullChangesResponse instance
+         * @type {{
+         *   (properties: atomic.PullChangesResponse.$Shape): atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape;
+         *   (properties?: atomic.PullChangesResponse.$Properties): atomic.PullChangesResponse;
+         * }}
+         */
+        PullChangesResponse.create = function(properties) {
+            return new PullChangesResponse(properties);
+        };
+
+        /**
+         * Encodes the specified PullChangesResponse message. Does not implicitly {@link atomic.PullChangesResponse.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {atomic.PullChangesResponse.$Properties} message PullChangesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullChangesResponse.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.appliedChanges != null && $Object.hasOwnProperty.call(message, "appliedChanges") && (typeof message.appliedChanges === "object" ? message.appliedChanges.low || message.appliedChanges.high : message.appliedChanges !== 0))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.appliedChanges);
+            if (message.updatedViews != null && message.updatedViews.length)
+                for (var i = 0; i < message.updatedViews.length; ++i)
+                    writer.uint32(/* id 2, wireType 2 =*/18).string(message.updatedViews[i]);
+            if (message.report != null && $Object.hasOwnProperty.call(message, "report"))
+                $root.atomic.PullReport.encode(message.report, writer.uint32(/* id 3, wireType 2 =*/26).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.ResponseMeta.encode(message.meta, writer.uint32(/* id 100, wireType 2 =*/802).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullChangesResponse message, length delimited. Does not implicitly {@link atomic.PullChangesResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {atomic.PullChangesResponse.$Properties} message PullChangesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullChangesResponse.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullChangesResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape} PullChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullChangesResponse.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullChangesResponse();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.appliedChanges = value;
+                        else
+                            delete message.appliedChanges;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.updatedViews && message.updatedViews.length))
+                            message.updatedViews = [];
+                        message.updatedViews.push(reader.stringVerify());
+                        continue;
+                    }
+                case 100: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.ResponseMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        message.report = $root.atomic.PullReport.decode(reader, reader.size(), $undefined, _depth + 1, message.report);
+                        message._report = "report";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullChangesResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape} PullChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullChangesResponse.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullChangesResponse message.
+         * @function verify
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullChangesResponse.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.appliedChanges != null && $Object.hasOwnProperty.call(message, "appliedChanges"))
+                if (!$util.isInteger(message.appliedChanges) && !(message.appliedChanges && $util.isInteger(message.appliedChanges.low) && $util.isInteger(message.appliedChanges.high)))
+                    return "appliedChanges: integer|Long expected";
+            if (message.updatedViews != null && $Object.hasOwnProperty.call(message, "updatedViews")) {
+                if (!$Array.isArray(message.updatedViews))
+                    return "updatedViews: array expected";
+                for (var i = 0; i < message.updatedViews.length; ++i)
+                    if (!$util.isString(message.updatedViews[i]))
+                        return "updatedViews: string[] expected";
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.ResponseMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            if (message.report != null && $Object.hasOwnProperty.call(message, "report")) {
+                properties._report = 1;
+                {
+                    var error = $root.atomic.PullReport.verify(message.report, _depth + 1);
+                    if (error)
+                        return "report." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PullChangesResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullChangesResponse} PullChangesResponse
+         */
+        PullChangesResponse.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullChangesResponse)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullChangesResponse: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullChangesResponse();
+            if (object.appliedChanges != null)
+                if (typeof object.appliedChanges === "object" ? object.appliedChanges.low || object.appliedChanges.high : $Number(object.appliedChanges) !== 0)
+                    if ($util.Long)
+                        message.appliedChanges = $util.Long.fromValue(object.appliedChanges, true);
+                    else if (typeof object.appliedChanges === "string")
+                        message.appliedChanges = $parseInt(object.appliedChanges, 10);
+                    else if (typeof object.appliedChanges === "number")
+                        message.appliedChanges = object.appliedChanges;
+                    else if (typeof object.appliedChanges === "object")
+                        message.appliedChanges = new $util.LongBits(object.appliedChanges.low >>> 0, object.appliedChanges.high >>> 0).toNumber(true);
+            if (object.updatedViews) {
+                if (!$Array.isArray(object.updatedViews))
+                    throw $TypeError(".atomic.PullChangesResponse.updatedViews: array expected");
+                message.updatedViews = $Array(object.updatedViews.length);
+                for (var i = 0; i < object.updatedViews.length; ++i)
+                    message.updatedViews[i] = $String(object.updatedViews[i]);
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.PullChangesResponse.meta: object expected");
+                message.meta = $root.atomic.ResponseMeta.fromObject(object.meta, _depth + 1);
+            }
+            if (object.report != null) {
+                if (!$util.isObject(object.report))
+                    throw $TypeError(".atomic.PullChangesResponse.report: object expected");
+                message.report = $root.atomic.PullReport.fromObject(object.report, _depth + 1);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullChangesResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {atomic.PullChangesResponse} message PullChangesResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullChangesResponse.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.updatedViews = [];
+            if (options.defaults) {
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.appliedChanges = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.appliedChanges = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.meta = null;
+            }
+            if (message.appliedChanges != null && $Object.hasOwnProperty.call(message, "appliedChanges"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.appliedChanges = typeof message.appliedChanges === "number" ? $BigInt(message.appliedChanges) : $util.Long.fromBits(message.appliedChanges.low >>> 0, message.appliedChanges.high >>> 0, true).toBigInt();
+                else if (typeof message.appliedChanges === "number")
+                    object.appliedChanges = options.longs === $String ? $String(message.appliedChanges) : message.appliedChanges;
+                else
+                    object.appliedChanges = options.longs === $String ? $util.Long.prototype.toString.call(message.appliedChanges) : options.longs === $Number ? new $util.LongBits(message.appliedChanges.low >>> 0, message.appliedChanges.high >>> 0).toNumber(true) : message.appliedChanges;
+            if (message.updatedViews && message.updatedViews.length) {
+                object.updatedViews = $Array(message.updatedViews.length);
+                for (var j = 0; j < message.updatedViews.length; ++j)
+                    object.updatedViews[j] = message.updatedViews[j];
+            }
+            if (message.report != null && $Object.hasOwnProperty.call(message, "report"))
+                object.report = $root.atomic.PullReport.toObject(message.report, options, _depth + 1);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.ResponseMeta.toObject(message.meta, options, _depth + 1);
+            return object;
+        };
+
+        /**
+         * Converts this PullChangesResponse to JSON.
+         * @function toJSON
+         * @memberof atomic.PullChangesResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullChangesResponse.prototype.toJSON = function() {
+            return PullChangesResponse.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullChangesResponse
+         * @function getTypeUrl
+         * @memberof atomic.PullChangesResponse
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullChangesResponse.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullChangesResponse";
+        };
+
+        return PullChangesResponse;
+    })();
+
+    atomic.PullReport = (function() {
+
+        /**
+         * Properties of a PullReport.
+         * @typedef {Object} atomic.PullReport.$Properties
+         * @property {string|null} [remoteName] PullReport remoteName
+         * @property {string|null} [remoteUrl] PullReport remoteUrl
+         * @property {string|null} [remoteView] PullReport remoteView
+         * @property {string|null} [localView] PullReport localView
+         * @property {number|Long|null} [localViewChanges] PullReport localViewChanges
+         * @property {number|Long|null} [graphObjects] PullReport graphObjects
+         * @property {number|Long|null} [remoteChanges] PullReport remoteChanges
+         * @property {string|null} [remoteState] PullReport remoteState
+         * @property {Array.<string>|null} [localOnly] PullReport localOnly
+         * @property {Array.<atomic.PullDownload.$Properties>|null} [downloads] PullReport downloads
+         * @property {number|Long|null} [changesDownloaded] PullReport changesDownloaded
+         * @property {number|Long|null} [bytesTransferred] PullReport bytesTransferred
+         * @property {boolean|null} [applied] PullReport applied
+         * @property {number|Long|null} [appliedChanges] PullReport appliedChanges
+         * @property {Array.<string>|null} [applyErrors] PullReport applyErrors
+         * @property {Array.<atomic.PullSidecar.$Properties>|null} [sidecars] PullReport sidecars
+         * @property {boolean|null} [setIdVerified] PullReport setIdVerified
+         * @property {string|null} [setIdWarning] PullReport setIdWarning
+         * @property {boolean|null} [materialized] PullReport materialized
+         * @property {number|Long|null} [filesWritten] PullReport filesWritten
+         * @property {string|null} [materializeError] PullReport materializeError
+         * @property {Array.<atomic.PullTag.$Properties>|null} [tags] PullReport tags
+         * @property {Array.<atomic.PullWarning.$Properties>|null} [warnings] PullReport warnings
+         * @property {string|null} [localTip] PullReport localTip
+         * @property {boolean|null} [vaultBootstrapped] PullReport vaultBootstrapped
+         * @property {number|Long|null} [reconciledViews] PullReport reconciledViews
+         * @property {boolean|null} [downloadOnly] PullReport downloadOnly
+         * @property {number|Long|null} [changesFailed] PullReport changesFailed
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullReport.
+         * @memberof atomic
+         * @interface IPullReport
+         * @augments atomic.PullReport.$Properties
+         * @deprecated Use atomic.PullReport.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullReport.
+         * @typedef {atomic.PullReport.$Properties} atomic.PullReport.$Shape
+         */
+
+        /**
+         * Constructs a new PullReport.
+         * @memberof atomic
+         * @classdesc Represents a PullReport.
+         * @constructor
+         * @param {atomic.PullReport.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullReport = function (properties) {
+            this.localOnly = [];
+            this.downloads = [];
+            this.applyErrors = [];
+            this.sidecars = [];
+            this.tags = [];
+            this.warnings = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullReport remoteName.
+         * @member {string} remoteName
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.remoteName = "";
+
+        /**
+         * PullReport remoteUrl.
+         * @member {string} remoteUrl
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.remoteUrl = "";
+
+        /**
+         * PullReport remoteView.
+         * @member {string} remoteView
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.remoteView = "";
+
+        /**
+         * PullReport localView.
+         * @member {string} localView
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.localView = "";
+
+        /**
+         * PullReport localViewChanges.
+         * @member {number|Long} localViewChanges
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.localViewChanges = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport graphObjects.
+         * @member {number|Long} graphObjects
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.graphObjects = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport remoteChanges.
+         * @member {number|Long} remoteChanges
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.remoteChanges = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport remoteState.
+         * @member {string|null|undefined} remoteState
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.remoteState = null;
+
+        /**
+         * PullReport localOnly.
+         * @member {Array.<string>} localOnly
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.localOnly = $util.emptyArray;
+
+        /**
+         * PullReport downloads.
+         * @member {Array.<atomic.PullDownload.$Properties>} downloads
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.downloads = $util.emptyArray;
+
+        /**
+         * PullReport changesDownloaded.
+         * @member {number|Long} changesDownloaded
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.changesDownloaded = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport bytesTransferred.
+         * @member {number|Long} bytesTransferred
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.bytesTransferred = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport applied.
+         * @member {boolean} applied
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.applied = false;
+
+        /**
+         * PullReport appliedChanges.
+         * @member {number|Long} appliedChanges
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.appliedChanges = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport applyErrors.
+         * @member {Array.<string>} applyErrors
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.applyErrors = $util.emptyArray;
+
+        /**
+         * PullReport sidecars.
+         * @member {Array.<atomic.PullSidecar.$Properties>} sidecars
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.sidecars = $util.emptyArray;
+
+        /**
+         * PullReport setIdVerified.
+         * @member {boolean} setIdVerified
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.setIdVerified = false;
+
+        /**
+         * PullReport setIdWarning.
+         * @member {string|null|undefined} setIdWarning
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.setIdWarning = null;
+
+        /**
+         * PullReport materialized.
+         * @member {boolean} materialized
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.materialized = false;
+
+        /**
+         * PullReport filesWritten.
+         * @member {number|Long} filesWritten
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.filesWritten = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport materializeError.
+         * @member {string|null|undefined} materializeError
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.materializeError = null;
+
+        /**
+         * PullReport tags.
+         * @member {Array.<atomic.PullTag.$Properties>} tags
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.tags = $util.emptyArray;
+
+        /**
+         * PullReport warnings.
+         * @member {Array.<atomic.PullWarning.$Properties>} warnings
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.warnings = $util.emptyArray;
+
+        /**
+         * PullReport localTip.
+         * @member {string|null|undefined} localTip
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.localTip = null;
+
+        /**
+         * PullReport vaultBootstrapped.
+         * @member {boolean} vaultBootstrapped
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.vaultBootstrapped = false;
+
+        /**
+         * PullReport reconciledViews.
+         * @member {number|Long} reconciledViews
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.reconciledViews = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullReport downloadOnly.
+         * @member {boolean} downloadOnly
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.downloadOnly = false;
+
+        /**
+         * PullReport changesFailed.
+         * @member {number|Long} changesFailed
+         * @memberof atomic.PullReport
+         * @instance
+         */
+        PullReport.prototype.changesFailed = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullReport.prototype, "_remote_state", {
+            get: $util.oneOfGetter($oneOfFields = ["remoteState"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullReport.prototype, "_set_id_warning", {
+            get: $util.oneOfGetter($oneOfFields = ["setIdWarning"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullReport.prototype, "_materialize_error", {
+            get: $util.oneOfGetter($oneOfFields = ["materializeError"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullReport.prototype, "_local_tip", {
+            get: $util.oneOfGetter($oneOfFields = ["localTip"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PullReport instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullReport
+         * @static
+         * @param {atomic.PullReport.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullReport} PullReport instance
+         * @type {{
+         *   (properties: atomic.PullReport.$Shape): atomic.PullReport & atomic.PullReport.$Shape;
+         *   (properties?: atomic.PullReport.$Properties): atomic.PullReport;
+         * }}
+         */
+        PullReport.create = function(properties) {
+            return new PullReport(properties);
+        };
+
+        /**
+         * Encodes the specified PullReport message. Does not implicitly {@link atomic.PullReport.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullReport
+         * @static
+         * @param {atomic.PullReport.$Properties} message PullReport message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullReport.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName") && message.remoteName !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.remoteName);
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl") && message.remoteUrl !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.remoteUrl);
+            if (message.remoteView != null && $Object.hasOwnProperty.call(message, "remoteView") && message.remoteView !== "")
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.remoteView);
+            if (message.localView != null && $Object.hasOwnProperty.call(message, "localView") && message.localView !== "")
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.localView);
+            if (message.localViewChanges != null && $Object.hasOwnProperty.call(message, "localViewChanges") && (typeof message.localViewChanges === "object" ? message.localViewChanges.low || message.localViewChanges.high : message.localViewChanges !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.localViewChanges);
+            if (message.graphObjects != null && $Object.hasOwnProperty.call(message, "graphObjects") && (typeof message.graphObjects === "object" ? message.graphObjects.low || message.graphObjects.high : message.graphObjects !== 0))
+                writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.graphObjects);
+            if (message.remoteChanges != null && $Object.hasOwnProperty.call(message, "remoteChanges") && (typeof message.remoteChanges === "object" ? message.remoteChanges.low || message.remoteChanges.high : message.remoteChanges !== 0))
+                writer.uint32(/* id 7, wireType 0 =*/56).uint64(message.remoteChanges);
+            if (message.remoteState != null && $Object.hasOwnProperty.call(message, "remoteState"))
+                writer.uint32(/* id 8, wireType 2 =*/66).string(message.remoteState);
+            if (message.localOnly != null && message.localOnly.length)
+                for (var i = 0; i < message.localOnly.length; ++i)
+                    writer.uint32(/* id 9, wireType 2 =*/74).string(message.localOnly[i]);
+            if (message.downloads != null && message.downloads.length)
+                for (var i = 0; i < message.downloads.length; ++i)
+                    $root.atomic.PullDownload.encode(message.downloads[i], writer.uint32(/* id 10, wireType 2 =*/82).fork(), _depth + 1).ldelim();
+            if (message.changesDownloaded != null && $Object.hasOwnProperty.call(message, "changesDownloaded") && (typeof message.changesDownloaded === "object" ? message.changesDownloaded.low || message.changesDownloaded.high : message.changesDownloaded !== 0))
+                writer.uint32(/* id 11, wireType 0 =*/88).uint64(message.changesDownloaded);
+            if (message.bytesTransferred != null && $Object.hasOwnProperty.call(message, "bytesTransferred") && (typeof message.bytesTransferred === "object" ? message.bytesTransferred.low || message.bytesTransferred.high : message.bytesTransferred !== 0))
+                writer.uint32(/* id 12, wireType 0 =*/96).uint64(message.bytesTransferred);
+            if (message.applied != null && $Object.hasOwnProperty.call(message, "applied") && message.applied !== false)
+                writer.uint32(/* id 13, wireType 0 =*/104).bool(message.applied);
+            if (message.appliedChanges != null && $Object.hasOwnProperty.call(message, "appliedChanges") && (typeof message.appliedChanges === "object" ? message.appliedChanges.low || message.appliedChanges.high : message.appliedChanges !== 0))
+                writer.uint32(/* id 14, wireType 0 =*/112).uint64(message.appliedChanges);
+            if (message.applyErrors != null && message.applyErrors.length)
+                for (var i = 0; i < message.applyErrors.length; ++i)
+                    writer.uint32(/* id 15, wireType 2 =*/122).string(message.applyErrors[i]);
+            if (message.sidecars != null && message.sidecars.length)
+                for (var i = 0; i < message.sidecars.length; ++i)
+                    $root.atomic.PullSidecar.encode(message.sidecars[i], writer.uint32(/* id 16, wireType 2 =*/130).fork(), _depth + 1).ldelim();
+            if (message.setIdVerified != null && $Object.hasOwnProperty.call(message, "setIdVerified") && message.setIdVerified !== false)
+                writer.uint32(/* id 17, wireType 0 =*/136).bool(message.setIdVerified);
+            if (message.setIdWarning != null && $Object.hasOwnProperty.call(message, "setIdWarning"))
+                writer.uint32(/* id 18, wireType 2 =*/146).string(message.setIdWarning);
+            if (message.materialized != null && $Object.hasOwnProperty.call(message, "materialized") && message.materialized !== false)
+                writer.uint32(/* id 19, wireType 0 =*/152).bool(message.materialized);
+            if (message.filesWritten != null && $Object.hasOwnProperty.call(message, "filesWritten") && (typeof message.filesWritten === "object" ? message.filesWritten.low || message.filesWritten.high : message.filesWritten !== 0))
+                writer.uint32(/* id 20, wireType 0 =*/160).uint64(message.filesWritten);
+            if (message.materializeError != null && $Object.hasOwnProperty.call(message, "materializeError"))
+                writer.uint32(/* id 21, wireType 2 =*/170).string(message.materializeError);
+            if (message.tags != null && message.tags.length)
+                for (var i = 0; i < message.tags.length; ++i)
+                    $root.atomic.PullTag.encode(message.tags[i], writer.uint32(/* id 22, wireType 2 =*/178).fork(), _depth + 1).ldelim();
+            if (message.warnings != null && message.warnings.length)
+                for (var i = 0; i < message.warnings.length; ++i)
+                    $root.atomic.PullWarning.encode(message.warnings[i], writer.uint32(/* id 23, wireType 2 =*/186).fork(), _depth + 1).ldelim();
+            if (message.localTip != null && $Object.hasOwnProperty.call(message, "localTip"))
+                writer.uint32(/* id 24, wireType 2 =*/194).string(message.localTip);
+            if (message.vaultBootstrapped != null && $Object.hasOwnProperty.call(message, "vaultBootstrapped") && message.vaultBootstrapped !== false)
+                writer.uint32(/* id 25, wireType 0 =*/200).bool(message.vaultBootstrapped);
+            if (message.reconciledViews != null && $Object.hasOwnProperty.call(message, "reconciledViews") && (typeof message.reconciledViews === "object" ? message.reconciledViews.low || message.reconciledViews.high : message.reconciledViews !== 0))
+                writer.uint32(/* id 26, wireType 0 =*/208).uint64(message.reconciledViews);
+            if (message.downloadOnly != null && $Object.hasOwnProperty.call(message, "downloadOnly") && message.downloadOnly !== false)
+                writer.uint32(/* id 27, wireType 0 =*/216).bool(message.downloadOnly);
+            if (message.changesFailed != null && $Object.hasOwnProperty.call(message, "changesFailed") && (typeof message.changesFailed === "object" ? message.changesFailed.low || message.changesFailed.high : message.changesFailed !== 0))
+                writer.uint32(/* id 28, wireType 0 =*/224).uint64(message.changesFailed);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullReport message, length delimited. Does not implicitly {@link atomic.PullReport.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullReport
+         * @static
+         * @param {atomic.PullReport.$Properties} message PullReport message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullReport.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullReport message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullReport
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullReport & atomic.PullReport.$Shape} PullReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullReport.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullReport();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remoteName = value;
+                        else
+                            delete message.remoteName;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remoteUrl = value;
+                        else
+                            delete message.remoteUrl;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.remoteView = value;
+                        else
+                            delete message.remoteView;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.localView = value;
+                        else
+                            delete message.localView;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.localViewChanges = value;
+                        else
+                            delete message.localViewChanges;
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.graphObjects = value;
+                        else
+                            delete message.graphObjects;
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.remoteChanges = value;
+                        else
+                            delete message.remoteChanges;
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 2)
+                            break;
+                        message.remoteState = reader.stringVerify();
+                        message._remote_state = "remoteState";
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.localOnly && message.localOnly.length))
+                            message.localOnly = [];
+                        message.localOnly.push(reader.stringVerify());
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.downloads && message.downloads.length))
+                            message.downloads = [];
+                        message.downloads.push($root.atomic.PullDownload.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 11: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.changesDownloaded = value;
+                        else
+                            delete message.changesDownloaded;
+                        continue;
+                    }
+                case 12: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.bytesTransferred = value;
+                        else
+                            delete message.bytesTransferred;
+                        continue;
+                    }
+                case 13: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.applied = value;
+                        else
+                            delete message.applied;
+                        continue;
+                    }
+                case 14: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.appliedChanges = value;
+                        else
+                            delete message.appliedChanges;
+                        continue;
+                    }
+                case 15: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.applyErrors && message.applyErrors.length))
+                            message.applyErrors = [];
+                        message.applyErrors.push(reader.stringVerify());
+                        continue;
+                    }
+                case 16: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.sidecars && message.sidecars.length))
+                            message.sidecars = [];
+                        message.sidecars.push($root.atomic.PullSidecar.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 17: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.setIdVerified = value;
+                        else
+                            delete message.setIdVerified;
+                        continue;
+                    }
+                case 18: {
+                        if (wireType !== 2)
+                            break;
+                        message.setIdWarning = reader.stringVerify();
+                        message._set_id_warning = "setIdWarning";
+                        continue;
+                    }
+                case 19: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.materialized = value;
+                        else
+                            delete message.materialized;
+                        continue;
+                    }
+                case 20: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.filesWritten = value;
+                        else
+                            delete message.filesWritten;
+                        continue;
+                    }
+                case 21: {
+                        if (wireType !== 2)
+                            break;
+                        message.materializeError = reader.stringVerify();
+                        message._materialize_error = "materializeError";
+                        continue;
+                    }
+                case 22: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.tags && message.tags.length))
+                            message.tags = [];
+                        message.tags.push($root.atomic.PullTag.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 23: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.warnings && message.warnings.length))
+                            message.warnings = [];
+                        message.warnings.push($root.atomic.PullWarning.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 24: {
+                        if (wireType !== 2)
+                            break;
+                        message.localTip = reader.stringVerify();
+                        message._local_tip = "localTip";
+                        continue;
+                    }
+                case 25: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.vaultBootstrapped = value;
+                        else
+                            delete message.vaultBootstrapped;
+                        continue;
+                    }
+                case 26: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.reconciledViews = value;
+                        else
+                            delete message.reconciledViews;
+                        continue;
+                    }
+                case 27: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.downloadOnly = value;
+                        else
+                            delete message.downloadOnly;
+                        continue;
+                    }
+                case 28: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.changesFailed = value;
+                        else
+                            delete message.changesFailed;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullReport message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullReport
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullReport & atomic.PullReport.$Shape} PullReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullReport.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullReport message.
+         * @function verify
+         * @memberof atomic.PullReport
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullReport.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName"))
+                if (!$util.isString(message.remoteName))
+                    return "remoteName: string expected";
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                if (!$util.isString(message.remoteUrl))
+                    return "remoteUrl: string expected";
+            if (message.remoteView != null && $Object.hasOwnProperty.call(message, "remoteView"))
+                if (!$util.isString(message.remoteView))
+                    return "remoteView: string expected";
+            if (message.localView != null && $Object.hasOwnProperty.call(message, "localView"))
+                if (!$util.isString(message.localView))
+                    return "localView: string expected";
+            if (message.localViewChanges != null && $Object.hasOwnProperty.call(message, "localViewChanges"))
+                if (!$util.isInteger(message.localViewChanges) && !(message.localViewChanges && $util.isInteger(message.localViewChanges.low) && $util.isInteger(message.localViewChanges.high)))
+                    return "localViewChanges: integer|Long expected";
+            if (message.graphObjects != null && $Object.hasOwnProperty.call(message, "graphObjects"))
+                if (!$util.isInteger(message.graphObjects) && !(message.graphObjects && $util.isInteger(message.graphObjects.low) && $util.isInteger(message.graphObjects.high)))
+                    return "graphObjects: integer|Long expected";
+            if (message.remoteChanges != null && $Object.hasOwnProperty.call(message, "remoteChanges"))
+                if (!$util.isInteger(message.remoteChanges) && !(message.remoteChanges && $util.isInteger(message.remoteChanges.low) && $util.isInteger(message.remoteChanges.high)))
+                    return "remoteChanges: integer|Long expected";
+            if (message.remoteState != null && $Object.hasOwnProperty.call(message, "remoteState")) {
+                properties._remote_state = 1;
+                if (!$util.isString(message.remoteState))
+                    return "remoteState: string expected";
+            }
+            if (message.localOnly != null && $Object.hasOwnProperty.call(message, "localOnly")) {
+                if (!$Array.isArray(message.localOnly))
+                    return "localOnly: array expected";
+                for (var i = 0; i < message.localOnly.length; ++i)
+                    if (!$util.isString(message.localOnly[i]))
+                        return "localOnly: string[] expected";
+            }
+            if (message.downloads != null && $Object.hasOwnProperty.call(message, "downloads")) {
+                if (!$Array.isArray(message.downloads))
+                    return "downloads: array expected";
+                for (var i = 0; i < message.downloads.length; ++i) {
+                    var error = $root.atomic.PullDownload.verify(message.downloads[i], _depth + 1);
+                    if (error)
+                        return "downloads." + error;
+                }
+            }
+            if (message.changesDownloaded != null && $Object.hasOwnProperty.call(message, "changesDownloaded"))
+                if (!$util.isInteger(message.changesDownloaded) && !(message.changesDownloaded && $util.isInteger(message.changesDownloaded.low) && $util.isInteger(message.changesDownloaded.high)))
+                    return "changesDownloaded: integer|Long expected";
+            if (message.bytesTransferred != null && $Object.hasOwnProperty.call(message, "bytesTransferred"))
+                if (!$util.isInteger(message.bytesTransferred) && !(message.bytesTransferred && $util.isInteger(message.bytesTransferred.low) && $util.isInteger(message.bytesTransferred.high)))
+                    return "bytesTransferred: integer|Long expected";
+            if (message.applied != null && $Object.hasOwnProperty.call(message, "applied"))
+                if (typeof message.applied !== "boolean")
+                    return "applied: boolean expected";
+            if (message.appliedChanges != null && $Object.hasOwnProperty.call(message, "appliedChanges"))
+                if (!$util.isInteger(message.appliedChanges) && !(message.appliedChanges && $util.isInteger(message.appliedChanges.low) && $util.isInteger(message.appliedChanges.high)))
+                    return "appliedChanges: integer|Long expected";
+            if (message.applyErrors != null && $Object.hasOwnProperty.call(message, "applyErrors")) {
+                if (!$Array.isArray(message.applyErrors))
+                    return "applyErrors: array expected";
+                for (var i = 0; i < message.applyErrors.length; ++i)
+                    if (!$util.isString(message.applyErrors[i]))
+                        return "applyErrors: string[] expected";
+            }
+            if (message.sidecars != null && $Object.hasOwnProperty.call(message, "sidecars")) {
+                if (!$Array.isArray(message.sidecars))
+                    return "sidecars: array expected";
+                for (var i = 0; i < message.sidecars.length; ++i) {
+                    var error = $root.atomic.PullSidecar.verify(message.sidecars[i], _depth + 1);
+                    if (error)
+                        return "sidecars." + error;
+                }
+            }
+            if (message.setIdVerified != null && $Object.hasOwnProperty.call(message, "setIdVerified"))
+                if (typeof message.setIdVerified !== "boolean")
+                    return "setIdVerified: boolean expected";
+            if (message.setIdWarning != null && $Object.hasOwnProperty.call(message, "setIdWarning")) {
+                properties._set_id_warning = 1;
+                if (!$util.isString(message.setIdWarning))
+                    return "setIdWarning: string expected";
+            }
+            if (message.materialized != null && $Object.hasOwnProperty.call(message, "materialized"))
+                if (typeof message.materialized !== "boolean")
+                    return "materialized: boolean expected";
+            if (message.filesWritten != null && $Object.hasOwnProperty.call(message, "filesWritten"))
+                if (!$util.isInteger(message.filesWritten) && !(message.filesWritten && $util.isInteger(message.filesWritten.low) && $util.isInteger(message.filesWritten.high)))
+                    return "filesWritten: integer|Long expected";
+            if (message.materializeError != null && $Object.hasOwnProperty.call(message, "materializeError")) {
+                properties._materialize_error = 1;
+                if (!$util.isString(message.materializeError))
+                    return "materializeError: string expected";
+            }
+            if (message.tags != null && $Object.hasOwnProperty.call(message, "tags")) {
+                if (!$Array.isArray(message.tags))
+                    return "tags: array expected";
+                for (var i = 0; i < message.tags.length; ++i) {
+                    var error = $root.atomic.PullTag.verify(message.tags[i], _depth + 1);
+                    if (error)
+                        return "tags." + error;
+                }
+            }
+            if (message.warnings != null && $Object.hasOwnProperty.call(message, "warnings")) {
+                if (!$Array.isArray(message.warnings))
+                    return "warnings: array expected";
+                for (var i = 0; i < message.warnings.length; ++i) {
+                    var error = $root.atomic.PullWarning.verify(message.warnings[i], _depth + 1);
+                    if (error)
+                        return "warnings." + error;
+                }
+            }
+            if (message.localTip != null && $Object.hasOwnProperty.call(message, "localTip")) {
+                properties._local_tip = 1;
+                if (!$util.isString(message.localTip))
+                    return "localTip: string expected";
+            }
+            if (message.vaultBootstrapped != null && $Object.hasOwnProperty.call(message, "vaultBootstrapped"))
+                if (typeof message.vaultBootstrapped !== "boolean")
+                    return "vaultBootstrapped: boolean expected";
+            if (message.reconciledViews != null && $Object.hasOwnProperty.call(message, "reconciledViews"))
+                if (!$util.isInteger(message.reconciledViews) && !(message.reconciledViews && $util.isInteger(message.reconciledViews.low) && $util.isInteger(message.reconciledViews.high)))
+                    return "reconciledViews: integer|Long expected";
+            if (message.downloadOnly != null && $Object.hasOwnProperty.call(message, "downloadOnly"))
+                if (typeof message.downloadOnly !== "boolean")
+                    return "downloadOnly: boolean expected";
+            if (message.changesFailed != null && $Object.hasOwnProperty.call(message, "changesFailed"))
+                if (!$util.isInteger(message.changesFailed) && !(message.changesFailed && $util.isInteger(message.changesFailed.low) && $util.isInteger(message.changesFailed.high)))
+                    return "changesFailed: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a PullReport message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullReport
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullReport} PullReport
+         */
+        PullReport.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullReport)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullReport: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullReport();
+            if (object.remoteName != null)
+                if (typeof object.remoteName !== "string" || object.remoteName.length)
+                    message.remoteName = $String(object.remoteName);
+            if (object.remoteUrl != null)
+                if (typeof object.remoteUrl !== "string" || object.remoteUrl.length)
+                    message.remoteUrl = $String(object.remoteUrl);
+            if (object.remoteView != null)
+                if (typeof object.remoteView !== "string" || object.remoteView.length)
+                    message.remoteView = $String(object.remoteView);
+            if (object.localView != null)
+                if (typeof object.localView !== "string" || object.localView.length)
+                    message.localView = $String(object.localView);
+            if (object.localViewChanges != null)
+                if (typeof object.localViewChanges === "object" ? object.localViewChanges.low || object.localViewChanges.high : $Number(object.localViewChanges) !== 0)
+                    if ($util.Long)
+                        message.localViewChanges = $util.Long.fromValue(object.localViewChanges, true);
+                    else if (typeof object.localViewChanges === "string")
+                        message.localViewChanges = $parseInt(object.localViewChanges, 10);
+                    else if (typeof object.localViewChanges === "number")
+                        message.localViewChanges = object.localViewChanges;
+                    else if (typeof object.localViewChanges === "object")
+                        message.localViewChanges = new $util.LongBits(object.localViewChanges.low >>> 0, object.localViewChanges.high >>> 0).toNumber(true);
+            if (object.graphObjects != null)
+                if (typeof object.graphObjects === "object" ? object.graphObjects.low || object.graphObjects.high : $Number(object.graphObjects) !== 0)
+                    if ($util.Long)
+                        message.graphObjects = $util.Long.fromValue(object.graphObjects, true);
+                    else if (typeof object.graphObjects === "string")
+                        message.graphObjects = $parseInt(object.graphObjects, 10);
+                    else if (typeof object.graphObjects === "number")
+                        message.graphObjects = object.graphObjects;
+                    else if (typeof object.graphObjects === "object")
+                        message.graphObjects = new $util.LongBits(object.graphObjects.low >>> 0, object.graphObjects.high >>> 0).toNumber(true);
+            if (object.remoteChanges != null)
+                if (typeof object.remoteChanges === "object" ? object.remoteChanges.low || object.remoteChanges.high : $Number(object.remoteChanges) !== 0)
+                    if ($util.Long)
+                        message.remoteChanges = $util.Long.fromValue(object.remoteChanges, true);
+                    else if (typeof object.remoteChanges === "string")
+                        message.remoteChanges = $parseInt(object.remoteChanges, 10);
+                    else if (typeof object.remoteChanges === "number")
+                        message.remoteChanges = object.remoteChanges;
+                    else if (typeof object.remoteChanges === "object")
+                        message.remoteChanges = new $util.LongBits(object.remoteChanges.low >>> 0, object.remoteChanges.high >>> 0).toNumber(true);
+            if (object.remoteState != null)
+                message.remoteState = $String(object.remoteState);
+            if (object.localOnly) {
+                if (!$Array.isArray(object.localOnly))
+                    throw $TypeError(".atomic.PullReport.localOnly: array expected");
+                message.localOnly = $Array(object.localOnly.length);
+                for (var i = 0; i < object.localOnly.length; ++i)
+                    message.localOnly[i] = $String(object.localOnly[i]);
+            }
+            if (object.downloads) {
+                if (!$Array.isArray(object.downloads))
+                    throw $TypeError(".atomic.PullReport.downloads: array expected");
+                message.downloads = $Array(object.downloads.length);
+                for (var i = 0; i < object.downloads.length; ++i) {
+                    if (!$util.isObject(object.downloads[i]))
+                        throw $TypeError(".atomic.PullReport.downloads: object expected");
+                    message.downloads[i] = $root.atomic.PullDownload.fromObject(object.downloads[i], _depth + 1);
+                }
+            }
+            if (object.changesDownloaded != null)
+                if (typeof object.changesDownloaded === "object" ? object.changesDownloaded.low || object.changesDownloaded.high : $Number(object.changesDownloaded) !== 0)
+                    if ($util.Long)
+                        message.changesDownloaded = $util.Long.fromValue(object.changesDownloaded, true);
+                    else if (typeof object.changesDownloaded === "string")
+                        message.changesDownloaded = $parseInt(object.changesDownloaded, 10);
+                    else if (typeof object.changesDownloaded === "number")
+                        message.changesDownloaded = object.changesDownloaded;
+                    else if (typeof object.changesDownloaded === "object")
+                        message.changesDownloaded = new $util.LongBits(object.changesDownloaded.low >>> 0, object.changesDownloaded.high >>> 0).toNumber(true);
+            if (object.bytesTransferred != null)
+                if (typeof object.bytesTransferred === "object" ? object.bytesTransferred.low || object.bytesTransferred.high : $Number(object.bytesTransferred) !== 0)
+                    if ($util.Long)
+                        message.bytesTransferred = $util.Long.fromValue(object.bytesTransferred, true);
+                    else if (typeof object.bytesTransferred === "string")
+                        message.bytesTransferred = $parseInt(object.bytesTransferred, 10);
+                    else if (typeof object.bytesTransferred === "number")
+                        message.bytesTransferred = object.bytesTransferred;
+                    else if (typeof object.bytesTransferred === "object")
+                        message.bytesTransferred = new $util.LongBits(object.bytesTransferred.low >>> 0, object.bytesTransferred.high >>> 0).toNumber(true);
+            if (object.applied != null)
+                if (object.applied)
+                    message.applied = $Boolean(object.applied);
+            if (object.appliedChanges != null)
+                if (typeof object.appliedChanges === "object" ? object.appliedChanges.low || object.appliedChanges.high : $Number(object.appliedChanges) !== 0)
+                    if ($util.Long)
+                        message.appliedChanges = $util.Long.fromValue(object.appliedChanges, true);
+                    else if (typeof object.appliedChanges === "string")
+                        message.appliedChanges = $parseInt(object.appliedChanges, 10);
+                    else if (typeof object.appliedChanges === "number")
+                        message.appliedChanges = object.appliedChanges;
+                    else if (typeof object.appliedChanges === "object")
+                        message.appliedChanges = new $util.LongBits(object.appliedChanges.low >>> 0, object.appliedChanges.high >>> 0).toNumber(true);
+            if (object.applyErrors) {
+                if (!$Array.isArray(object.applyErrors))
+                    throw $TypeError(".atomic.PullReport.applyErrors: array expected");
+                message.applyErrors = $Array(object.applyErrors.length);
+                for (var i = 0; i < object.applyErrors.length; ++i)
+                    message.applyErrors[i] = $String(object.applyErrors[i]);
+            }
+            if (object.sidecars) {
+                if (!$Array.isArray(object.sidecars))
+                    throw $TypeError(".atomic.PullReport.sidecars: array expected");
+                message.sidecars = $Array(object.sidecars.length);
+                for (var i = 0; i < object.sidecars.length; ++i) {
+                    if (!$util.isObject(object.sidecars[i]))
+                        throw $TypeError(".atomic.PullReport.sidecars: object expected");
+                    message.sidecars[i] = $root.atomic.PullSidecar.fromObject(object.sidecars[i], _depth + 1);
+                }
+            }
+            if (object.setIdVerified != null)
+                if (object.setIdVerified)
+                    message.setIdVerified = $Boolean(object.setIdVerified);
+            if (object.setIdWarning != null)
+                message.setIdWarning = $String(object.setIdWarning);
+            if (object.materialized != null)
+                if (object.materialized)
+                    message.materialized = $Boolean(object.materialized);
+            if (object.filesWritten != null)
+                if (typeof object.filesWritten === "object" ? object.filesWritten.low || object.filesWritten.high : $Number(object.filesWritten) !== 0)
+                    if ($util.Long)
+                        message.filesWritten = $util.Long.fromValue(object.filesWritten, true);
+                    else if (typeof object.filesWritten === "string")
+                        message.filesWritten = $parseInt(object.filesWritten, 10);
+                    else if (typeof object.filesWritten === "number")
+                        message.filesWritten = object.filesWritten;
+                    else if (typeof object.filesWritten === "object")
+                        message.filesWritten = new $util.LongBits(object.filesWritten.low >>> 0, object.filesWritten.high >>> 0).toNumber(true);
+            if (object.materializeError != null)
+                message.materializeError = $String(object.materializeError);
+            if (object.tags) {
+                if (!$Array.isArray(object.tags))
+                    throw $TypeError(".atomic.PullReport.tags: array expected");
+                message.tags = $Array(object.tags.length);
+                for (var i = 0; i < object.tags.length; ++i) {
+                    if (!$util.isObject(object.tags[i]))
+                        throw $TypeError(".atomic.PullReport.tags: object expected");
+                    message.tags[i] = $root.atomic.PullTag.fromObject(object.tags[i], _depth + 1);
+                }
+            }
+            if (object.warnings) {
+                if (!$Array.isArray(object.warnings))
+                    throw $TypeError(".atomic.PullReport.warnings: array expected");
+                message.warnings = $Array(object.warnings.length);
+                for (var i = 0; i < object.warnings.length; ++i) {
+                    if (!$util.isObject(object.warnings[i]))
+                        throw $TypeError(".atomic.PullReport.warnings: object expected");
+                    message.warnings[i] = $root.atomic.PullWarning.fromObject(object.warnings[i], _depth + 1);
+                }
+            }
+            if (object.localTip != null)
+                message.localTip = $String(object.localTip);
+            if (object.vaultBootstrapped != null)
+                if (object.vaultBootstrapped)
+                    message.vaultBootstrapped = $Boolean(object.vaultBootstrapped);
+            if (object.reconciledViews != null)
+                if (typeof object.reconciledViews === "object" ? object.reconciledViews.low || object.reconciledViews.high : $Number(object.reconciledViews) !== 0)
+                    if ($util.Long)
+                        message.reconciledViews = $util.Long.fromValue(object.reconciledViews, true);
+                    else if (typeof object.reconciledViews === "string")
+                        message.reconciledViews = $parseInt(object.reconciledViews, 10);
+                    else if (typeof object.reconciledViews === "number")
+                        message.reconciledViews = object.reconciledViews;
+                    else if (typeof object.reconciledViews === "object")
+                        message.reconciledViews = new $util.LongBits(object.reconciledViews.low >>> 0, object.reconciledViews.high >>> 0).toNumber(true);
+            if (object.downloadOnly != null)
+                if (object.downloadOnly)
+                    message.downloadOnly = $Boolean(object.downloadOnly);
+            if (object.changesFailed != null)
+                if (typeof object.changesFailed === "object" ? object.changesFailed.low || object.changesFailed.high : $Number(object.changesFailed) !== 0)
+                    if ($util.Long)
+                        message.changesFailed = $util.Long.fromValue(object.changesFailed, true);
+                    else if (typeof object.changesFailed === "string")
+                        message.changesFailed = $parseInt(object.changesFailed, 10);
+                    else if (typeof object.changesFailed === "number")
+                        message.changesFailed = object.changesFailed;
+                    else if (typeof object.changesFailed === "object")
+                        message.changesFailed = new $util.LongBits(object.changesFailed.low >>> 0, object.changesFailed.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullReport message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullReport
+         * @static
+         * @param {atomic.PullReport} message PullReport
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullReport.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults) {
+                object.localOnly = [];
+                object.downloads = [];
+                object.applyErrors = [];
+                object.sidecars = [];
+                object.tags = [];
+                object.warnings = [];
+            }
+            if (options.defaults) {
+                object.remoteName = "";
+                object.remoteUrl = "";
+                object.remoteView = "";
+                object.localView = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.localViewChanges = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.localViewChanges = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.graphObjects = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.graphObjects = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.remoteChanges = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.remoteChanges = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.changesDownloaded = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.changesDownloaded = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.bytesTransferred = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.bytesTransferred = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.applied = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.appliedChanges = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.appliedChanges = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.setIdVerified = false;
+                object.materialized = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.filesWritten = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.filesWritten = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.vaultBootstrapped = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.reconciledViews = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.reconciledViews = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                object.downloadOnly = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.changesFailed = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.changesFailed = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.remoteName != null && $Object.hasOwnProperty.call(message, "remoteName"))
+                object.remoteName = message.remoteName;
+            if (message.remoteUrl != null && $Object.hasOwnProperty.call(message, "remoteUrl"))
+                object.remoteUrl = message.remoteUrl;
+            if (message.remoteView != null && $Object.hasOwnProperty.call(message, "remoteView"))
+                object.remoteView = message.remoteView;
+            if (message.localView != null && $Object.hasOwnProperty.call(message, "localView"))
+                object.localView = message.localView;
+            if (message.localViewChanges != null && $Object.hasOwnProperty.call(message, "localViewChanges"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.localViewChanges = typeof message.localViewChanges === "number" ? $BigInt(message.localViewChanges) : $util.Long.fromBits(message.localViewChanges.low >>> 0, message.localViewChanges.high >>> 0, true).toBigInt();
+                else if (typeof message.localViewChanges === "number")
+                    object.localViewChanges = options.longs === $String ? $String(message.localViewChanges) : message.localViewChanges;
+                else
+                    object.localViewChanges = options.longs === $String ? $util.Long.prototype.toString.call(message.localViewChanges) : options.longs === $Number ? new $util.LongBits(message.localViewChanges.low >>> 0, message.localViewChanges.high >>> 0).toNumber(true) : message.localViewChanges;
+            if (message.graphObjects != null && $Object.hasOwnProperty.call(message, "graphObjects"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.graphObjects = typeof message.graphObjects === "number" ? $BigInt(message.graphObjects) : $util.Long.fromBits(message.graphObjects.low >>> 0, message.graphObjects.high >>> 0, true).toBigInt();
+                else if (typeof message.graphObjects === "number")
+                    object.graphObjects = options.longs === $String ? $String(message.graphObjects) : message.graphObjects;
+                else
+                    object.graphObjects = options.longs === $String ? $util.Long.prototype.toString.call(message.graphObjects) : options.longs === $Number ? new $util.LongBits(message.graphObjects.low >>> 0, message.graphObjects.high >>> 0).toNumber(true) : message.graphObjects;
+            if (message.remoteChanges != null && $Object.hasOwnProperty.call(message, "remoteChanges"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.remoteChanges = typeof message.remoteChanges === "number" ? $BigInt(message.remoteChanges) : $util.Long.fromBits(message.remoteChanges.low >>> 0, message.remoteChanges.high >>> 0, true).toBigInt();
+                else if (typeof message.remoteChanges === "number")
+                    object.remoteChanges = options.longs === $String ? $String(message.remoteChanges) : message.remoteChanges;
+                else
+                    object.remoteChanges = options.longs === $String ? $util.Long.prototype.toString.call(message.remoteChanges) : options.longs === $Number ? new $util.LongBits(message.remoteChanges.low >>> 0, message.remoteChanges.high >>> 0).toNumber(true) : message.remoteChanges;
+            if (message.remoteState != null && $Object.hasOwnProperty.call(message, "remoteState"))
+                object.remoteState = message.remoteState;
+            if (message.localOnly && message.localOnly.length) {
+                object.localOnly = $Array(message.localOnly.length);
+                for (var j = 0; j < message.localOnly.length; ++j)
+                    object.localOnly[j] = message.localOnly[j];
+            }
+            if (message.downloads && message.downloads.length) {
+                object.downloads = $Array(message.downloads.length);
+                for (var j = 0; j < message.downloads.length; ++j)
+                    object.downloads[j] = $root.atomic.PullDownload.toObject(message.downloads[j], options, _depth + 1);
+            }
+            if (message.changesDownloaded != null && $Object.hasOwnProperty.call(message, "changesDownloaded"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.changesDownloaded = typeof message.changesDownloaded === "number" ? $BigInt(message.changesDownloaded) : $util.Long.fromBits(message.changesDownloaded.low >>> 0, message.changesDownloaded.high >>> 0, true).toBigInt();
+                else if (typeof message.changesDownloaded === "number")
+                    object.changesDownloaded = options.longs === $String ? $String(message.changesDownloaded) : message.changesDownloaded;
+                else
+                    object.changesDownloaded = options.longs === $String ? $util.Long.prototype.toString.call(message.changesDownloaded) : options.longs === $Number ? new $util.LongBits(message.changesDownloaded.low >>> 0, message.changesDownloaded.high >>> 0).toNumber(true) : message.changesDownloaded;
+            if (message.bytesTransferred != null && $Object.hasOwnProperty.call(message, "bytesTransferred"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.bytesTransferred = typeof message.bytesTransferred === "number" ? $BigInt(message.bytesTransferred) : $util.Long.fromBits(message.bytesTransferred.low >>> 0, message.bytesTransferred.high >>> 0, true).toBigInt();
+                else if (typeof message.bytesTransferred === "number")
+                    object.bytesTransferred = options.longs === $String ? $String(message.bytesTransferred) : message.bytesTransferred;
+                else
+                    object.bytesTransferred = options.longs === $String ? $util.Long.prototype.toString.call(message.bytesTransferred) : options.longs === $Number ? new $util.LongBits(message.bytesTransferred.low >>> 0, message.bytesTransferred.high >>> 0).toNumber(true) : message.bytesTransferred;
+            if (message.applied != null && $Object.hasOwnProperty.call(message, "applied"))
+                object.applied = message.applied;
+            if (message.appliedChanges != null && $Object.hasOwnProperty.call(message, "appliedChanges"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.appliedChanges = typeof message.appliedChanges === "number" ? $BigInt(message.appliedChanges) : $util.Long.fromBits(message.appliedChanges.low >>> 0, message.appliedChanges.high >>> 0, true).toBigInt();
+                else if (typeof message.appliedChanges === "number")
+                    object.appliedChanges = options.longs === $String ? $String(message.appliedChanges) : message.appliedChanges;
+                else
+                    object.appliedChanges = options.longs === $String ? $util.Long.prototype.toString.call(message.appliedChanges) : options.longs === $Number ? new $util.LongBits(message.appliedChanges.low >>> 0, message.appliedChanges.high >>> 0).toNumber(true) : message.appliedChanges;
+            if (message.applyErrors && message.applyErrors.length) {
+                object.applyErrors = $Array(message.applyErrors.length);
+                for (var j = 0; j < message.applyErrors.length; ++j)
+                    object.applyErrors[j] = message.applyErrors[j];
+            }
+            if (message.sidecars && message.sidecars.length) {
+                object.sidecars = $Array(message.sidecars.length);
+                for (var j = 0; j < message.sidecars.length; ++j)
+                    object.sidecars[j] = $root.atomic.PullSidecar.toObject(message.sidecars[j], options, _depth + 1);
+            }
+            if (message.setIdVerified != null && $Object.hasOwnProperty.call(message, "setIdVerified"))
+                object.setIdVerified = message.setIdVerified;
+            if (message.setIdWarning != null && $Object.hasOwnProperty.call(message, "setIdWarning"))
+                object.setIdWarning = message.setIdWarning;
+            if (message.materialized != null && $Object.hasOwnProperty.call(message, "materialized"))
+                object.materialized = message.materialized;
+            if (message.filesWritten != null && $Object.hasOwnProperty.call(message, "filesWritten"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.filesWritten = typeof message.filesWritten === "number" ? $BigInt(message.filesWritten) : $util.Long.fromBits(message.filesWritten.low >>> 0, message.filesWritten.high >>> 0, true).toBigInt();
+                else if (typeof message.filesWritten === "number")
+                    object.filesWritten = options.longs === $String ? $String(message.filesWritten) : message.filesWritten;
+                else
+                    object.filesWritten = options.longs === $String ? $util.Long.prototype.toString.call(message.filesWritten) : options.longs === $Number ? new $util.LongBits(message.filesWritten.low >>> 0, message.filesWritten.high >>> 0).toNumber(true) : message.filesWritten;
+            if (message.materializeError != null && $Object.hasOwnProperty.call(message, "materializeError"))
+                object.materializeError = message.materializeError;
+            if (message.tags && message.tags.length) {
+                object.tags = $Array(message.tags.length);
+                for (var j = 0; j < message.tags.length; ++j)
+                    object.tags[j] = $root.atomic.PullTag.toObject(message.tags[j], options, _depth + 1);
+            }
+            if (message.warnings && message.warnings.length) {
+                object.warnings = $Array(message.warnings.length);
+                for (var j = 0; j < message.warnings.length; ++j)
+                    object.warnings[j] = $root.atomic.PullWarning.toObject(message.warnings[j], options, _depth + 1);
+            }
+            if (message.localTip != null && $Object.hasOwnProperty.call(message, "localTip"))
+                object.localTip = message.localTip;
+            if (message.vaultBootstrapped != null && $Object.hasOwnProperty.call(message, "vaultBootstrapped"))
+                object.vaultBootstrapped = message.vaultBootstrapped;
+            if (message.reconciledViews != null && $Object.hasOwnProperty.call(message, "reconciledViews"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.reconciledViews = typeof message.reconciledViews === "number" ? $BigInt(message.reconciledViews) : $util.Long.fromBits(message.reconciledViews.low >>> 0, message.reconciledViews.high >>> 0, true).toBigInt();
+                else if (typeof message.reconciledViews === "number")
+                    object.reconciledViews = options.longs === $String ? $String(message.reconciledViews) : message.reconciledViews;
+                else
+                    object.reconciledViews = options.longs === $String ? $util.Long.prototype.toString.call(message.reconciledViews) : options.longs === $Number ? new $util.LongBits(message.reconciledViews.low >>> 0, message.reconciledViews.high >>> 0).toNumber(true) : message.reconciledViews;
+            if (message.downloadOnly != null && $Object.hasOwnProperty.call(message, "downloadOnly"))
+                object.downloadOnly = message.downloadOnly;
+            if (message.changesFailed != null && $Object.hasOwnProperty.call(message, "changesFailed"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.changesFailed = typeof message.changesFailed === "number" ? $BigInt(message.changesFailed) : $util.Long.fromBits(message.changesFailed.low >>> 0, message.changesFailed.high >>> 0, true).toBigInt();
+                else if (typeof message.changesFailed === "number")
+                    object.changesFailed = options.longs === $String ? $String(message.changesFailed) : message.changesFailed;
+                else
+                    object.changesFailed = options.longs === $String ? $util.Long.prototype.toString.call(message.changesFailed) : options.longs === $Number ? new $util.LongBits(message.changesFailed.low >>> 0, message.changesFailed.high >>> 0).toNumber(true) : message.changesFailed;
+            return object;
+        };
+
+        /**
+         * Converts this PullReport to JSON.
+         * @function toJSON
+         * @memberof atomic.PullReport
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullReport.prototype.toJSON = function() {
+            return PullReport.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullReport
+         * @function getTypeUrl
+         * @memberof atomic.PullReport
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullReport.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullReport";
+        };
+
+        return PullReport;
+    })();
+
+    atomic.PullDownload = (function() {
+
+        /**
+         * Properties of a PullDownload.
+         * @typedef {Object} atomic.PullDownload.$Properties
+         * @property {atomic.Hash.$Properties|null} [hash] PullDownload hash
+         * @property {string|null} [message] PullDownload message
+         * @property {boolean|null} [ok] PullDownload ok
+         * @property {string|null} [error] PullDownload error
+         * @property {number|Long|null} [index] PullDownload index
+         * @property {number|Long|null} [total] PullDownload total
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullDownload.
+         * @memberof atomic
+         * @interface IPullDownload
+         * @augments atomic.PullDownload.$Properties
+         * @deprecated Use atomic.PullDownload.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullDownload.
+         * @typedef {atomic.PullDownload.$Properties} atomic.PullDownload.$Shape
+         */
+
+        /**
+         * Constructs a new PullDownload.
+         * @memberof atomic
+         * @classdesc Represents a PullDownload.
+         * @constructor
+         * @param {atomic.PullDownload.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullDownload = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullDownload hash.
+         * @member {atomic.Hash.$Properties|null|undefined} hash
+         * @memberof atomic.PullDownload
+         * @instance
+         */
+        PullDownload.prototype.hash = null;
+
+        /**
+         * PullDownload message.
+         * @member {string|null|undefined} message
+         * @memberof atomic.PullDownload
+         * @instance
+         */
+        PullDownload.prototype.message = null;
+
+        /**
+         * PullDownload ok.
+         * @member {boolean} ok
+         * @memberof atomic.PullDownload
+         * @instance
+         */
+        PullDownload.prototype.ok = false;
+
+        /**
+         * PullDownload error.
+         * @member {string|null|undefined} error
+         * @memberof atomic.PullDownload
+         * @instance
+         */
+        PullDownload.prototype.error = null;
+
+        /**
+         * PullDownload index.
+         * @member {number|Long} index
+         * @memberof atomic.PullDownload
+         * @instance
+         */
+        PullDownload.prototype.index = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullDownload total.
+         * @member {number|Long} total
+         * @memberof atomic.PullDownload
+         * @instance
+         */
+        PullDownload.prototype.total = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullDownload.prototype, "_message", {
+            get: $util.oneOfGetter($oneOfFields = ["message"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullDownload.prototype, "_error", {
+            get: $util.oneOfGetter($oneOfFields = ["error"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PullDownload instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {atomic.PullDownload.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullDownload} PullDownload instance
+         * @type {{
+         *   (properties: atomic.PullDownload.$Shape): atomic.PullDownload & atomic.PullDownload.$Shape;
+         *   (properties?: atomic.PullDownload.$Properties): atomic.PullDownload;
+         * }}
+         */
+        PullDownload.create = function(properties) {
+            return new PullDownload(properties);
+        };
+
+        /**
+         * Encodes the specified PullDownload message. Does not implicitly {@link atomic.PullDownload.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {atomic.PullDownload.$Properties} message PullDownload message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullDownload.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                $root.atomic.Hash.encode(message.hash, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+            if (message.ok != null && $Object.hasOwnProperty.call(message, "ok") && message.ok !== false)
+                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.ok);
+            if (message.error != null && $Object.hasOwnProperty.call(message, "error"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.error);
+            if (message.index != null && $Object.hasOwnProperty.call(message, "index") && (typeof message.index === "object" ? message.index.low || message.index.high : message.index !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.index);
+            if (message.total != null && $Object.hasOwnProperty.call(message, "total") && (typeof message.total === "object" ? message.total.low || message.total.high : message.total !== 0))
+                writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.total);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullDownload message, length delimited. Does not implicitly {@link atomic.PullDownload.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {atomic.PullDownload.$Properties} message PullDownload message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullDownload.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullDownload message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullDownload & atomic.PullDownload.$Shape} PullDownload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullDownload.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullDownload();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.hash = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.hash);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.message = reader.stringVerify();
+                        message._message = "message";
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.ok = value;
+                        else
+                            delete message.ok;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.error = reader.stringVerify();
+                        message._error = "error";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.index = value;
+                        else
+                            delete message.index;
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.total = value;
+                        else
+                            delete message.total;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullDownload message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullDownload & atomic.PullDownload.$Shape} PullDownload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullDownload.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullDownload message.
+         * @function verify
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullDownload.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash")) {
+                var error = $root.atomic.Hash.verify(message.hash, _depth + 1);
+                if (error)
+                    return "hash." + error;
+            }
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message")) {
+                properties._message = 1;
+                if (!$util.isString(message.message))
+                    return "message: string expected";
+            }
+            if (message.ok != null && $Object.hasOwnProperty.call(message, "ok"))
+                if (typeof message.ok !== "boolean")
+                    return "ok: boolean expected";
+            if (message.error != null && $Object.hasOwnProperty.call(message, "error")) {
+                properties._error = 1;
+                if (!$util.isString(message.error))
+                    return "error: string expected";
+            }
+            if (message.index != null && $Object.hasOwnProperty.call(message, "index"))
+                if (!$util.isInteger(message.index) && !(message.index && $util.isInteger(message.index.low) && $util.isInteger(message.index.high)))
+                    return "index: integer|Long expected";
+            if (message.total != null && $Object.hasOwnProperty.call(message, "total"))
+                if (!$util.isInteger(message.total) && !(message.total && $util.isInteger(message.total.low) && $util.isInteger(message.total.high)))
+                    return "total: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a PullDownload message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullDownload} PullDownload
+         */
+        PullDownload.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullDownload)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullDownload: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullDownload();
+            if (object.hash != null) {
+                if (!$util.isObject(object.hash))
+                    throw $TypeError(".atomic.PullDownload.hash: object expected");
+                message.hash = $root.atomic.Hash.fromObject(object.hash, _depth + 1);
+            }
+            if (object.message != null)
+                message.message = $String(object.message);
+            if (object.ok != null)
+                if (object.ok)
+                    message.ok = $Boolean(object.ok);
+            if (object.error != null)
+                message.error = $String(object.error);
+            if (object.index != null)
+                if (typeof object.index === "object" ? object.index.low || object.index.high : $Number(object.index) !== 0)
+                    if ($util.Long)
+                        message.index = $util.Long.fromValue(object.index, true);
+                    else if (typeof object.index === "string")
+                        message.index = $parseInt(object.index, 10);
+                    else if (typeof object.index === "number")
+                        message.index = object.index;
+                    else if (typeof object.index === "object")
+                        message.index = new $util.LongBits(object.index.low >>> 0, object.index.high >>> 0).toNumber(true);
+            if (object.total != null)
+                if (typeof object.total === "object" ? object.total.low || object.total.high : $Number(object.total) !== 0)
+                    if ($util.Long)
+                        message.total = $util.Long.fromValue(object.total, true);
+                    else if (typeof object.total === "string")
+                        message.total = $parseInt(object.total, 10);
+                    else if (typeof object.total === "number")
+                        message.total = object.total;
+                    else if (typeof object.total === "object")
+                        message.total = new $util.LongBits(object.total.low >>> 0, object.total.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullDownload message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {atomic.PullDownload} message PullDownload
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullDownload.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.hash = null;
+                object.ok = false;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.index = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.index = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.total = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.total = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.hash != null && $Object.hasOwnProperty.call(message, "hash"))
+                object.hash = $root.atomic.Hash.toObject(message.hash, options, _depth + 1);
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                object.message = message.message;
+            if (message.ok != null && $Object.hasOwnProperty.call(message, "ok"))
+                object.ok = message.ok;
+            if (message.error != null && $Object.hasOwnProperty.call(message, "error"))
+                object.error = message.error;
+            if (message.index != null && $Object.hasOwnProperty.call(message, "index"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.index = typeof message.index === "number" ? $BigInt(message.index) : $util.Long.fromBits(message.index.low >>> 0, message.index.high >>> 0, true).toBigInt();
+                else if (typeof message.index === "number")
+                    object.index = options.longs === $String ? $String(message.index) : message.index;
+                else
+                    object.index = options.longs === $String ? $util.Long.prototype.toString.call(message.index) : options.longs === $Number ? new $util.LongBits(message.index.low >>> 0, message.index.high >>> 0).toNumber(true) : message.index;
+            if (message.total != null && $Object.hasOwnProperty.call(message, "total"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.total = typeof message.total === "number" ? $BigInt(message.total) : $util.Long.fromBits(message.total.low >>> 0, message.total.high >>> 0, true).toBigInt();
+                else if (typeof message.total === "number")
+                    object.total = options.longs === $String ? $String(message.total) : message.total;
+                else
+                    object.total = options.longs === $String ? $util.Long.prototype.toString.call(message.total) : options.longs === $Number ? new $util.LongBits(message.total.low >>> 0, message.total.high >>> 0).toNumber(true) : message.total;
+            return object;
+        };
+
+        /**
+         * Converts this PullDownload to JSON.
+         * @function toJSON
+         * @memberof atomic.PullDownload
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullDownload.prototype.toJSON = function() {
+            return PullDownload.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullDownload
+         * @function getTypeUrl
+         * @memberof atomic.PullDownload
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullDownload.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullDownload";
+        };
+
+        return PullDownload;
+    })();
+
+    atomic.PullSidecar = (function() {
+
+        /**
+         * Properties of a PullSidecar.
+         * @typedef {Object} atomic.PullSidecar.$Properties
+         * @property {string|null} [kind] PullSidecar kind
+         * @property {number|Long|null} [count] PullSidecar count
+         * @property {string|null} [detail] PullSidecar detail
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullSidecar.
+         * @memberof atomic
+         * @interface IPullSidecar
+         * @augments atomic.PullSidecar.$Properties
+         * @deprecated Use atomic.PullSidecar.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullSidecar.
+         * @typedef {atomic.PullSidecar.$Properties} atomic.PullSidecar.$Shape
+         */
+
+        /**
+         * Constructs a new PullSidecar.
+         * @memberof atomic
+         * @classdesc Represents a PullSidecar.
+         * @constructor
+         * @param {atomic.PullSidecar.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullSidecar = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullSidecar kind.
+         * @member {string} kind
+         * @memberof atomic.PullSidecar
+         * @instance
+         */
+        PullSidecar.prototype.kind = "";
+
+        /**
+         * PullSidecar count.
+         * @member {number|Long} count
+         * @memberof atomic.PullSidecar
+         * @instance
+         */
+        PullSidecar.prototype.count = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * PullSidecar detail.
+         * @member {string|null|undefined} detail
+         * @memberof atomic.PullSidecar
+         * @instance
+         */
+        PullSidecar.prototype.detail = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(PullSidecar.prototype, "_detail", {
+            get: $util.oneOfGetter($oneOfFields = ["detail"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new PullSidecar instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {atomic.PullSidecar.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullSidecar} PullSidecar instance
+         * @type {{
+         *   (properties: atomic.PullSidecar.$Shape): atomic.PullSidecar & atomic.PullSidecar.$Shape;
+         *   (properties?: atomic.PullSidecar.$Properties): atomic.PullSidecar;
+         * }}
+         */
+        PullSidecar.create = function(properties) {
+            return new PullSidecar(properties);
+        };
+
+        /**
+         * Encodes the specified PullSidecar message. Does not implicitly {@link atomic.PullSidecar.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {atomic.PullSidecar.$Properties} message PullSidecar message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullSidecar.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind") && message.kind !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.kind);
+            if (message.count != null && $Object.hasOwnProperty.call(message, "count") && (typeof message.count === "object" ? message.count.low || message.count.high : message.count !== 0))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.count);
+            if (message.detail != null && $Object.hasOwnProperty.call(message, "detail"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.detail);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullSidecar message, length delimited. Does not implicitly {@link atomic.PullSidecar.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {atomic.PullSidecar.$Properties} message PullSidecar message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullSidecar.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullSidecar message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullSidecar & atomic.PullSidecar.$Shape} PullSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullSidecar.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullSidecar();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.kind = value;
+                        else
+                            delete message.kind;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.count = value;
+                        else
+                            delete message.count;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        message.detail = reader.stringVerify();
+                        message._detail = "detail";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullSidecar message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullSidecar & atomic.PullSidecar.$Shape} PullSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullSidecar.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullSidecar message.
+         * @function verify
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullSidecar.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind"))
+                if (!$util.isString(message.kind))
+                    return "kind: string expected";
+            if (message.count != null && $Object.hasOwnProperty.call(message, "count"))
+                if (!$util.isInteger(message.count) && !(message.count && $util.isInteger(message.count.low) && $util.isInteger(message.count.high)))
+                    return "count: integer|Long expected";
+            if (message.detail != null && $Object.hasOwnProperty.call(message, "detail")) {
+                properties._detail = 1;
+                if (!$util.isString(message.detail))
+                    return "detail: string expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a PullSidecar message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullSidecar} PullSidecar
+         */
+        PullSidecar.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullSidecar)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullSidecar: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullSidecar();
+            if (object.kind != null)
+                if (typeof object.kind !== "string" || object.kind.length)
+                    message.kind = $String(object.kind);
+            if (object.count != null)
+                if (typeof object.count === "object" ? object.count.low || object.count.high : $Number(object.count) !== 0)
+                    if ($util.Long)
+                        message.count = $util.Long.fromValue(object.count, true);
+                    else if (typeof object.count === "string")
+                        message.count = $parseInt(object.count, 10);
+                    else if (typeof object.count === "number")
+                        message.count = object.count;
+                    else if (typeof object.count === "object")
+                        message.count = new $util.LongBits(object.count.low >>> 0, object.count.high >>> 0).toNumber(true);
+            if (object.detail != null)
+                message.detail = $String(object.detail);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullSidecar message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {atomic.PullSidecar} message PullSidecar
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullSidecar.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.kind = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.count = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.count = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind"))
+                object.kind = message.kind;
+            if (message.count != null && $Object.hasOwnProperty.call(message, "count"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.count = typeof message.count === "number" ? $BigInt(message.count) : $util.Long.fromBits(message.count.low >>> 0, message.count.high >>> 0, true).toBigInt();
+                else if (typeof message.count === "number")
+                    object.count = options.longs === $String ? $String(message.count) : message.count;
+                else
+                    object.count = options.longs === $String ? $util.Long.prototype.toString.call(message.count) : options.longs === $Number ? new $util.LongBits(message.count.low >>> 0, message.count.high >>> 0).toNumber(true) : message.count;
+            if (message.detail != null && $Object.hasOwnProperty.call(message, "detail"))
+                object.detail = message.detail;
+            return object;
+        };
+
+        /**
+         * Converts this PullSidecar to JSON.
+         * @function toJSON
+         * @memberof atomic.PullSidecar
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullSidecar.prototype.toJSON = function() {
+            return PullSidecar.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullSidecar
+         * @function getTypeUrl
+         * @memberof atomic.PullSidecar
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullSidecar.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullSidecar";
+        };
+
+        return PullSidecar;
+    })();
+
+    atomic.PullTag = (function() {
+
+        /**
+         * Properties of a PullTag.
+         * @typedef {Object} atomic.PullTag.$Properties
+         * @property {string|null} [name] PullTag name
+         * @property {string|null} [kind] PullTag kind
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullTag.
+         * @memberof atomic
+         * @interface IPullTag
+         * @augments atomic.PullTag.$Properties
+         * @deprecated Use atomic.PullTag.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullTag.
+         * @typedef {atomic.PullTag.$Properties} atomic.PullTag.$Shape
+         */
+
+        /**
+         * Constructs a new PullTag.
+         * @memberof atomic
+         * @classdesc Represents a PullTag.
+         * @constructor
+         * @param {atomic.PullTag.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullTag = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullTag name.
+         * @member {string} name
+         * @memberof atomic.PullTag
+         * @instance
+         */
+        PullTag.prototype.name = "";
+
+        /**
+         * PullTag kind.
+         * @member {string} kind
+         * @memberof atomic.PullTag
+         * @instance
+         */
+        PullTag.prototype.kind = "";
+
+        /**
+         * Creates a new PullTag instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullTag
+         * @static
+         * @param {atomic.PullTag.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullTag} PullTag instance
+         * @type {{
+         *   (properties: atomic.PullTag.$Shape): atomic.PullTag & atomic.PullTag.$Shape;
+         *   (properties?: atomic.PullTag.$Properties): atomic.PullTag;
+         * }}
+         */
+        PullTag.create = function(properties) {
+            return new PullTag(properties);
+        };
+
+        /**
+         * Encodes the specified PullTag message. Does not implicitly {@link atomic.PullTag.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullTag
+         * @static
+         * @param {atomic.PullTag.$Properties} message PullTag message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullTag.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name") && message.name !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind") && message.kind !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.kind);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullTag message, length delimited. Does not implicitly {@link atomic.PullTag.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullTag
+         * @static
+         * @param {atomic.PullTag.$Properties} message PullTag message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullTag.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullTag message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullTag
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullTag & atomic.PullTag.$Shape} PullTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullTag.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullTag();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.name = value;
+                        else
+                            delete message.name;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.kind = value;
+                        else
+                            delete message.kind;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullTag message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullTag
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullTag & atomic.PullTag.$Shape} PullTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullTag.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullTag message.
+         * @function verify
+         * @memberof atomic.PullTag
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullTag.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind"))
+                if (!$util.isString(message.kind))
+                    return "kind: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a PullTag message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullTag
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullTag} PullTag
+         */
+        PullTag.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullTag)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullTag: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullTag();
+            if (object.name != null)
+                if (typeof object.name !== "string" || object.name.length)
+                    message.name = $String(object.name);
+            if (object.kind != null)
+                if (typeof object.kind !== "string" || object.kind.length)
+                    message.kind = $String(object.kind);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullTag message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullTag
+         * @static
+         * @param {atomic.PullTag} message PullTag
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullTag.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.name = "";
+                object.kind = "";
+            }
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                object.name = message.name;
+            if (message.kind != null && $Object.hasOwnProperty.call(message, "kind"))
+                object.kind = message.kind;
+            return object;
+        };
+
+        /**
+         * Converts this PullTag to JSON.
+         * @function toJSON
+         * @memberof atomic.PullTag
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullTag.prototype.toJSON = function() {
+            return PullTag.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullTag
+         * @function getTypeUrl
+         * @memberof atomic.PullTag
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullTag.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullTag";
+        };
+
+        return PullTag;
+    })();
+
+    atomic.PullWarning = (function() {
+
+        /**
+         * Properties of a PullWarning.
+         * @typedef {Object} atomic.PullWarning.$Properties
+         * @property {string|null} [text] PullWarning text
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PullWarning.
+         * @memberof atomic
+         * @interface IPullWarning
+         * @augments atomic.PullWarning.$Properties
+         * @deprecated Use atomic.PullWarning.$Properties instead.
+         */
+
+        /**
+         * Shape of a PullWarning.
+         * @typedef {atomic.PullWarning.$Properties} atomic.PullWarning.$Shape
+         */
+
+        /**
+         * Constructs a new PullWarning.
+         * @memberof atomic
+         * @classdesc Represents a PullWarning.
+         * @constructor
+         * @param {atomic.PullWarning.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PullWarning = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * PullWarning text.
+         * @member {string} text
+         * @memberof atomic.PullWarning
+         * @instance
+         */
+        PullWarning.prototype.text = "";
+
+        /**
+         * Creates a new PullWarning instance using the specified properties.
+         * @function create
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {atomic.PullWarning.$Properties=} [properties] Properties to set
+         * @returns {atomic.PullWarning} PullWarning instance
+         * @type {{
+         *   (properties: atomic.PullWarning.$Shape): atomic.PullWarning & atomic.PullWarning.$Shape;
+         *   (properties?: atomic.PullWarning.$Properties): atomic.PullWarning;
+         * }}
+         */
+        PullWarning.create = function(properties) {
+            return new PullWarning(properties);
+        };
+
+        /**
+         * Encodes the specified PullWarning message. Does not implicitly {@link atomic.PullWarning.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {atomic.PullWarning.$Properties} message PullWarning message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullWarning.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.text != null && $Object.hasOwnProperty.call(message, "text") && message.text !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.text);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PullWarning message, length delimited. Does not implicitly {@link atomic.PullWarning.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {atomic.PullWarning.$Properties} message PullWarning message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PullWarning.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PullWarning message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PullWarning & atomic.PullWarning.$Shape} PullWarning
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullWarning.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PullWarning();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.text = value;
+                        else
+                            delete message.text;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PullWarning message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PullWarning & atomic.PullWarning.$Shape} PullWarning
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PullWarning.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PullWarning message.
+         * @function verify
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PullWarning.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
+                if (!$util.isString(message.text))
+                    return "text: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a PullWarning message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PullWarning} PullWarning
+         */
+        PullWarning.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PullWarning)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PullWarning: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.PullWarning();
+            if (object.text != null)
+                if (typeof object.text !== "string" || object.text.length)
+                    message.text = $String(object.text);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a PullWarning message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {atomic.PullWarning} message PullWarning
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PullWarning.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults)
+                object.text = "";
+            if (message.text != null && $Object.hasOwnProperty.call(message, "text"))
+                object.text = message.text;
+            return object;
+        };
+
+        /**
+         * Converts this PullWarning to JSON.
+         * @function toJSON
+         * @memberof atomic.PullWarning
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PullWarning.prototype.toJSON = function() {
+            return PullWarning.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PullWarning
+         * @function getTypeUrl
+         * @memberof atomic.PullWarning
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PullWarning.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PullWarning";
+        };
+
+        return PullWarning;
+    })();
+
+    atomic.ListRemotesRequest = (function() {
+
+        /**
+         * Properties of a ListRemotesRequest.
+         * @typedef {Object} atomic.ListRemotesRequest.$Properties
+         * @property {atomic.RepositoryRef.$Properties|null} [repository] ListRemotesRequest repository
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ListRemotesRequest.
+         * @memberof atomic
+         * @interface IListRemotesRequest
+         * @augments atomic.ListRemotesRequest.$Properties
+         * @deprecated Use atomic.ListRemotesRequest.$Properties instead.
+         */
+
+        /**
+         * Shape of a ListRemotesRequest.
+         * @typedef {atomic.ListRemotesRequest.$Properties} atomic.ListRemotesRequest.$Shape
+         */
+
+        /**
+         * Constructs a new ListRemotesRequest.
+         * @memberof atomic
+         * @classdesc Represents a ListRemotesRequest.
+         * @constructor
+         * @param {atomic.ListRemotesRequest.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ListRemotesRequest = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ListRemotesRequest repository.
+         * @member {atomic.RepositoryRef.$Properties|null|undefined} repository
+         * @memberof atomic.ListRemotesRequest
+         * @instance
+         */
+        ListRemotesRequest.prototype.repository = null;
+
+        /**
+         * Creates a new ListRemotesRequest instance using the specified properties.
+         * @function create
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {atomic.ListRemotesRequest.$Properties=} [properties] Properties to set
+         * @returns {atomic.ListRemotesRequest} ListRemotesRequest instance
+         * @type {{
+         *   (properties: atomic.ListRemotesRequest.$Shape): atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape;
+         *   (properties?: atomic.ListRemotesRequest.$Properties): atomic.ListRemotesRequest;
+         * }}
+         */
+        ListRemotesRequest.create = function(properties) {
+            return new ListRemotesRequest(properties);
+        };
+
+        /**
+         * Encodes the specified ListRemotesRequest message. Does not implicitly {@link atomic.ListRemotesRequest.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {atomic.ListRemotesRequest.$Properties} message ListRemotesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ListRemotesRequest.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                $root.atomic.RepositoryRef.encode(message.repository, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ListRemotesRequest message, length delimited. Does not implicitly {@link atomic.ListRemotesRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {atomic.ListRemotesRequest.$Properties} message ListRemotesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ListRemotesRequest.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ListRemotesRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape} ListRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ListRemotesRequest.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ListRemotesRequest();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.repository = $root.atomic.RepositoryRef.decode(reader, reader.size(), $undefined, _depth + 1, message.repository);
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ListRemotesRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape} ListRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ListRemotesRequest.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ListRemotesRequest message.
+         * @function verify
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ListRemotesRequest.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository")) {
+                var error = $root.atomic.RepositoryRef.verify(message.repository, _depth + 1);
+                if (error)
+                    return "repository." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ListRemotesRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ListRemotesRequest} ListRemotesRequest
+         */
+        ListRemotesRequest.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ListRemotesRequest)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ListRemotesRequest: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ListRemotesRequest();
+            if (object.repository != null) {
+                if (!$util.isObject(object.repository))
+                    throw $TypeError(".atomic.ListRemotesRequest.repository: object expected");
+                message.repository = $root.atomic.RepositoryRef.fromObject(object.repository, _depth + 1);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ListRemotesRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {atomic.ListRemotesRequest} message ListRemotesRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ListRemotesRequest.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults)
+                object.repository = null;
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                object.repository = $root.atomic.RepositoryRef.toObject(message.repository, options, _depth + 1);
+            return object;
+        };
+
+        /**
+         * Converts this ListRemotesRequest to JSON.
+         * @function toJSON
+         * @memberof atomic.ListRemotesRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ListRemotesRequest.prototype.toJSON = function() {
+            return ListRemotesRequest.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ListRemotesRequest
+         * @function getTypeUrl
+         * @memberof atomic.ListRemotesRequest
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ListRemotesRequest.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ListRemotesRequest";
+        };
+
+        return ListRemotesRequest;
+    })();
+
+    atomic.ListRemotesResponse = (function() {
+
+        /**
+         * Properties of a ListRemotesResponse.
+         * @typedef {Object} atomic.ListRemotesResponse.$Properties
+         * @property {Array.<atomic.RemoteInfo.$Properties>|null} [remotes] ListRemotesResponse remotes
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ListRemotesResponse.
+         * @memberof atomic
+         * @interface IListRemotesResponse
+         * @augments atomic.ListRemotesResponse.$Properties
+         * @deprecated Use atomic.ListRemotesResponse.$Properties instead.
+         */
+
+        /**
+         * Shape of a ListRemotesResponse.
+         * @typedef {atomic.ListRemotesResponse.$Properties} atomic.ListRemotesResponse.$Shape
+         */
+
+        /**
+         * Constructs a new ListRemotesResponse.
+         * @memberof atomic
+         * @classdesc Represents a ListRemotesResponse.
+         * @constructor
+         * @param {atomic.ListRemotesResponse.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ListRemotesResponse = function (properties) {
+            this.remotes = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ListRemotesResponse remotes.
+         * @member {Array.<atomic.RemoteInfo.$Properties>} remotes
+         * @memberof atomic.ListRemotesResponse
+         * @instance
+         */
+        ListRemotesResponse.prototype.remotes = $util.emptyArray;
+
+        /**
+         * Creates a new ListRemotesResponse instance using the specified properties.
+         * @function create
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {atomic.ListRemotesResponse.$Properties=} [properties] Properties to set
+         * @returns {atomic.ListRemotesResponse} ListRemotesResponse instance
+         * @type {{
+         *   (properties: atomic.ListRemotesResponse.$Shape): atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape;
+         *   (properties?: atomic.ListRemotesResponse.$Properties): atomic.ListRemotesResponse;
+         * }}
+         */
+        ListRemotesResponse.create = function(properties) {
+            return new ListRemotesResponse(properties);
+        };
+
+        /**
+         * Encodes the specified ListRemotesResponse message. Does not implicitly {@link atomic.ListRemotesResponse.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {atomic.ListRemotesResponse.$Properties} message ListRemotesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ListRemotesResponse.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.remotes != null && message.remotes.length)
+                for (var i = 0; i < message.remotes.length; ++i)
+                    $root.atomic.RemoteInfo.encode(message.remotes[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ListRemotesResponse message, length delimited. Does not implicitly {@link atomic.ListRemotesResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {atomic.ListRemotesResponse.$Properties} message ListRemotesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ListRemotesResponse.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ListRemotesResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape} ListRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ListRemotesResponse.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ListRemotesResponse();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.remotes && message.remotes.length))
+                            message.remotes = [];
+                        message.remotes.push($root.atomic.RemoteInfo.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ListRemotesResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape} ListRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ListRemotesResponse.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ListRemotesResponse message.
+         * @function verify
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ListRemotesResponse.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.remotes != null && $Object.hasOwnProperty.call(message, "remotes")) {
+                if (!$Array.isArray(message.remotes))
+                    return "remotes: array expected";
+                for (var i = 0; i < message.remotes.length; ++i) {
+                    var error = $root.atomic.RemoteInfo.verify(message.remotes[i], _depth + 1);
+                    if (error)
+                        return "remotes." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ListRemotesResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ListRemotesResponse} ListRemotesResponse
+         */
+        ListRemotesResponse.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ListRemotesResponse)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ListRemotesResponse: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ListRemotesResponse();
+            if (object.remotes) {
+                if (!$Array.isArray(object.remotes))
+                    throw $TypeError(".atomic.ListRemotesResponse.remotes: array expected");
+                message.remotes = $Array(object.remotes.length);
+                for (var i = 0; i < object.remotes.length; ++i) {
+                    if (!$util.isObject(object.remotes[i]))
+                        throw $TypeError(".atomic.ListRemotesResponse.remotes: object expected");
+                    message.remotes[i] = $root.atomic.RemoteInfo.fromObject(object.remotes[i], _depth + 1);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ListRemotesResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {atomic.ListRemotesResponse} message ListRemotesResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ListRemotesResponse.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.remotes = [];
+            if (message.remotes && message.remotes.length) {
+                object.remotes = $Array(message.remotes.length);
+                for (var j = 0; j < message.remotes.length; ++j)
+                    object.remotes[j] = $root.atomic.RemoteInfo.toObject(message.remotes[j], options, _depth + 1);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this ListRemotesResponse to JSON.
+         * @function toJSON
+         * @memberof atomic.ListRemotesResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ListRemotesResponse.prototype.toJSON = function() {
+            return ListRemotesResponse.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ListRemotesResponse
+         * @function getTypeUrl
+         * @memberof atomic.ListRemotesResponse
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ListRemotesResponse.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ListRemotesResponse";
+        };
+
+        return ListRemotesResponse;
+    })();
+
+    atomic.RemoteInfo = (function() {
+
+        /**
+         * Properties of a RemoteInfo.
+         * @typedef {Object} atomic.RemoteInfo.$Properties
+         * @property {string|null} [name] RemoteInfo name
+         * @property {string|null} [url] RemoteInfo url
+         * @property {boolean|null} ["default"] RemoteInfo default
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a RemoteInfo.
+         * @memberof atomic
+         * @interface IRemoteInfo
+         * @augments atomic.RemoteInfo.$Properties
+         * @deprecated Use atomic.RemoteInfo.$Properties instead.
+         */
+
+        /**
+         * Shape of a RemoteInfo.
+         * @typedef {atomic.RemoteInfo.$Properties} atomic.RemoteInfo.$Shape
+         */
+
+        /**
+         * Constructs a new RemoteInfo.
+         * @memberof atomic
+         * @classdesc Represents a RemoteInfo.
+         * @constructor
+         * @param {atomic.RemoteInfo.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var RemoteInfo = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * RemoteInfo name.
+         * @member {string} name
+         * @memberof atomic.RemoteInfo
+         * @instance
+         */
+        RemoteInfo.prototype.name = "";
+
+        /**
+         * RemoteInfo url.
+         * @member {string} url
+         * @memberof atomic.RemoteInfo
+         * @instance
+         */
+        RemoteInfo.prototype.url = "";
+
+        /**
+         * RemoteInfo default.
+         * @member {boolean} default
+         * @memberof atomic.RemoteInfo
+         * @instance
+         */
+        RemoteInfo.prototype["default"] = false;
+
+        /**
+         * Creates a new RemoteInfo instance using the specified properties.
+         * @function create
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {atomic.RemoteInfo.$Properties=} [properties] Properties to set
+         * @returns {atomic.RemoteInfo} RemoteInfo instance
+         * @type {{
+         *   (properties: atomic.RemoteInfo.$Shape): atomic.RemoteInfo & atomic.RemoteInfo.$Shape;
+         *   (properties?: atomic.RemoteInfo.$Properties): atomic.RemoteInfo;
+         * }}
+         */
+        RemoteInfo.create = function(properties) {
+            return new RemoteInfo(properties);
+        };
+
+        /**
+         * Encodes the specified RemoteInfo message. Does not implicitly {@link atomic.RemoteInfo.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {atomic.RemoteInfo.$Properties} message RemoteInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RemoteInfo.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name") && message.name !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.name);
+            if (message.url != null && $Object.hasOwnProperty.call(message, "url") && message.url !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.url);
+            if (message["default"] != null && $Object.hasOwnProperty.call(message, "default") && message["default"] !== false)
+                writer.uint32(/* id 3, wireType 0 =*/24).bool(message["default"]);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RemoteInfo message, length delimited. Does not implicitly {@link atomic.RemoteInfo.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {atomic.RemoteInfo.$Properties} message RemoteInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RemoteInfo.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a RemoteInfo message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.RemoteInfo & atomic.RemoteInfo.$Shape} RemoteInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RemoteInfo.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.RemoteInfo();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.name = value;
+                        else
+                            delete message.name;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.url = value;
+                        else
+                            delete message.url;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message["default"] = value;
+                        else
+                            delete message["default"];
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a RemoteInfo message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.RemoteInfo & atomic.RemoteInfo.$Shape} RemoteInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RemoteInfo.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a RemoteInfo message.
+         * @function verify
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RemoteInfo.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.url != null && $Object.hasOwnProperty.call(message, "url"))
+                if (!$util.isString(message.url))
+                    return "url: string expected";
+            if (message["default"] != null && $Object.hasOwnProperty.call(message, "default"))
+                if (typeof message["default"] !== "boolean")
+                    return "default: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a RemoteInfo message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.RemoteInfo} RemoteInfo
+         */
+        RemoteInfo.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.RemoteInfo)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.RemoteInfo: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.RemoteInfo();
+            if (object.name != null)
+                if (typeof object.name !== "string" || object.name.length)
+                    message.name = $String(object.name);
+            if (object.url != null)
+                if (typeof object.url !== "string" || object.url.length)
+                    message.url = $String(object.url);
+            if (object["default"] != null)
+                if (object["default"])
+                    message["default"] = $Boolean(object["default"]);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a RemoteInfo message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {atomic.RemoteInfo} message RemoteInfo
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        RemoteInfo.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.name = "";
+                object.url = "";
+                object["default"] = false;
+            }
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                object.name = message.name;
+            if (message.url != null && $Object.hasOwnProperty.call(message, "url"))
+                object.url = message.url;
+            if (message["default"] != null && $Object.hasOwnProperty.call(message, "default"))
+                object["default"] = message["default"];
+            return object;
+        };
+
+        /**
+         * Converts this RemoteInfo to JSON.
+         * @function toJSON
+         * @memberof atomic.RemoteInfo
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        RemoteInfo.prototype.toJSON = function() {
+            return RemoteInfo.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for RemoteInfo
+         * @function getTypeUrl
+         * @memberof atomic.RemoteInfo
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        RemoteInfo.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.RemoteInfo";
+        };
+
+        return RemoteInfo;
+    })();
+
+    atomic.ManageRemotesRequest = (function() {
+
+        /**
+         * Properties of a ManageRemotesRequest.
+         * @typedef {Object} atomic.ManageRemotesRequest.$Properties
+         * @property {atomic.RepositoryRef.$Properties|null} [repository] ManageRemotesRequest repository
+         * @property {atomic.RequestMeta.$Properties|null} [meta] ManageRemotesRequest meta
+         * @property {atomic.RemoteAction|null} [action] ManageRemotesRequest action
+         * @property {string|null} [name] ManageRemotesRequest name
+         * @property {string|null} [url] ManageRemotesRequest url
+         * @property {string|null} [newName] ManageRemotesRequest newName
+         * @property {boolean|null} [setDefault] ManageRemotesRequest setDefault
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ManageRemotesRequest.
+         * @memberof atomic
+         * @interface IManageRemotesRequest
+         * @augments atomic.ManageRemotesRequest.$Properties
+         * @deprecated Use atomic.ManageRemotesRequest.$Properties instead.
+         */
+
+        /**
+         * Shape of a ManageRemotesRequest.
+         * @typedef {atomic.ManageRemotesRequest.$Properties} atomic.ManageRemotesRequest.$Shape
+         */
+
+        /**
+         * Constructs a new ManageRemotesRequest.
+         * @memberof atomic
+         * @classdesc Represents a ManageRemotesRequest.
+         * @constructor
+         * @param {atomic.ManageRemotesRequest.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ManageRemotesRequest = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ManageRemotesRequest repository.
+         * @member {atomic.RepositoryRef.$Properties|null|undefined} repository
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.repository = null;
+
+        /**
+         * ManageRemotesRequest meta.
+         * @member {atomic.RequestMeta.$Properties|null|undefined} meta
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.meta = null;
+
+        /**
+         * ManageRemotesRequest action.
+         * @member {atomic.RemoteAction} action
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.action = 0;
+
+        /**
+         * ManageRemotesRequest name.
+         * @member {string|null|undefined} name
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.name = null;
+
+        /**
+         * ManageRemotesRequest url.
+         * @member {string|null|undefined} url
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.url = null;
+
+        /**
+         * ManageRemotesRequest newName.
+         * @member {string|null|undefined} newName
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.newName = null;
+
+        /**
+         * ManageRemotesRequest setDefault.
+         * @member {boolean} setDefault
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         */
+        ManageRemotesRequest.prototype.setDefault = false;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ManageRemotesRequest.prototype, "_name", {
+            get: $util.oneOfGetter($oneOfFields = ["name"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ManageRemotesRequest.prototype, "_url", {
+            get: $util.oneOfGetter($oneOfFields = ["url"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ManageRemotesRequest.prototype, "_new_name", {
+            get: $util.oneOfGetter($oneOfFields = ["newName"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new ManageRemotesRequest instance using the specified properties.
+         * @function create
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {atomic.ManageRemotesRequest.$Properties=} [properties] Properties to set
+         * @returns {atomic.ManageRemotesRequest} ManageRemotesRequest instance
+         * @type {{
+         *   (properties: atomic.ManageRemotesRequest.$Shape): atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape;
+         *   (properties?: atomic.ManageRemotesRequest.$Properties): atomic.ManageRemotesRequest;
+         * }}
+         */
+        ManageRemotesRequest.create = function(properties) {
+            return new ManageRemotesRequest(properties);
+        };
+
+        /**
+         * Encodes the specified ManageRemotesRequest message. Does not implicitly {@link atomic.ManageRemotesRequest.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {atomic.ManageRemotesRequest.$Properties} message ManageRemotesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ManageRemotesRequest.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                $root.atomic.RepositoryRef.encode(message.repository, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.RequestMeta.encode(message.meta, writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+            if (message.action != null && $Object.hasOwnProperty.call(message, "action") && message.action !== 0)
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.action);
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.name);
+            if (message.url != null && $Object.hasOwnProperty.call(message, "url"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.url);
+            if (message.newName != null && $Object.hasOwnProperty.call(message, "newName"))
+                writer.uint32(/* id 6, wireType 2 =*/50).string(message.newName);
+            if (message.setDefault != null && $Object.hasOwnProperty.call(message, "setDefault") && message.setDefault !== false)
+                writer.uint32(/* id 7, wireType 0 =*/56).bool(message.setDefault);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ManageRemotesRequest message, length delimited. Does not implicitly {@link atomic.ManageRemotesRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {atomic.ManageRemotesRequest.$Properties} message ManageRemotesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ManageRemotesRequest.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ManageRemotesRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape} ManageRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ManageRemotesRequest.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ManageRemotesRequest();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.repository = $root.atomic.RepositoryRef.decode(reader, reader.size(), $undefined, _depth + 1, message.repository);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.RequestMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.int32())
+                            message.action = value;
+                        else
+                            delete message.action;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.name = reader.stringVerify();
+                        message._name = "name";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.url = reader.stringVerify();
+                        message._url = "url";
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 2)
+                            break;
+                        message.newName = reader.stringVerify();
+                        message._new_name = "newName";
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.setDefault = value;
+                        else
+                            delete message.setDefault;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ManageRemotesRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape} ManageRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ManageRemotesRequest.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ManageRemotesRequest message.
+         * @function verify
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ManageRemotesRequest.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository")) {
+                var error = $root.atomic.RepositoryRef.verify(message.repository, _depth + 1);
+                if (error)
+                    return "repository." + error;
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.RequestMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            if (message.action != null && $Object.hasOwnProperty.call(message, "action"))
+                if (typeof message.action !== "number" || (message.action | 0) !== message.action)
+                    return "action: enum value expected";
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name")) {
+                properties._name = 1;
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            }
+            if (message.url != null && $Object.hasOwnProperty.call(message, "url")) {
+                properties._url = 1;
+                if (!$util.isString(message.url))
+                    return "url: string expected";
+            }
+            if (message.newName != null && $Object.hasOwnProperty.call(message, "newName")) {
+                properties._new_name = 1;
+                if (!$util.isString(message.newName))
+                    return "newName: string expected";
+            }
+            if (message.setDefault != null && $Object.hasOwnProperty.call(message, "setDefault"))
+                if (typeof message.setDefault !== "boolean")
+                    return "setDefault: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a ManageRemotesRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ManageRemotesRequest} ManageRemotesRequest
+         */
+        ManageRemotesRequest.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ManageRemotesRequest)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ManageRemotesRequest: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ManageRemotesRequest();
+            if (object.repository != null) {
+                if (!$util.isObject(object.repository))
+                    throw $TypeError(".atomic.ManageRemotesRequest.repository: object expected");
+                message.repository = $root.atomic.RepositoryRef.fromObject(object.repository, _depth + 1);
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.ManageRemotesRequest.meta: object expected");
+                message.meta = $root.atomic.RequestMeta.fromObject(object.meta, _depth + 1);
+            }
+            if (object.action !== 0 && (typeof object.action !== "string" || $root.atomic.RemoteAction[object.action] !== 0))
+                switch (object.action) {
+                case "REMOTE_ACTION_UNSPECIFIED":
+                case 0:
+                    message.action = 0;
+                    break;
+                case "REMOTE_ACTION_ADD":
+                case 1:
+                    message.action = 1;
+                    break;
+                case "REMOTE_ACTION_REMOVE":
+                case 2:
+                    message.action = 2;
+                    break;
+                case "REMOTE_ACTION_RENAME":
+                case 3:
+                    message.action = 3;
+                    break;
+                case "REMOTE_ACTION_SET_URL":
+                case 4:
+                    message.action = 4;
+                    break;
+                case "REMOTE_ACTION_SET_DEFAULT":
+                case 5:
+                    message.action = 5;
+                    break;
+                default:
+                    if (typeof object.action === "number" && (object.action | 0) === object.action)
+                        message.action = object.action;
+                }
+            if (object.name != null)
+                message.name = $String(object.name);
+            if (object.url != null)
+                message.url = $String(object.url);
+            if (object.newName != null)
+                message.newName = $String(object.newName);
+            if (object.setDefault != null)
+                if (object.setDefault)
+                    message.setDefault = $Boolean(object.setDefault);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ManageRemotesRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {atomic.ManageRemotesRequest} message ManageRemotesRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ManageRemotesRequest.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.repository = null;
+                object.meta = null;
+                object.action = options.enums === $String ? "REMOTE_ACTION_UNSPECIFIED" : 0;
+                object.setDefault = false;
+            }
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                object.repository = $root.atomic.RepositoryRef.toObject(message.repository, options, _depth + 1);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.RequestMeta.toObject(message.meta, options, _depth + 1);
+            if (message.action != null && $Object.hasOwnProperty.call(message, "action"))
+                object.action = options.enums === $String ? $root.atomic.RemoteAction[message.action] === $undefined ? message.action : $root.atomic.RemoteAction[message.action] : message.action;
+            if (message.name != null && $Object.hasOwnProperty.call(message, "name"))
+                object.name = message.name;
+            if (message.url != null && $Object.hasOwnProperty.call(message, "url"))
+                object.url = message.url;
+            if (message.newName != null && $Object.hasOwnProperty.call(message, "newName"))
+                object.newName = message.newName;
+            if (message.setDefault != null && $Object.hasOwnProperty.call(message, "setDefault"))
+                object.setDefault = message.setDefault;
+            return object;
+        };
+
+        /**
+         * Converts this ManageRemotesRequest to JSON.
+         * @function toJSON
+         * @memberof atomic.ManageRemotesRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ManageRemotesRequest.prototype.toJSON = function() {
+            return ManageRemotesRequest.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ManageRemotesRequest
+         * @function getTypeUrl
+         * @memberof atomic.ManageRemotesRequest
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ManageRemotesRequest.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ManageRemotesRequest";
+        };
+
+        return ManageRemotesRequest;
+    })();
+
+    /**
+     * RemoteAction enum.
+     * @name atomic.RemoteAction
+     * @enum {number}
+     * @property {number} REMOTE_ACTION_UNSPECIFIED=0 REMOTE_ACTION_UNSPECIFIED value
+     * @property {number} REMOTE_ACTION_ADD=1 REMOTE_ACTION_ADD value
+     * @property {number} REMOTE_ACTION_REMOVE=2 REMOTE_ACTION_REMOVE value
+     * @property {number} REMOTE_ACTION_RENAME=3 REMOTE_ACTION_RENAME value
+     * @property {number} REMOTE_ACTION_SET_URL=4 REMOTE_ACTION_SET_URL value
+     * @property {number} REMOTE_ACTION_SET_DEFAULT=5 REMOTE_ACTION_SET_DEFAULT value
+     */
+    atomic.RemoteAction = (function() {
+        var valuesById = $Object.create(null), values = $Object.create(valuesById);
+        values[valuesById[0] = "REMOTE_ACTION_UNSPECIFIED"] = 0;
+        values[valuesById[1] = "REMOTE_ACTION_ADD"] = 1;
+        values[valuesById[2] = "REMOTE_ACTION_REMOVE"] = 2;
+        values[valuesById[3] = "REMOTE_ACTION_RENAME"] = 3;
+        values[valuesById[4] = "REMOTE_ACTION_SET_URL"] = 4;
+        values[valuesById[5] = "REMOTE_ACTION_SET_DEFAULT"] = 5;
+        return values;
+    })();
+
+    atomic.ManageRemotesResponse = (function() {
+
+        /**
+         * Properties of a ManageRemotesResponse.
+         * @typedef {Object} atomic.ManageRemotesResponse.$Properties
+         * @property {Array.<atomic.RemoteInfo.$Properties>|null} [remotes] ManageRemotesResponse remotes
+         * @property {atomic.ResponseMeta.$Properties|null} [meta] ManageRemotesResponse meta
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ManageRemotesResponse.
+         * @memberof atomic
+         * @interface IManageRemotesResponse
+         * @augments atomic.ManageRemotesResponse.$Properties
+         * @deprecated Use atomic.ManageRemotesResponse.$Properties instead.
+         */
+
+        /**
+         * Shape of a ManageRemotesResponse.
+         * @typedef {atomic.ManageRemotesResponse.$Properties} atomic.ManageRemotesResponse.$Shape
+         */
+
+        /**
+         * Constructs a new ManageRemotesResponse.
+         * @memberof atomic
+         * @classdesc Represents a ManageRemotesResponse.
+         * @constructor
+         * @param {atomic.ManageRemotesResponse.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ManageRemotesResponse = function (properties) {
+            this.remotes = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ManageRemotesResponse remotes.
+         * @member {Array.<atomic.RemoteInfo.$Properties>} remotes
+         * @memberof atomic.ManageRemotesResponse
+         * @instance
+         */
+        ManageRemotesResponse.prototype.remotes = $util.emptyArray;
+
+        /**
+         * ManageRemotesResponse meta.
+         * @member {atomic.ResponseMeta.$Properties|null|undefined} meta
+         * @memberof atomic.ManageRemotesResponse
+         * @instance
+         */
+        ManageRemotesResponse.prototype.meta = null;
+
+        /**
+         * Creates a new ManageRemotesResponse instance using the specified properties.
+         * @function create
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {atomic.ManageRemotesResponse.$Properties=} [properties] Properties to set
+         * @returns {atomic.ManageRemotesResponse} ManageRemotesResponse instance
+         * @type {{
+         *   (properties: atomic.ManageRemotesResponse.$Shape): atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape;
+         *   (properties?: atomic.ManageRemotesResponse.$Properties): atomic.ManageRemotesResponse;
+         * }}
+         */
+        ManageRemotesResponse.create = function(properties) {
+            return new ManageRemotesResponse(properties);
+        };
+
+        /**
+         * Encodes the specified ManageRemotesResponse message. Does not implicitly {@link atomic.ManageRemotesResponse.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {atomic.ManageRemotesResponse.$Properties} message ManageRemotesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ManageRemotesResponse.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.remotes != null && message.remotes.length)
+                for (var i = 0; i < message.remotes.length; ++i)
+                    $root.atomic.RemoteInfo.encode(message.remotes[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.ResponseMeta.encode(message.meta, writer.uint32(/* id 100, wireType 2 =*/802).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ManageRemotesResponse message, length delimited. Does not implicitly {@link atomic.ManageRemotesResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {atomic.ManageRemotesResponse.$Properties} message ManageRemotesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ManageRemotesResponse.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ManageRemotesResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape} ManageRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ManageRemotesResponse.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ManageRemotesResponse();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.remotes && message.remotes.length))
+                            message.remotes = [];
+                        message.remotes.push($root.atomic.RemoteInfo.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 100: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.ResponseMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ManageRemotesResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape} ManageRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ManageRemotesResponse.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ManageRemotesResponse message.
+         * @function verify
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ManageRemotesResponse.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.remotes != null && $Object.hasOwnProperty.call(message, "remotes")) {
+                if (!$Array.isArray(message.remotes))
+                    return "remotes: array expected";
+                for (var i = 0; i < message.remotes.length; ++i) {
+                    var error = $root.atomic.RemoteInfo.verify(message.remotes[i], _depth + 1);
+                    if (error)
+                        return "remotes." + error;
+                }
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.ResponseMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ManageRemotesResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ManageRemotesResponse} ManageRemotesResponse
+         */
+        ManageRemotesResponse.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ManageRemotesResponse)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ManageRemotesResponse: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ManageRemotesResponse();
+            if (object.remotes) {
+                if (!$Array.isArray(object.remotes))
+                    throw $TypeError(".atomic.ManageRemotesResponse.remotes: array expected");
+                message.remotes = $Array(object.remotes.length);
+                for (var i = 0; i < object.remotes.length; ++i) {
+                    if (!$util.isObject(object.remotes[i]))
+                        throw $TypeError(".atomic.ManageRemotesResponse.remotes: object expected");
+                    message.remotes[i] = $root.atomic.RemoteInfo.fromObject(object.remotes[i], _depth + 1);
+                }
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.ManageRemotesResponse.meta: object expected");
+                message.meta = $root.atomic.ResponseMeta.fromObject(object.meta, _depth + 1);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ManageRemotesResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {atomic.ManageRemotesResponse} message ManageRemotesResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ManageRemotesResponse.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.remotes = [];
+            if (options.defaults)
+                object.meta = null;
+            if (message.remotes && message.remotes.length) {
+                object.remotes = $Array(message.remotes.length);
+                for (var j = 0; j < message.remotes.length; ++j)
+                    object.remotes[j] = $root.atomic.RemoteInfo.toObject(message.remotes[j], options, _depth + 1);
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.ResponseMeta.toObject(message.meta, options, _depth + 1);
+            return object;
+        };
+
+        /**
+         * Converts this ManageRemotesResponse to JSON.
+         * @function toJSON
+         * @memberof atomic.ManageRemotesResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ManageRemotesResponse.prototype.toJSON = function() {
+            return ManageRemotesResponse.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ManageRemotesResponse
+         * @function getTypeUrl
+         * @memberof atomic.ManageRemotesResponse
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ManageRemotesResponse.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ManageRemotesResponse";
+        };
+
+        return ManageRemotesResponse;
+    })();
+
+    atomic.InsertChangesRequest = (function() {
+
+        /**
+         * Properties of an InsertChangesRequest.
+         * @typedef {Object} atomic.InsertChangesRequest.$Properties
+         * @property {atomic.RepositoryRef.$Properties|null} [repository] InsertChangesRequest repository
+         * @property {atomic.RequestMeta.$Properties|null} [meta] InsertChangesRequest meta
+         * @property {atomic.Hash.$Properties|null} [singleChange] InsertChangesRequest singleChange
+         * @property {string|null} [fromView] InsertChangesRequest fromView
+         * @property {string|null} [upToTag] InsertChangesRequest upToTag
+         * @property {atomic.PromoteCurrentView.$Properties|null} [promoteCurrentView] InsertChangesRequest promoteCurrentView
+         * @property {atomic.ChangeSet.$Properties|null} [changeSet] InsertChangesRequest changeSet
+         * @property {string|null} [singleRef] InsertChangesRequest singleRef
+         * @property {string|null} [targetView] InsertChangesRequest targetView
+         * @property {boolean|null} [allowConflicts] InsertChangesRequest allowConflicts
+         * @property {atomic.ViewRef.$Properties|null} [target] InsertChangesRequest target
+         * @property {atomic.ViewSnapshot.$Properties|null} [expectedSnapshot] InsertChangesRequest expectedSnapshot
+         * @property {atomic.ViewSnapshot.$Properties|null} [sourceSnapshot] InsertChangesRequest sourceSnapshot
+         * @property {boolean|null} [applyDependencies] InsertChangesRequest applyDependencies
+         * @property {boolean|null} [dryRun] InsertChangesRequest dryRun
+         * @property {string|null} [tagFromView] InsertChangesRequest tagFromView
+         * @property {"singleChange"|"fromView"|"upToTag"|"promoteCurrentView"|"changeSet"|"singleRef"} [source] InsertChangesRequest source
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of an InsertChangesRequest.
+         * @memberof atomic
+         * @interface IInsertChangesRequest
+         * @augments atomic.InsertChangesRequest.$Properties
+         * @deprecated Use atomic.InsertChangesRequest.$Properties instead.
+         */
+
+        /**
+         * Narrowed shape of an InsertChangesRequest.
+         * @typedef {{
+         *   repository?: atomic.RepositoryRef.$Shape|null;
+         *   meta?: atomic.RequestMeta.$Shape|null;
+         *   singleChange?: atomic.Hash.$Shape|null;
+         *   fromView?: string|null;
+         *   upToTag?: string|null;
+         *   promoteCurrentView?: atomic.PromoteCurrentView.$Shape|null;
+         *   changeSet?: atomic.ChangeSet.$Shape|null;
+         *   singleRef?: string|null;
+         *   targetView?: string|null;
+         *   allowConflicts?: boolean|null;
+         *   target?: atomic.ViewRef.$Shape|null;
+         *   expectedSnapshot?: atomic.ViewSnapshot.$Shape|null;
+         *   sourceSnapshot?: atomic.ViewSnapshot.$Shape|null;
+         *   applyDependencies?: boolean|null;
+         *   dryRun?: boolean|null;
+         *   tagFromView?: string|null;
+         *   $unknowns?: Array.<Uint8Array>;
+         * } & (
+         *   ({ source?: undefined; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "singleChange"; singleChange: atomic.Hash.$Shape; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "fromView"; singleChange?: null; fromView: string; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "upToTag"; singleChange?: null; fromView?: null; upToTag: string; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "promoteCurrentView"; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView: atomic.PromoteCurrentView.$Shape; changeSet?: null; singleRef?: null }|{ source?: "changeSet"; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet: atomic.ChangeSet.$Shape; singleRef?: null }|{ source?: "singleRef"; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef: string })
+         * )} atomic.InsertChangesRequest.$Shape
+         */
+
+        /**
+         * Constructs a new InsertChangesRequest.
+         * @memberof atomic
+         * @classdesc Represents an InsertChangesRequest.
+         * @constructor
+         * @param {atomic.InsertChangesRequest.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var InsertChangesRequest = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * InsertChangesRequest repository.
+         * @member {atomic.RepositoryRef.$Properties|null|undefined} repository
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.repository = null;
+
+        /**
+         * InsertChangesRequest meta.
+         * @member {atomic.RequestMeta.$Properties|null|undefined} meta
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.meta = null;
+
+        /**
+         * InsertChangesRequest singleChange.
+         * @member {atomic.Hash.$Properties|null|undefined} singleChange
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.singleChange = null;
+
+        /**
+         * InsertChangesRequest fromView.
+         * @member {string|null|undefined} fromView
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.fromView = null;
+
+        /**
+         * InsertChangesRequest upToTag.
+         * @member {string|null|undefined} upToTag
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.upToTag = null;
+
+        /**
+         * InsertChangesRequest promoteCurrentView.
+         * @member {atomic.PromoteCurrentView.$Properties|null|undefined} promoteCurrentView
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.promoteCurrentView = null;
+
+        /**
+         * InsertChangesRequest changeSet.
+         * @member {atomic.ChangeSet.$Properties|null|undefined} changeSet
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.changeSet = null;
+
+        /**
+         * InsertChangesRequest singleRef.
+         * @member {string|null|undefined} singleRef
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.singleRef = null;
+
+        /**
+         * InsertChangesRequest targetView.
+         * @member {string|null|undefined} targetView
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.targetView = null;
+
+        /**
+         * InsertChangesRequest allowConflicts.
+         * @member {boolean} allowConflicts
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.allowConflicts = false;
+
+        /**
+         * InsertChangesRequest target.
+         * @member {atomic.ViewRef.$Properties|null|undefined} target
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.target = null;
+
+        /**
+         * InsertChangesRequest expectedSnapshot.
+         * @member {atomic.ViewSnapshot.$Properties|null|undefined} expectedSnapshot
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.expectedSnapshot = null;
+
+        /**
+         * InsertChangesRequest sourceSnapshot.
+         * @member {atomic.ViewSnapshot.$Properties|null|undefined} sourceSnapshot
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.sourceSnapshot = null;
+
+        /**
+         * InsertChangesRequest applyDependencies.
+         * @member {boolean|null|undefined} applyDependencies
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.applyDependencies = null;
+
+        /**
+         * InsertChangesRequest dryRun.
+         * @member {boolean|null|undefined} dryRun
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.dryRun = null;
+
+        /**
+         * InsertChangesRequest tagFromView.
+         * @member {string|null|undefined} tagFromView
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        InsertChangesRequest.prototype.tagFromView = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        /**
+         * InsertChangesRequest source.
+         * @member {"singleChange"|"fromView"|"upToTag"|"promoteCurrentView"|"changeSet"|"singleRef"|undefined} source
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         */
+        $Object.defineProperty(InsertChangesRequest.prototype, "source", {
+            get: $util.oneOfGetter($oneOfFields = ["singleChange", "fromView", "upToTag", "promoteCurrentView", "changeSet", "singleRef"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesRequest.prototype, "_target_view", {
+            get: $util.oneOfGetter($oneOfFields = ["targetView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesRequest.prototype, "_source_snapshot", {
+            get: $util.oneOfGetter($oneOfFields = ["sourceSnapshot"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesRequest.prototype, "_apply_dependencies", {
+            get: $util.oneOfGetter($oneOfFields = ["applyDependencies"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesRequest.prototype, "_dry_run", {
+            get: $util.oneOfGetter($oneOfFields = ["dryRun"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesRequest.prototype, "_tag_from_view", {
+            get: $util.oneOfGetter($oneOfFields = ["tagFromView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new InsertChangesRequest instance using the specified properties.
+         * @function create
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {atomic.InsertChangesRequest.$Properties=} [properties] Properties to set
+         * @returns {atomic.InsertChangesRequest} InsertChangesRequest instance
+         * @type {{
+         *   (properties: atomic.InsertChangesRequest.$Shape): atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape;
+         *   (properties?: atomic.InsertChangesRequest.$Properties): atomic.InsertChangesRequest;
+         * }}
+         */
+        InsertChangesRequest.create = function(properties) {
+            return new InsertChangesRequest(properties);
+        };
+
+        /**
+         * Encodes the specified InsertChangesRequest message. Does not implicitly {@link atomic.InsertChangesRequest.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {atomic.InsertChangesRequest.$Properties} message InsertChangesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        InsertChangesRequest.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                $root.atomic.RepositoryRef.encode(message.repository, writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.RequestMeta.encode(message.meta, writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
+            if (message.singleChange != null && $Object.hasOwnProperty.call(message, "singleChange"))
+                $root.atomic.Hash.encode(message.singleChange, writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.fromView);
+            if (message.upToTag != null && $Object.hasOwnProperty.call(message, "upToTag"))
+                writer.uint32(/* id 6, wireType 2 =*/50).string(message.upToTag);
+            if (message.targetView != null && $Object.hasOwnProperty.call(message, "targetView"))
+                writer.uint32(/* id 7, wireType 2 =*/58).string(message.targetView);
+            if (message.allowConflicts != null && $Object.hasOwnProperty.call(message, "allowConflicts") && message.allowConflicts !== false)
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.allowConflicts);
+            if (message.target != null && $Object.hasOwnProperty.call(message, "target"))
+                $root.atomic.ViewRef.encode(message.target, writer.uint32(/* id 12, wireType 2 =*/98).fork(), _depth + 1).ldelim();
+            if (message.expectedSnapshot != null && $Object.hasOwnProperty.call(message, "expectedSnapshot"))
+                $root.atomic.ViewSnapshot.encode(message.expectedSnapshot, writer.uint32(/* id 13, wireType 2 =*/106).fork(), _depth + 1).ldelim();
+            if (message.sourceSnapshot != null && $Object.hasOwnProperty.call(message, "sourceSnapshot"))
+                $root.atomic.ViewSnapshot.encode(message.sourceSnapshot, writer.uint32(/* id 14, wireType 2 =*/114).fork(), _depth + 1).ldelim();
+            if (message.applyDependencies != null && $Object.hasOwnProperty.call(message, "applyDependencies"))
+                writer.uint32(/* id 15, wireType 0 =*/120).bool(message.applyDependencies);
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun"))
+                writer.uint32(/* id 16, wireType 0 =*/128).bool(message.dryRun);
+            if (message.tagFromView != null && $Object.hasOwnProperty.call(message, "tagFromView"))
+                writer.uint32(/* id 17, wireType 2 =*/138).string(message.tagFromView);
+            if (message.promoteCurrentView != null && $Object.hasOwnProperty.call(message, "promoteCurrentView"))
+                $root.atomic.PromoteCurrentView.encode(message.promoteCurrentView, writer.uint32(/* id 18, wireType 2 =*/146).fork(), _depth + 1).ldelim();
+            if (message.changeSet != null && $Object.hasOwnProperty.call(message, "changeSet"))
+                $root.atomic.ChangeSet.encode(message.changeSet, writer.uint32(/* id 19, wireType 2 =*/154).fork(), _depth + 1).ldelim();
+            if (message.singleRef != null && $Object.hasOwnProperty.call(message, "singleRef"))
+                writer.uint32(/* id 20, wireType 2 =*/162).string(message.singleRef);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified InsertChangesRequest message, length delimited. Does not implicitly {@link atomic.InsertChangesRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {atomic.InsertChangesRequest.$Properties} message InsertChangesRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        InsertChangesRequest.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes an InsertChangesRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape} InsertChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        InsertChangesRequest.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.InsertChangesRequest();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        message.repository = $root.atomic.RepositoryRef.decode(reader, reader.size(), $undefined, _depth + 1, message.repository);
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.RequestMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.singleChange = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.singleChange);
+                        message.source = "singleChange";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.fromView = reader.stringVerify();
+                        message.source = "fromView";
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 2)
+                            break;
+                        message.upToTag = reader.stringVerify();
+                        message.source = "upToTag";
+                        continue;
+                    }
+                case 18: {
+                        if (wireType !== 2)
+                            break;
+                        message.promoteCurrentView = $root.atomic.PromoteCurrentView.decode(reader, reader.size(), $undefined, _depth + 1, message.promoteCurrentView);
+                        message.source = "promoteCurrentView";
+                        continue;
+                    }
+                case 19: {
+                        if (wireType !== 2)
+                            break;
+                        message.changeSet = $root.atomic.ChangeSet.decode(reader, reader.size(), $undefined, _depth + 1, message.changeSet);
+                        message.source = "changeSet";
+                        continue;
+                    }
+                case 20: {
+                        if (wireType !== 2)
+                            break;
+                        message.singleRef = reader.stringVerify();
+                        message.source = "singleRef";
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 2)
+                            break;
+                        message.targetView = reader.stringVerify();
+                        message._target_view = "targetView";
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.allowConflicts = value;
+                        else
+                            delete message.allowConflicts;
+                        continue;
+                    }
+                case 12: {
+                        if (wireType !== 2)
+                            break;
+                        message.target = $root.atomic.ViewRef.decode(reader, reader.size(), $undefined, _depth + 1, message.target);
+                        continue;
+                    }
+                case 13: {
+                        if (wireType !== 2)
+                            break;
+                        message.expectedSnapshot = $root.atomic.ViewSnapshot.decode(reader, reader.size(), $undefined, _depth + 1, message.expectedSnapshot);
+                        continue;
+                    }
+                case 14: {
+                        if (wireType !== 2)
+                            break;
+                        message.sourceSnapshot = $root.atomic.ViewSnapshot.decode(reader, reader.size(), $undefined, _depth + 1, message.sourceSnapshot);
+                        message._source_snapshot = "sourceSnapshot";
+                        continue;
+                    }
+                case 15: {
+                        if (wireType !== 0)
+                            break;
+                        message.applyDependencies = reader.bool();
+                        message._apply_dependencies = "applyDependencies";
+                        continue;
+                    }
+                case 16: {
+                        if (wireType !== 0)
+                            break;
+                        message.dryRun = reader.bool();
+                        message._dry_run = "dryRun";
+                        continue;
+                    }
+                case 17: {
+                        if (wireType !== 2)
+                            break;
+                        message.tagFromView = reader.stringVerify();
+                        message._tag_from_view = "tagFromView";
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes an InsertChangesRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape} InsertChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        InsertChangesRequest.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies an InsertChangesRequest message.
+         * @function verify
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        InsertChangesRequest.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository")) {
+                var error = $root.atomic.RepositoryRef.verify(message.repository, _depth + 1);
+                if (error)
+                    return "repository." + error;
+            }
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.RequestMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            if (message.singleChange != null && $Object.hasOwnProperty.call(message, "singleChange")) {
+                properties.source = 1;
+                {
+                    var error = $root.atomic.Hash.verify(message.singleChange, _depth + 1);
+                    if (error)
+                        return "singleChange." + error;
+                }
+            }
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView")) {
+                if (properties.source === 1)
+                    return "source: multiple values";
+                properties.source = 1;
+                if (!$util.isString(message.fromView))
+                    return "fromView: string expected";
+            }
+            if (message.upToTag != null && $Object.hasOwnProperty.call(message, "upToTag")) {
+                if (properties.source === 1)
+                    return "source: multiple values";
+                properties.source = 1;
+                if (!$util.isString(message.upToTag))
+                    return "upToTag: string expected";
+            }
+            if (message.promoteCurrentView != null && $Object.hasOwnProperty.call(message, "promoteCurrentView")) {
+                if (properties.source === 1)
+                    return "source: multiple values";
+                properties.source = 1;
+                {
+                    var error = $root.atomic.PromoteCurrentView.verify(message.promoteCurrentView, _depth + 1);
+                    if (error)
+                        return "promoteCurrentView." + error;
+                }
+            }
+            if (message.changeSet != null && $Object.hasOwnProperty.call(message, "changeSet")) {
+                if (properties.source === 1)
+                    return "source: multiple values";
+                properties.source = 1;
+                {
+                    var error = $root.atomic.ChangeSet.verify(message.changeSet, _depth + 1);
+                    if (error)
+                        return "changeSet." + error;
+                }
+            }
+            if (message.singleRef != null && $Object.hasOwnProperty.call(message, "singleRef")) {
+                if (properties.source === 1)
+                    return "source: multiple values";
+                properties.source = 1;
+                if (!$util.isString(message.singleRef))
+                    return "singleRef: string expected";
+            }
+            if (message.targetView != null && $Object.hasOwnProperty.call(message, "targetView")) {
+                properties._target_view = 1;
+                if (!$util.isString(message.targetView))
+                    return "targetView: string expected";
+            }
+            if (message.allowConflicts != null && $Object.hasOwnProperty.call(message, "allowConflicts"))
+                if (typeof message.allowConflicts !== "boolean")
+                    return "allowConflicts: boolean expected";
+            if (message.target != null && $Object.hasOwnProperty.call(message, "target")) {
+                var error = $root.atomic.ViewRef.verify(message.target, _depth + 1);
+                if (error)
+                    return "target." + error;
+            }
+            if (message.expectedSnapshot != null && $Object.hasOwnProperty.call(message, "expectedSnapshot")) {
+                var error = $root.atomic.ViewSnapshot.verify(message.expectedSnapshot, _depth + 1);
+                if (error)
+                    return "expectedSnapshot." + error;
+            }
+            if (message.sourceSnapshot != null && $Object.hasOwnProperty.call(message, "sourceSnapshot")) {
+                properties._source_snapshot = 1;
+                {
+                    var error = $root.atomic.ViewSnapshot.verify(message.sourceSnapshot, _depth + 1);
+                    if (error)
+                        return "sourceSnapshot." + error;
+                }
+            }
+            if (message.applyDependencies != null && $Object.hasOwnProperty.call(message, "applyDependencies")) {
+                properties._apply_dependencies = 1;
+                if (typeof message.applyDependencies !== "boolean")
+                    return "applyDependencies: boolean expected";
+            }
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun")) {
+                properties._dry_run = 1;
+                if (typeof message.dryRun !== "boolean")
+                    return "dryRun: boolean expected";
+            }
+            if (message.tagFromView != null && $Object.hasOwnProperty.call(message, "tagFromView")) {
+                properties._tag_from_view = 1;
+                if (!$util.isString(message.tagFromView))
+                    return "tagFromView: string expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates an InsertChangesRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.InsertChangesRequest} InsertChangesRequest
+         */
+        InsertChangesRequest.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.InsertChangesRequest)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.InsertChangesRequest: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.InsertChangesRequest();
+            if (object.repository != null) {
+                if (!$util.isObject(object.repository))
+                    throw $TypeError(".atomic.InsertChangesRequest.repository: object expected");
+                message.repository = $root.atomic.RepositoryRef.fromObject(object.repository, _depth + 1);
+            }
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.InsertChangesRequest.meta: object expected");
+                message.meta = $root.atomic.RequestMeta.fromObject(object.meta, _depth + 1);
+            }
+            if (object.singleChange != null) {
+                if (!$util.isObject(object.singleChange))
+                    throw $TypeError(".atomic.InsertChangesRequest.singleChange: object expected");
+                message.singleChange = $root.atomic.Hash.fromObject(object.singleChange, _depth + 1);
+            }
+            if (object.fromView != null)
+                message.fromView = $String(object.fromView);
+            if (object.upToTag != null)
+                message.upToTag = $String(object.upToTag);
+            if (object.promoteCurrentView != null) {
+                if (!$util.isObject(object.promoteCurrentView))
+                    throw $TypeError(".atomic.InsertChangesRequest.promoteCurrentView: object expected");
+                message.promoteCurrentView = $root.atomic.PromoteCurrentView.fromObject(object.promoteCurrentView, _depth + 1);
+            }
+            if (object.changeSet != null) {
+                if (!$util.isObject(object.changeSet))
+                    throw $TypeError(".atomic.InsertChangesRequest.changeSet: object expected");
+                message.changeSet = $root.atomic.ChangeSet.fromObject(object.changeSet, _depth + 1);
+            }
+            if (object.singleRef != null)
+                message.singleRef = $String(object.singleRef);
+            if (object.targetView != null)
+                message.targetView = $String(object.targetView);
+            if (object.allowConflicts != null)
+                if (object.allowConflicts)
+                    message.allowConflicts = $Boolean(object.allowConflicts);
+            if (object.target != null) {
+                if (!$util.isObject(object.target))
+                    throw $TypeError(".atomic.InsertChangesRequest.target: object expected");
+                message.target = $root.atomic.ViewRef.fromObject(object.target, _depth + 1);
+            }
+            if (object.expectedSnapshot != null) {
+                if (!$util.isObject(object.expectedSnapshot))
+                    throw $TypeError(".atomic.InsertChangesRequest.expectedSnapshot: object expected");
+                message.expectedSnapshot = $root.atomic.ViewSnapshot.fromObject(object.expectedSnapshot, _depth + 1);
+            }
+            if (object.sourceSnapshot != null) {
+                if (!$util.isObject(object.sourceSnapshot))
+                    throw $TypeError(".atomic.InsertChangesRequest.sourceSnapshot: object expected");
+                message.sourceSnapshot = $root.atomic.ViewSnapshot.fromObject(object.sourceSnapshot, _depth + 1);
+            }
+            if (object.applyDependencies != null)
+                message.applyDependencies = $Boolean(object.applyDependencies);
+            if (object.dryRun != null)
+                message.dryRun = $Boolean(object.dryRun);
+            if (object.tagFromView != null)
+                message.tagFromView = $String(object.tagFromView);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an InsertChangesRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {atomic.InsertChangesRequest} message InsertChangesRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        InsertChangesRequest.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.repository = null;
+                object.meta = null;
+                object.allowConflicts = false;
+                object.target = null;
+                object.expectedSnapshot = null;
+            }
+            if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
+                object.repository = $root.atomic.RepositoryRef.toObject(message.repository, options, _depth + 1);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.RequestMeta.toObject(message.meta, options, _depth + 1);
+            if (message.singleChange != null && $Object.hasOwnProperty.call(message, "singleChange")) {
+                object.singleChange = $root.atomic.Hash.toObject(message.singleChange, options, _depth + 1);
+                if (options.oneofs)
+                    object.source = "singleChange";
+            }
+            if (message.fromView != null && $Object.hasOwnProperty.call(message, "fromView")) {
+                object.fromView = message.fromView;
+                if (options.oneofs)
+                    object.source = "fromView";
+            }
+            if (message.upToTag != null && $Object.hasOwnProperty.call(message, "upToTag")) {
+                object.upToTag = message.upToTag;
+                if (options.oneofs)
+                    object.source = "upToTag";
+            }
+            if (message.targetView != null && $Object.hasOwnProperty.call(message, "targetView"))
+                object.targetView = message.targetView;
+            if (message.allowConflicts != null && $Object.hasOwnProperty.call(message, "allowConflicts"))
+                object.allowConflicts = message.allowConflicts;
+            if (message.target != null && $Object.hasOwnProperty.call(message, "target"))
+                object.target = $root.atomic.ViewRef.toObject(message.target, options, _depth + 1);
+            if (message.expectedSnapshot != null && $Object.hasOwnProperty.call(message, "expectedSnapshot"))
+                object.expectedSnapshot = $root.atomic.ViewSnapshot.toObject(message.expectedSnapshot, options, _depth + 1);
+            if (message.sourceSnapshot != null && $Object.hasOwnProperty.call(message, "sourceSnapshot"))
+                object.sourceSnapshot = $root.atomic.ViewSnapshot.toObject(message.sourceSnapshot, options, _depth + 1);
+            if (message.applyDependencies != null && $Object.hasOwnProperty.call(message, "applyDependencies"))
+                object.applyDependencies = message.applyDependencies;
+            if (message.dryRun != null && $Object.hasOwnProperty.call(message, "dryRun"))
+                object.dryRun = message.dryRun;
+            if (message.tagFromView != null && $Object.hasOwnProperty.call(message, "tagFromView"))
+                object.tagFromView = message.tagFromView;
+            if (message.promoteCurrentView != null && $Object.hasOwnProperty.call(message, "promoteCurrentView")) {
+                object.promoteCurrentView = $root.atomic.PromoteCurrentView.toObject(message.promoteCurrentView, options, _depth + 1);
+                if (options.oneofs)
+                    object.source = "promoteCurrentView";
+            }
+            if (message.changeSet != null && $Object.hasOwnProperty.call(message, "changeSet")) {
+                object.changeSet = $root.atomic.ChangeSet.toObject(message.changeSet, options, _depth + 1);
+                if (options.oneofs)
+                    object.source = "changeSet";
+            }
+            if (message.singleRef != null && $Object.hasOwnProperty.call(message, "singleRef")) {
+                object.singleRef = message.singleRef;
+                if (options.oneofs)
+                    object.source = "singleRef";
+            }
+            return object;
+        };
+
+        /**
+         * Converts this InsertChangesRequest to JSON.
+         * @function toJSON
+         * @memberof atomic.InsertChangesRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        InsertChangesRequest.prototype.toJSON = function() {
+            return InsertChangesRequest.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for InsertChangesRequest
+         * @function getTypeUrl
+         * @memberof atomic.InsertChangesRequest
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        InsertChangesRequest.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.InsertChangesRequest";
+        };
+
+        return InsertChangesRequest;
+    })();
+
+    atomic.PromoteCurrentView = (function() {
+
+        /**
+         * Properties of a PromoteCurrentView.
+         * @typedef {Object} atomic.PromoteCurrentView.$Properties
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a PromoteCurrentView.
+         * @memberof atomic
+         * @interface IPromoteCurrentView
+         * @augments atomic.PromoteCurrentView.$Properties
+         * @deprecated Use atomic.PromoteCurrentView.$Properties instead.
+         */
+
+        /**
+         * Shape of a PromoteCurrentView.
+         * @typedef {atomic.PromoteCurrentView.$Properties} atomic.PromoteCurrentView.$Shape
+         */
+
+        /**
+         * Constructs a new PromoteCurrentView.
+         * @memberof atomic
+         * @classdesc Represents a PromoteCurrentView.
+         * @constructor
+         * @param {atomic.PromoteCurrentView.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var PromoteCurrentView = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * Creates a new PromoteCurrentView instance using the specified properties.
+         * @function create
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {atomic.PromoteCurrentView.$Properties=} [properties] Properties to set
+         * @returns {atomic.PromoteCurrentView} PromoteCurrentView instance
+         * @type {{
+         *   (properties: atomic.PromoteCurrentView.$Shape): atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape;
+         *   (properties?: atomic.PromoteCurrentView.$Properties): atomic.PromoteCurrentView;
+         * }}
+         */
+        PromoteCurrentView.create = function(properties) {
+            return new PromoteCurrentView(properties);
+        };
+
+        /**
+         * Encodes the specified PromoteCurrentView message. Does not implicitly {@link atomic.PromoteCurrentView.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {atomic.PromoteCurrentView.$Properties} message PromoteCurrentView message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PromoteCurrentView.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified PromoteCurrentView message, length delimited. Does not implicitly {@link atomic.PromoteCurrentView.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {atomic.PromoteCurrentView.$Properties} message PromoteCurrentView message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        PromoteCurrentView.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a PromoteCurrentView message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape} PromoteCurrentView
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PromoteCurrentView.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.PromoteCurrentView();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                reader.skipType(tag & 7, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a PromoteCurrentView message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape} PromoteCurrentView
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        PromoteCurrentView.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a PromoteCurrentView message.
+         * @function verify
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        PromoteCurrentView.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            return null;
+        };
+
+        /**
+         * Creates a PromoteCurrentView message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.PromoteCurrentView} PromoteCurrentView
+         */
+        PromoteCurrentView.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.PromoteCurrentView)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.PromoteCurrentView: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            return new $root.atomic.PromoteCurrentView();
+        };
+
+        /**
+         * Creates a plain object from a PromoteCurrentView message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {atomic.PromoteCurrentView} message PromoteCurrentView
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        PromoteCurrentView.toObject = function () {
+            return {};
+        };
+
+        /**
+         * Converts this PromoteCurrentView to JSON.
+         * @function toJSON
+         * @memberof atomic.PromoteCurrentView
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        PromoteCurrentView.prototype.toJSON = function() {
+            return PromoteCurrentView.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for PromoteCurrentView
+         * @function getTypeUrl
+         * @memberof atomic.PromoteCurrentView
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        PromoteCurrentView.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.PromoteCurrentView";
+        };
+
+        return PromoteCurrentView;
+    })();
+
+    atomic.ChangeSet = (function() {
+
+        /**
+         * Properties of a ChangeSet.
+         * @typedef {Object} atomic.ChangeSet.$Properties
+         * @property {Array.<string>|null} [changes] ChangeSet changes
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ChangeSet.
+         * @memberof atomic
+         * @interface IChangeSet
+         * @augments atomic.ChangeSet.$Properties
+         * @deprecated Use atomic.ChangeSet.$Properties instead.
+         */
+
+        /**
+         * Shape of a ChangeSet.
+         * @typedef {atomic.ChangeSet.$Properties} atomic.ChangeSet.$Shape
+         */
+
+        /**
+         * Constructs a new ChangeSet.
+         * @memberof atomic
+         * @classdesc Represents a ChangeSet.
+         * @constructor
+         * @param {atomic.ChangeSet.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ChangeSet = function (properties) {
+            this.changes = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ChangeSet changes.
+         * @member {Array.<string>} changes
+         * @memberof atomic.ChangeSet
+         * @instance
+         */
+        ChangeSet.prototype.changes = $util.emptyArray;
+
+        /**
+         * Creates a new ChangeSet instance using the specified properties.
+         * @function create
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {atomic.ChangeSet.$Properties=} [properties] Properties to set
+         * @returns {atomic.ChangeSet} ChangeSet instance
+         * @type {{
+         *   (properties: atomic.ChangeSet.$Shape): atomic.ChangeSet & atomic.ChangeSet.$Shape;
+         *   (properties?: atomic.ChangeSet.$Properties): atomic.ChangeSet;
+         * }}
+         */
+        ChangeSet.create = function(properties) {
+            return new ChangeSet(properties);
+        };
+
+        /**
+         * Encodes the specified ChangeSet message. Does not implicitly {@link atomic.ChangeSet.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {atomic.ChangeSet.$Properties} message ChangeSet message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChangeSet.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.changes != null && message.changes.length)
+                for (var i = 0; i < message.changes.length; ++i)
+                    writer.uint32(/* id 1, wireType 2 =*/10).string(message.changes[i]);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ChangeSet message, length delimited. Does not implicitly {@link atomic.ChangeSet.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {atomic.ChangeSet.$Properties} message ChangeSet message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChangeSet.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ChangeSet message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ChangeSet & atomic.ChangeSet.$Shape} ChangeSet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChangeSet.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ChangeSet();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.changes && message.changes.length))
+                            message.changes = [];
+                        message.changes.push(reader.stringVerify());
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ChangeSet message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ChangeSet & atomic.ChangeSet.$Shape} ChangeSet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChangeSet.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ChangeSet message.
+         * @function verify
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChangeSet.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.changes != null && $Object.hasOwnProperty.call(message, "changes")) {
+                if (!$Array.isArray(message.changes))
+                    return "changes: array expected";
+                for (var i = 0; i < message.changes.length; ++i)
+                    if (!$util.isString(message.changes[i]))
+                        return "changes: string[] expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ChangeSet message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ChangeSet} ChangeSet
+         */
+        ChangeSet.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ChangeSet)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ChangeSet: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ChangeSet();
+            if (object.changes) {
+                if (!$Array.isArray(object.changes))
+                    throw $TypeError(".atomic.ChangeSet.changes: array expected");
+                message.changes = $Array(object.changes.length);
+                for (var i = 0; i < object.changes.length; ++i)
+                    message.changes[i] = $String(object.changes[i]);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ChangeSet message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {atomic.ChangeSet} message ChangeSet
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChangeSet.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.changes = [];
+            if (message.changes && message.changes.length) {
+                object.changes = $Array(message.changes.length);
+                for (var j = 0; j < message.changes.length; ++j)
+                    object.changes[j] = message.changes[j];
+            }
+            return object;
+        };
+
+        /**
+         * Converts this ChangeSet to JSON.
+         * @function toJSON
+         * @memberof atomic.ChangeSet
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChangeSet.prototype.toJSON = function() {
+            return ChangeSet.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ChangeSet
+         * @function getTypeUrl
+         * @memberof atomic.ChangeSet
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ChangeSet.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ChangeSet";
+        };
+
+        return ChangeSet;
+    })();
+
+    atomic.InsertChangesResponse = (function() {
+
+        /**
+         * Properties of an InsertChangesResponse.
+         * @typedef {Object} atomic.InsertChangesResponse.$Properties
+         * @property {Array.<atomic.ChangeInfo.$Properties>|null} [inserted] InsertChangesResponse inserted
+         * @property {Array.<atomic.ConflictInfo.$Properties>|null} [conflicts] InsertChangesResponse conflicts
+         * @property {string|null} [resolvedSourceView] InsertChangesResponse resolvedSourceView
+         * @property {string|null} [resolvedTargetView] InsertChangesResponse resolvedTargetView
+         * @property {boolean|null} [bothViewsShared] InsertChangesResponse bothViewsShared
+         * @property {atomic.Hash.$Properties|null} [resolvedChange] InsertChangesResponse resolvedChange
+         * @property {atomic.Hash.$Properties|null} [newState] InsertChangesResponse newState
+         * @property {number|null} [skippedCount] InsertChangesResponse skippedCount
+         * @property {number|Long|null} [filesUpdated] InsertChangesResponse filesUpdated
+         * @property {number|Long|null} [directoriesCreated] InsertChangesResponse directoriesCreated
+         * @property {boolean|null} [hasConflicts] InsertChangesResponse hasConflicts
+         * @property {atomic.ResponseMeta.$Properties|null} [meta] InsertChangesResponse meta
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of an InsertChangesResponse.
+         * @memberof atomic
+         * @interface IInsertChangesResponse
+         * @augments atomic.InsertChangesResponse.$Properties
+         * @deprecated Use atomic.InsertChangesResponse.$Properties instead.
+         */
+
+        /**
+         * Shape of an InsertChangesResponse.
+         * @typedef {atomic.InsertChangesResponse.$Properties} atomic.InsertChangesResponse.$Shape
+         */
+
+        /**
+         * Constructs a new InsertChangesResponse.
+         * @memberof atomic
+         * @classdesc Represents an InsertChangesResponse.
+         * @constructor
+         * @param {atomic.InsertChangesResponse.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var InsertChangesResponse = function (properties) {
+            this.inserted = [];
+            this.conflicts = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * InsertChangesResponse inserted.
+         * @member {Array.<atomic.ChangeInfo.$Properties>} inserted
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.inserted = $util.emptyArray;
+
+        /**
+         * InsertChangesResponse conflicts.
+         * @member {Array.<atomic.ConflictInfo.$Properties>} conflicts
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.conflicts = $util.emptyArray;
+
+        /**
+         * InsertChangesResponse resolvedSourceView.
+         * @member {string|null|undefined} resolvedSourceView
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.resolvedSourceView = null;
+
+        /**
+         * InsertChangesResponse resolvedTargetView.
+         * @member {string|null|undefined} resolvedTargetView
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.resolvedTargetView = null;
+
+        /**
+         * InsertChangesResponse bothViewsShared.
+         * @member {boolean|null|undefined} bothViewsShared
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.bothViewsShared = null;
+
+        /**
+         * InsertChangesResponse resolvedChange.
+         * @member {atomic.Hash.$Properties|null|undefined} resolvedChange
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.resolvedChange = null;
+
+        /**
+         * InsertChangesResponse newState.
+         * @member {atomic.Hash.$Properties|null|undefined} newState
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.newState = null;
+
+        /**
+         * InsertChangesResponse skippedCount.
+         * @member {number} skippedCount
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.skippedCount = 0;
+
+        /**
+         * InsertChangesResponse filesUpdated.
+         * @member {number|Long|null|undefined} filesUpdated
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.filesUpdated = null;
+
+        /**
+         * InsertChangesResponse directoriesCreated.
+         * @member {number|Long|null|undefined} directoriesCreated
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.directoriesCreated = null;
+
+        /**
+         * InsertChangesResponse hasConflicts.
+         * @member {boolean} hasConflicts
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.hasConflicts = false;
+
+        /**
+         * InsertChangesResponse meta.
+         * @member {atomic.ResponseMeta.$Properties|null|undefined} meta
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         */
+        InsertChangesResponse.prototype.meta = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_resolved_source_view", {
+            get: $util.oneOfGetter($oneOfFields = ["resolvedSourceView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_resolved_target_view", {
+            get: $util.oneOfGetter($oneOfFields = ["resolvedTargetView"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_both_views_shared", {
+            get: $util.oneOfGetter($oneOfFields = ["bothViewsShared"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_resolved_change", {
+            get: $util.oneOfGetter($oneOfFields = ["resolvedChange"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_new_state", {
+            get: $util.oneOfGetter($oneOfFields = ["newState"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_files_updated", {
+            get: $util.oneOfGetter($oneOfFields = ["filesUpdated"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(InsertChangesResponse.prototype, "_directories_created", {
+            get: $util.oneOfGetter($oneOfFields = ["directoriesCreated"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
+         * Creates a new InsertChangesResponse instance using the specified properties.
+         * @function create
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {atomic.InsertChangesResponse.$Properties=} [properties] Properties to set
+         * @returns {atomic.InsertChangesResponse} InsertChangesResponse instance
+         * @type {{
+         *   (properties: atomic.InsertChangesResponse.$Shape): atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape;
+         *   (properties?: atomic.InsertChangesResponse.$Properties): atomic.InsertChangesResponse;
+         * }}
+         */
+        InsertChangesResponse.create = function(properties) {
+            return new InsertChangesResponse(properties);
+        };
+
+        /**
+         * Encodes the specified InsertChangesResponse message. Does not implicitly {@link atomic.InsertChangesResponse.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {atomic.InsertChangesResponse.$Properties} message InsertChangesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        InsertChangesResponse.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.inserted != null && message.inserted.length)
+                for (var i = 0; i < message.inserted.length; ++i)
+                    $root.atomic.ChangeInfo.encode(message.inserted[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.conflicts != null && message.conflicts.length)
+                for (var i = 0; i < message.conflicts.length; ++i)
+                    $root.atomic.ConflictInfo.encode(message.conflicts[i], writer.uint32(/* id 3, wireType 2 =*/26).fork(), _depth + 1).ldelim();
+            if (message.resolvedSourceView != null && $Object.hasOwnProperty.call(message, "resolvedSourceView"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.resolvedSourceView);
+            if (message.resolvedTargetView != null && $Object.hasOwnProperty.call(message, "resolvedTargetView"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.resolvedTargetView);
+            if (message.bothViewsShared != null && $Object.hasOwnProperty.call(message, "bothViewsShared"))
+                writer.uint32(/* id 6, wireType 0 =*/48).bool(message.bothViewsShared);
+            if (message.resolvedChange != null && $Object.hasOwnProperty.call(message, "resolvedChange"))
+                $root.atomic.Hash.encode(message.resolvedChange, writer.uint32(/* id 7, wireType 2 =*/58).fork(), _depth + 1).ldelim();
+            if (message.newState != null && $Object.hasOwnProperty.call(message, "newState"))
+                $root.atomic.Hash.encode(message.newState, writer.uint32(/* id 8, wireType 2 =*/66).fork(), _depth + 1).ldelim();
+            if (message.skippedCount != null && $Object.hasOwnProperty.call(message, "skippedCount") && message.skippedCount !== 0)
+                writer.uint32(/* id 9, wireType 0 =*/72).uint32(message.skippedCount);
+            if (message.filesUpdated != null && $Object.hasOwnProperty.call(message, "filesUpdated"))
+                writer.uint32(/* id 10, wireType 0 =*/80).uint64(message.filesUpdated);
+            if (message.directoriesCreated != null && $Object.hasOwnProperty.call(message, "directoriesCreated"))
+                writer.uint32(/* id 11, wireType 0 =*/88).uint64(message.directoriesCreated);
+            if (message.hasConflicts != null && $Object.hasOwnProperty.call(message, "hasConflicts") && message.hasConflicts !== false)
+                writer.uint32(/* id 12, wireType 0 =*/96).bool(message.hasConflicts);
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                $root.atomic.ResponseMeta.encode(message.meta, writer.uint32(/* id 100, wireType 2 =*/802).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified InsertChangesResponse message, length delimited. Does not implicitly {@link atomic.InsertChangesResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {atomic.InsertChangesResponse.$Properties} message InsertChangesResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        InsertChangesResponse.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes an InsertChangesResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape} InsertChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        InsertChangesResponse.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.InsertChangesResponse();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.inserted && message.inserted.length))
+                            message.inserted = [];
+                        message.inserted.push($root.atomic.ChangeInfo.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.conflicts && message.conflicts.length))
+                            message.conflicts = [];
+                        message.conflicts.push($root.atomic.ConflictInfo.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.resolvedSourceView = reader.stringVerify();
+                        message._resolved_source_view = "resolvedSourceView";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.resolvedTargetView = reader.stringVerify();
+                        message._resolved_target_view = "resolvedTargetView";
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        message.bothViewsShared = reader.bool();
+                        message._both_views_shared = "bothViewsShared";
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 2)
+                            break;
+                        message.resolvedChange = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.resolvedChange);
+                        message._resolved_change = "resolvedChange";
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 2)
+                            break;
+                        message.newState = $root.atomic.Hash.decode(reader, reader.size(), $undefined, _depth + 1, message.newState);
+                        message._new_state = "newState";
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.uint32())
+                            message.skippedCount = value;
+                        else
+                            delete message.skippedCount;
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 0)
+                            break;
+                        message.filesUpdated = reader.uint64();
+                        message._files_updated = "filesUpdated";
+                        continue;
+                    }
+                case 11: {
+                        if (wireType !== 0)
+                            break;
+                        message.directoriesCreated = reader.uint64();
+                        message._directories_created = "directoriesCreated";
+                        continue;
+                    }
+                case 12: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.hasConflicts = value;
+                        else
+                            delete message.hasConflicts;
+                        continue;
+                    }
+                case 100: {
+                        if (wireType !== 2)
+                            break;
+                        message.meta = $root.atomic.ResponseMeta.decode(reader, reader.size(), $undefined, _depth + 1, message.meta);
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes an InsertChangesResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape} InsertChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        InsertChangesResponse.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies an InsertChangesResponse message.
+         * @function verify
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        InsertChangesResponse.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            var properties = {};
+            if (message.inserted != null && $Object.hasOwnProperty.call(message, "inserted")) {
+                if (!$Array.isArray(message.inserted))
+                    return "inserted: array expected";
+                for (var i = 0; i < message.inserted.length; ++i) {
+                    var error = $root.atomic.ChangeInfo.verify(message.inserted[i], _depth + 1);
+                    if (error)
+                        return "inserted." + error;
+                }
+            }
+            if (message.conflicts != null && $Object.hasOwnProperty.call(message, "conflicts")) {
+                if (!$Array.isArray(message.conflicts))
+                    return "conflicts: array expected";
+                for (var i = 0; i < message.conflicts.length; ++i) {
+                    var error = $root.atomic.ConflictInfo.verify(message.conflicts[i], _depth + 1);
+                    if (error)
+                        return "conflicts." + error;
+                }
+            }
+            if (message.resolvedSourceView != null && $Object.hasOwnProperty.call(message, "resolvedSourceView")) {
+                properties._resolved_source_view = 1;
+                if (!$util.isString(message.resolvedSourceView))
+                    return "resolvedSourceView: string expected";
+            }
+            if (message.resolvedTargetView != null && $Object.hasOwnProperty.call(message, "resolvedTargetView")) {
+                properties._resolved_target_view = 1;
+                if (!$util.isString(message.resolvedTargetView))
+                    return "resolvedTargetView: string expected";
+            }
+            if (message.bothViewsShared != null && $Object.hasOwnProperty.call(message, "bothViewsShared")) {
+                properties._both_views_shared = 1;
+                if (typeof message.bothViewsShared !== "boolean")
+                    return "bothViewsShared: boolean expected";
+            }
+            if (message.resolvedChange != null && $Object.hasOwnProperty.call(message, "resolvedChange")) {
+                properties._resolved_change = 1;
+                {
+                    var error = $root.atomic.Hash.verify(message.resolvedChange, _depth + 1);
+                    if (error)
+                        return "resolvedChange." + error;
+                }
+            }
+            if (message.newState != null && $Object.hasOwnProperty.call(message, "newState")) {
+                properties._new_state = 1;
+                {
+                    var error = $root.atomic.Hash.verify(message.newState, _depth + 1);
+                    if (error)
+                        return "newState." + error;
+                }
+            }
+            if (message.skippedCount != null && $Object.hasOwnProperty.call(message, "skippedCount"))
+                if (!$util.isInteger(message.skippedCount))
+                    return "skippedCount: integer expected";
+            if (message.filesUpdated != null && $Object.hasOwnProperty.call(message, "filesUpdated")) {
+                properties._files_updated = 1;
+                if (!$util.isInteger(message.filesUpdated) && !(message.filesUpdated && $util.isInteger(message.filesUpdated.low) && $util.isInteger(message.filesUpdated.high)))
+                    return "filesUpdated: integer|Long expected";
+            }
+            if (message.directoriesCreated != null && $Object.hasOwnProperty.call(message, "directoriesCreated")) {
+                properties._directories_created = 1;
+                if (!$util.isInteger(message.directoriesCreated) && !(message.directoriesCreated && $util.isInteger(message.directoriesCreated.low) && $util.isInteger(message.directoriesCreated.high)))
+                    return "directoriesCreated: integer|Long expected";
+            }
+            if (message.hasConflicts != null && $Object.hasOwnProperty.call(message, "hasConflicts"))
+                if (typeof message.hasConflicts !== "boolean")
+                    return "hasConflicts: boolean expected";
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
+                var error = $root.atomic.ResponseMeta.verify(message.meta, _depth + 1);
+                if (error)
+                    return "meta." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates an InsertChangesResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.InsertChangesResponse} InsertChangesResponse
+         */
+        InsertChangesResponse.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.InsertChangesResponse)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.InsertChangesResponse: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.InsertChangesResponse();
+            if (object.inserted) {
+                if (!$Array.isArray(object.inserted))
+                    throw $TypeError(".atomic.InsertChangesResponse.inserted: array expected");
+                message.inserted = $Array(object.inserted.length);
+                for (var i = 0; i < object.inserted.length; ++i) {
+                    if (!$util.isObject(object.inserted[i]))
+                        throw $TypeError(".atomic.InsertChangesResponse.inserted: object expected");
+                    message.inserted[i] = $root.atomic.ChangeInfo.fromObject(object.inserted[i], _depth + 1);
+                }
+            }
+            if (object.conflicts) {
+                if (!$Array.isArray(object.conflicts))
+                    throw $TypeError(".atomic.InsertChangesResponse.conflicts: array expected");
+                message.conflicts = $Array(object.conflicts.length);
+                for (var i = 0; i < object.conflicts.length; ++i) {
+                    if (!$util.isObject(object.conflicts[i]))
+                        throw $TypeError(".atomic.InsertChangesResponse.conflicts: object expected");
+                    message.conflicts[i] = $root.atomic.ConflictInfo.fromObject(object.conflicts[i], _depth + 1);
+                }
+            }
+            if (object.resolvedSourceView != null)
+                message.resolvedSourceView = $String(object.resolvedSourceView);
+            if (object.resolvedTargetView != null)
+                message.resolvedTargetView = $String(object.resolvedTargetView);
+            if (object.bothViewsShared != null)
+                message.bothViewsShared = $Boolean(object.bothViewsShared);
+            if (object.resolvedChange != null) {
+                if (!$util.isObject(object.resolvedChange))
+                    throw $TypeError(".atomic.InsertChangesResponse.resolvedChange: object expected");
+                message.resolvedChange = $root.atomic.Hash.fromObject(object.resolvedChange, _depth + 1);
+            }
+            if (object.newState != null) {
+                if (!$util.isObject(object.newState))
+                    throw $TypeError(".atomic.InsertChangesResponse.newState: object expected");
+                message.newState = $root.atomic.Hash.fromObject(object.newState, _depth + 1);
+            }
+            if (object.skippedCount != null)
+                if ($Number(object.skippedCount) !== 0)
+                    message.skippedCount = object.skippedCount >>> 0;
+            if (object.filesUpdated != null)
+                if ($util.Long)
+                    message.filesUpdated = $util.Long.fromValue(object.filesUpdated, true);
+                else if (typeof object.filesUpdated === "string")
+                    message.filesUpdated = $parseInt(object.filesUpdated, 10);
+                else if (typeof object.filesUpdated === "number")
+                    message.filesUpdated = object.filesUpdated;
+                else if (typeof object.filesUpdated === "object")
+                    message.filesUpdated = new $util.LongBits(object.filesUpdated.low >>> 0, object.filesUpdated.high >>> 0).toNumber(true);
+            if (object.directoriesCreated != null)
+                if ($util.Long)
+                    message.directoriesCreated = $util.Long.fromValue(object.directoriesCreated, true);
+                else if (typeof object.directoriesCreated === "string")
+                    message.directoriesCreated = $parseInt(object.directoriesCreated, 10);
+                else if (typeof object.directoriesCreated === "number")
+                    message.directoriesCreated = object.directoriesCreated;
+                else if (typeof object.directoriesCreated === "object")
+                    message.directoriesCreated = new $util.LongBits(object.directoriesCreated.low >>> 0, object.directoriesCreated.high >>> 0).toNumber(true);
+            if (object.hasConflicts != null)
+                if (object.hasConflicts)
+                    message.hasConflicts = $Boolean(object.hasConflicts);
+            if (object.meta != null) {
+                if (!$util.isObject(object.meta))
+                    throw $TypeError(".atomic.InsertChangesResponse.meta: object expected");
+                message.meta = $root.atomic.ResponseMeta.fromObject(object.meta, _depth + 1);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from an InsertChangesResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {atomic.InsertChangesResponse} message InsertChangesResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        InsertChangesResponse.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults) {
+                object.inserted = [];
+                object.conflicts = [];
+            }
+            if (options.defaults) {
+                object.skippedCount = 0;
+                object.hasConflicts = false;
+                object.meta = null;
+            }
+            if (message.inserted && message.inserted.length) {
+                object.inserted = $Array(message.inserted.length);
+                for (var j = 0; j < message.inserted.length; ++j)
+                    object.inserted[j] = $root.atomic.ChangeInfo.toObject(message.inserted[j], options, _depth + 1);
+            }
+            if (message.conflicts && message.conflicts.length) {
+                object.conflicts = $Array(message.conflicts.length);
+                for (var j = 0; j < message.conflicts.length; ++j)
+                    object.conflicts[j] = $root.atomic.ConflictInfo.toObject(message.conflicts[j], options, _depth + 1);
+            }
+            if (message.resolvedSourceView != null && $Object.hasOwnProperty.call(message, "resolvedSourceView"))
+                object.resolvedSourceView = message.resolvedSourceView;
+            if (message.resolvedTargetView != null && $Object.hasOwnProperty.call(message, "resolvedTargetView"))
+                object.resolvedTargetView = message.resolvedTargetView;
+            if (message.bothViewsShared != null && $Object.hasOwnProperty.call(message, "bothViewsShared"))
+                object.bothViewsShared = message.bothViewsShared;
+            if (message.resolvedChange != null && $Object.hasOwnProperty.call(message, "resolvedChange"))
+                object.resolvedChange = $root.atomic.Hash.toObject(message.resolvedChange, options, _depth + 1);
+            if (message.newState != null && $Object.hasOwnProperty.call(message, "newState"))
+                object.newState = $root.atomic.Hash.toObject(message.newState, options, _depth + 1);
+            if (message.skippedCount != null && $Object.hasOwnProperty.call(message, "skippedCount"))
+                object.skippedCount = message.skippedCount;
+            if (message.filesUpdated != null && $Object.hasOwnProperty.call(message, "filesUpdated"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.filesUpdated = typeof message.filesUpdated === "number" ? $BigInt(message.filesUpdated) : $util.Long.fromBits(message.filesUpdated.low >>> 0, message.filesUpdated.high >>> 0, true).toBigInt();
+                else if (typeof message.filesUpdated === "number")
+                    object.filesUpdated = options.longs === $String ? $String(message.filesUpdated) : message.filesUpdated;
+                else
+                    object.filesUpdated = options.longs === $String ? $util.Long.prototype.toString.call(message.filesUpdated) : options.longs === $Number ? new $util.LongBits(message.filesUpdated.low >>> 0, message.filesUpdated.high >>> 0).toNumber(true) : message.filesUpdated;
+            if (message.directoriesCreated != null && $Object.hasOwnProperty.call(message, "directoriesCreated"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.directoriesCreated = typeof message.directoriesCreated === "number" ? $BigInt(message.directoriesCreated) : $util.Long.fromBits(message.directoriesCreated.low >>> 0, message.directoriesCreated.high >>> 0, true).toBigInt();
+                else if (typeof message.directoriesCreated === "number")
+                    object.directoriesCreated = options.longs === $String ? $String(message.directoriesCreated) : message.directoriesCreated;
+                else
+                    object.directoriesCreated = options.longs === $String ? $util.Long.prototype.toString.call(message.directoriesCreated) : options.longs === $Number ? new $util.LongBits(message.directoriesCreated.low >>> 0, message.directoriesCreated.high >>> 0).toNumber(true) : message.directoriesCreated;
+            if (message.hasConflicts != null && $Object.hasOwnProperty.call(message, "hasConflicts"))
+                object.hasConflicts = message.hasConflicts;
+            if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
+                object.meta = $root.atomic.ResponseMeta.toObject(message.meta, options, _depth + 1);
+            return object;
+        };
+
+        /**
+         * Converts this InsertChangesResponse to JSON.
+         * @function toJSON
+         * @memberof atomic.InsertChangesResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        InsertChangesResponse.prototype.toJSON = function() {
+            return InsertChangesResponse.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for InsertChangesResponse
+         * @function getTypeUrl
+         * @memberof atomic.InsertChangesResponse
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        InsertChangesResponse.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.InsertChangesResponse";
+        };
+
+        return InsertChangesResponse;
+    })();
+
     atomic.GetVaultEntryRequest = (function() {
 
         /**
@@ -26148,6 +38119,8 @@ $root.atomic = (function() {
          * @property {string|null} [entryType] ListVaultEntriesRequest entryType
          * @property {string|null} [statusFilter] ListVaultEntriesRequest statusFilter
          * @property {boolean|null} [toolResultPreviews] ListVaultEntriesRequest toolResultPreviews
+         * @property {atomic.VaultListSort|null} [sort] ListVaultEntriesRequest sort
+         * @property {boolean|null} [reverse] ListVaultEntriesRequest reverse
          * @property {atomic.ViewRef.$Properties|null} [view] ListVaultEntriesRequest view
          * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
          */
@@ -26269,6 +38242,22 @@ $root.atomic = (function() {
         ListVaultEntriesRequest.prototype.toolResultPreviews = false;
 
         /**
+         * ListVaultEntriesRequest sort.
+         * @member {atomic.VaultListSort|null|undefined} sort
+         * @memberof atomic.ListVaultEntriesRequest
+         * @instance
+         */
+        ListVaultEntriesRequest.prototype.sort = null;
+
+        /**
+         * ListVaultEntriesRequest reverse.
+         * @member {boolean} reverse
+         * @memberof atomic.ListVaultEntriesRequest
+         * @instance
+         */
+        ListVaultEntriesRequest.prototype.reverse = false;
+
+        /**
          * ListVaultEntriesRequest view.
          * @member {atomic.ViewRef.$Properties|null|undefined} view
          * @memberof atomic.ListVaultEntriesRequest
@@ -26327,6 +38316,12 @@ $root.atomic = (function() {
             set: $util.oneOfSetter($oneOfFields)
         });
 
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ListVaultEntriesRequest.prototype, "_sort", {
+            get: $util.oneOfGetter($oneOfFields = ["sort"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
         /**
          * Creates a new ListVaultEntriesRequest instance using the specified properties.
          * @function create
@@ -26381,6 +38376,10 @@ $root.atomic = (function() {
                 writer.uint32(/* id 10, wireType 2 =*/82).string(message.statusFilter);
             if (message.toolResultPreviews != null && $Object.hasOwnProperty.call(message, "toolResultPreviews") && message.toolResultPreviews !== false)
                 writer.uint32(/* id 11, wireType 0 =*/88).bool(message.toolResultPreviews);
+            if (message.sort != null && $Object.hasOwnProperty.call(message, "sort"))
+                writer.uint32(/* id 12, wireType 0 =*/96).int32(message.sort);
+            if (message.reverse != null && $Object.hasOwnProperty.call(message, "reverse") && message.reverse !== false)
+                writer.uint32(/* id 13, wireType 0 =*/104).bool(message.reverse);
             if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
                 $root.atomic.ViewRef.encode(message.view, writer.uint32(/* id 20, wireType 2 =*/162).fork(), _depth + 1).ldelim();
             if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
@@ -26520,6 +38519,22 @@ $root.atomic = (function() {
                             delete message.toolResultPreviews;
                         continue;
                     }
+                case 12: {
+                        if (wireType !== 0)
+                            break;
+                        message.sort = reader.int32();
+                        message._sort = "sort";
+                        continue;
+                    }
+                case 13: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.reverse = value;
+                        else
+                            delete message.reverse;
+                        continue;
+                    }
                 case 20: {
                         if (wireType !== 2)
                             break;
@@ -26632,6 +38647,14 @@ $root.atomic = (function() {
             if (message.toolResultPreviews != null && $Object.hasOwnProperty.call(message, "toolResultPreviews"))
                 if (typeof message.toolResultPreviews !== "boolean")
                     return "toolResultPreviews: boolean expected";
+            if (message.sort != null && $Object.hasOwnProperty.call(message, "sort")) {
+                properties._sort = 1;
+                if (typeof message.sort !== "number" || (message.sort | 0) !== message.sort)
+                    return "sort: enum value expected";
+            }
+            if (message.reverse != null && $Object.hasOwnProperty.call(message, "reverse"))
+                if (typeof message.reverse !== "boolean")
+                    return "reverse: boolean expected";
             if (message.view != null && $Object.hasOwnProperty.call(message, "view")) {
                 var error = $root.atomic.ViewRef.verify(message.view, _depth + 1);
                 if (error)
@@ -26757,6 +38780,50 @@ $root.atomic = (function() {
             if (object.toolResultPreviews != null)
                 if (object.toolResultPreviews)
                     message.toolResultPreviews = $Boolean(object.toolResultPreviews);
+            switch (object.sort) {
+            case "VAULT_LIST_SORT_UNSPECIFIED":
+            case 0:
+                message.sort = 0;
+                break;
+            case "VAULT_LIST_SORT_ID":
+            case 1:
+                message.sort = 1;
+                break;
+            case "VAULT_LIST_SORT_UPDATED":
+            case 2:
+                message.sort = 2;
+                break;
+            case "VAULT_LIST_SORT_TITLE":
+            case 3:
+                message.sort = 3;
+                break;
+            case "VAULT_LIST_SORT_STATUS":
+            case 4:
+                message.sort = 4;
+                break;
+            case "VAULT_LIST_SORT_KIND":
+            case 5:
+                message.sort = 5;
+                break;
+            case "VAULT_LIST_SORT_ABOUT":
+            case 6:
+                message.sort = 6;
+                break;
+            case "VAULT_LIST_SORT_ATTESTED":
+            case 7:
+                message.sort = 7;
+                break;
+            case "VAULT_LIST_SORT_VERIFIES":
+            case 8:
+                message.sort = 8;
+                break;
+            default:
+                if (typeof object.sort === "number" && (object.sort | 0) === object.sort)
+                    message.sort = object.sort;
+            }
+            if (object.reverse != null)
+                if (object.reverse)
+                    message.reverse = $Boolean(object.reverse);
             if (object.view != null) {
                 if (!$util.isObject(object.view))
                     throw $TypeError(".atomic.ListVaultEntriesRequest.view: object expected");
@@ -26786,6 +38853,7 @@ $root.atomic = (function() {
                 object.repository = null;
                 object.summariesOnly = false;
                 object.toolResultPreviews = false;
+                object.reverse = false;
                 object.view = null;
             }
             if (message.repository != null && $Object.hasOwnProperty.call(message, "repository"))
@@ -26810,6 +38878,10 @@ $root.atomic = (function() {
                 object.statusFilter = message.statusFilter;
             if (message.toolResultPreviews != null && $Object.hasOwnProperty.call(message, "toolResultPreviews"))
                 object.toolResultPreviews = message.toolResultPreviews;
+            if (message.sort != null && $Object.hasOwnProperty.call(message, "sort"))
+                object.sort = options.enums === $String ? $root.atomic.VaultListSort[message.sort] === $undefined ? message.sort : $root.atomic.VaultListSort[message.sort] : message.sort;
+            if (message.reverse != null && $Object.hasOwnProperty.call(message, "reverse"))
+                object.reverse = message.reverse;
             if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
                 object.view = $root.atomic.ViewRef.toObject(message.view, options, _depth + 1);
             return object;
@@ -26841,6 +38913,34 @@ $root.atomic = (function() {
         };
 
         return ListVaultEntriesRequest;
+    })();
+
+    /**
+     * VaultListSort enum.
+     * @name atomic.VaultListSort
+     * @enum {number}
+     * @property {number} VAULT_LIST_SORT_UNSPECIFIED=0 VAULT_LIST_SORT_UNSPECIFIED value
+     * @property {number} VAULT_LIST_SORT_ID=1 VAULT_LIST_SORT_ID value
+     * @property {number} VAULT_LIST_SORT_UPDATED=2 VAULT_LIST_SORT_UPDATED value
+     * @property {number} VAULT_LIST_SORT_TITLE=3 VAULT_LIST_SORT_TITLE value
+     * @property {number} VAULT_LIST_SORT_STATUS=4 VAULT_LIST_SORT_STATUS value
+     * @property {number} VAULT_LIST_SORT_KIND=5 VAULT_LIST_SORT_KIND value
+     * @property {number} VAULT_LIST_SORT_ABOUT=6 VAULT_LIST_SORT_ABOUT value
+     * @property {number} VAULT_LIST_SORT_ATTESTED=7 VAULT_LIST_SORT_ATTESTED value
+     * @property {number} VAULT_LIST_SORT_VERIFIES=8 VAULT_LIST_SORT_VERIFIES value
+     */
+    atomic.VaultListSort = (function() {
+        var valuesById = $Object.create(null), values = $Object.create(valuesById);
+        values[valuesById[0] = "VAULT_LIST_SORT_UNSPECIFIED"] = 0;
+        values[valuesById[1] = "VAULT_LIST_SORT_ID"] = 1;
+        values[valuesById[2] = "VAULT_LIST_SORT_UPDATED"] = 2;
+        values[valuesById[3] = "VAULT_LIST_SORT_TITLE"] = 3;
+        values[valuesById[4] = "VAULT_LIST_SORT_STATUS"] = 4;
+        values[valuesById[5] = "VAULT_LIST_SORT_KIND"] = 5;
+        values[valuesById[6] = "VAULT_LIST_SORT_ABOUT"] = 6;
+        values[valuesById[7] = "VAULT_LIST_SORT_ATTESTED"] = 7;
+        values[valuesById[8] = "VAULT_LIST_SORT_VERIFIES"] = 8;
+        return values;
     })();
 
     atomic.ListVaultEntriesResponse = (function() {
@@ -31367,6 +43467,11 @@ $root.atomic = (function() {
          * @typedef {Object} atomic.ContentSearchQuery.$Properties
          * @property {string|null} [query] ContentSearchQuery query
          * @property {Array.<string>|null} [paths] ContentSearchQuery paths
+         * @property {string|null} [pathFilter] ContentSearchQuery pathFilter
+         * @property {string|null} [fileType] ContentSearchQuery fileType
+         * @property {string|null} [excludeType] ContentSearchQuery excludeType
+         * @property {boolean|null} [caseInsensitive] ContentSearchQuery caseInsensitive
+         * @property {number|null} [maxResults] ContentSearchQuery maxResults
          * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
          */
 
@@ -31416,6 +43521,73 @@ $root.atomic = (function() {
         ContentSearchQuery.prototype.paths = $util.emptyArray;
 
         /**
+         * ContentSearchQuery pathFilter.
+         * @member {string|null|undefined} pathFilter
+         * @memberof atomic.ContentSearchQuery
+         * @instance
+         */
+        ContentSearchQuery.prototype.pathFilter = null;
+
+        /**
+         * ContentSearchQuery fileType.
+         * @member {string|null|undefined} fileType
+         * @memberof atomic.ContentSearchQuery
+         * @instance
+         */
+        ContentSearchQuery.prototype.fileType = null;
+
+        /**
+         * ContentSearchQuery excludeType.
+         * @member {string|null|undefined} excludeType
+         * @memberof atomic.ContentSearchQuery
+         * @instance
+         */
+        ContentSearchQuery.prototype.excludeType = null;
+
+        /**
+         * ContentSearchQuery caseInsensitive.
+         * @member {boolean} caseInsensitive
+         * @memberof atomic.ContentSearchQuery
+         * @instance
+         */
+        ContentSearchQuery.prototype.caseInsensitive = false;
+
+        /**
+         * ContentSearchQuery maxResults.
+         * @member {number|null|undefined} maxResults
+         * @memberof atomic.ContentSearchQuery
+         * @instance
+         */
+        ContentSearchQuery.prototype.maxResults = null;
+
+        // OneOf field names bound to virtual getters and setters
+        var $oneOfFields;
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ContentSearchQuery.prototype, "_path_filter", {
+            get: $util.oneOfGetter($oneOfFields = ["pathFilter"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ContentSearchQuery.prototype, "_file_type", {
+            get: $util.oneOfGetter($oneOfFields = ["fileType"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ContentSearchQuery.prototype, "_exclude_type", {
+            get: $util.oneOfGetter($oneOfFields = ["excludeType"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(ContentSearchQuery.prototype, "_max_results", {
+            get: $util.oneOfGetter($oneOfFields = ["maxResults"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        /**
          * Creates a new ContentSearchQuery instance using the specified properties.
          * @function create
          * @memberof atomic.ContentSearchQuery
@@ -31452,6 +43624,16 @@ $root.atomic = (function() {
             if (message.paths != null && message.paths.length)
                 for (var i = 0; i < message.paths.length; ++i)
                     writer.uint32(/* id 2, wireType 2 =*/18).string(message.paths[i]);
+            if (message.pathFilter != null && $Object.hasOwnProperty.call(message, "pathFilter"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.pathFilter);
+            if (message.fileType != null && $Object.hasOwnProperty.call(message, "fileType"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.fileType);
+            if (message.excludeType != null && $Object.hasOwnProperty.call(message, "excludeType"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.excludeType);
+            if (message.caseInsensitive != null && $Object.hasOwnProperty.call(message, "caseInsensitive") && message.caseInsensitive !== false)
+                writer.uint32(/* id 6, wireType 0 =*/48).bool(message.caseInsensitive);
+            if (message.maxResults != null && $Object.hasOwnProperty.call(message, "maxResults"))
+                writer.uint32(/* id 7, wireType 0 =*/56).uint32(message.maxResults);
             if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                 for (var i = 0; i < message.$unknowns.length; ++i)
                     writer.raw(message.$unknowns[i]);
@@ -31526,6 +43708,43 @@ $root.atomic = (function() {
                         message.paths.push(reader.stringVerify());
                         continue;
                     }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        message.pathFilter = reader.stringVerify();
+                        message._path_filter = "pathFilter";
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.fileType = reader.stringVerify();
+                        message._file_type = "fileType";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        message.excludeType = reader.stringVerify();
+                        message._exclude_type = "excludeType";
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.bool())
+                            message.caseInsensitive = value;
+                        else
+                            delete message.caseInsensitive;
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 0)
+                            break;
+                        message.maxResults = reader.uint32();
+                        message._max_results = "maxResults";
+                        continue;
+                    }
                 }
                 reader.skipType(wireType, _depth, tag);
                 if (!reader.discardUnknown) {
@@ -31574,6 +43793,7 @@ $root.atomic = (function() {
                 _depth = 0;
             if (_depth > $util.recursionLimit)
                 return "max depth exceeded";
+            var properties = {};
             if (message.query != null && $Object.hasOwnProperty.call(message, "query"))
                 if (!$util.isString(message.query))
                     return "query: string expected";
@@ -31583,6 +43803,29 @@ $root.atomic = (function() {
                 for (var i = 0; i < message.paths.length; ++i)
                     if (!$util.isString(message.paths[i]))
                         return "paths: string[] expected";
+            }
+            if (message.pathFilter != null && $Object.hasOwnProperty.call(message, "pathFilter")) {
+                properties._path_filter = 1;
+                if (!$util.isString(message.pathFilter))
+                    return "pathFilter: string expected";
+            }
+            if (message.fileType != null && $Object.hasOwnProperty.call(message, "fileType")) {
+                properties._file_type = 1;
+                if (!$util.isString(message.fileType))
+                    return "fileType: string expected";
+            }
+            if (message.excludeType != null && $Object.hasOwnProperty.call(message, "excludeType")) {
+                properties._exclude_type = 1;
+                if (!$util.isString(message.excludeType))
+                    return "excludeType: string expected";
+            }
+            if (message.caseInsensitive != null && $Object.hasOwnProperty.call(message, "caseInsensitive"))
+                if (typeof message.caseInsensitive !== "boolean")
+                    return "caseInsensitive: boolean expected";
+            if (message.maxResults != null && $Object.hasOwnProperty.call(message, "maxResults")) {
+                properties._max_results = 1;
+                if (!$util.isInteger(message.maxResults))
+                    return "maxResults: integer expected";
             }
             return null;
         };
@@ -31615,6 +43858,17 @@ $root.atomic = (function() {
                 for (var i = 0; i < object.paths.length; ++i)
                     message.paths[i] = $String(object.paths[i]);
             }
+            if (object.pathFilter != null)
+                message.pathFilter = $String(object.pathFilter);
+            if (object.fileType != null)
+                message.fileType = $String(object.fileType);
+            if (object.excludeType != null)
+                message.excludeType = $String(object.excludeType);
+            if (object.caseInsensitive != null)
+                if (object.caseInsensitive)
+                    message.caseInsensitive = $Boolean(object.caseInsensitive);
+            if (object.maxResults != null)
+                message.maxResults = object.maxResults >>> 0;
             return message;
         };
 
@@ -31637,8 +43891,10 @@ $root.atomic = (function() {
             var object = {};
             if (options.arrays || options.defaults)
                 object.paths = [];
-            if (options.defaults)
+            if (options.defaults) {
                 object.query = "";
+                object.caseInsensitive = false;
+            }
             if (message.query != null && $Object.hasOwnProperty.call(message, "query"))
                 object.query = message.query;
             if (message.paths && message.paths.length) {
@@ -31646,6 +43902,16 @@ $root.atomic = (function() {
                 for (var j = 0; j < message.paths.length; ++j)
                     object.paths[j] = message.paths[j];
             }
+            if (message.pathFilter != null && $Object.hasOwnProperty.call(message, "pathFilter"))
+                object.pathFilter = message.pathFilter;
+            if (message.fileType != null && $Object.hasOwnProperty.call(message, "fileType"))
+                object.fileType = message.fileType;
+            if (message.excludeType != null && $Object.hasOwnProperty.call(message, "excludeType"))
+                object.excludeType = message.excludeType;
+            if (message.caseInsensitive != null && $Object.hasOwnProperty.call(message, "caseInsensitive"))
+                object.caseInsensitive = message.caseInsensitive;
+            if (message.maxResults != null && $Object.hasOwnProperty.call(message, "maxResults"))
+                object.maxResults = message.maxResults;
             return object;
         };
 
@@ -34115,6 +46381,7 @@ $root.atomic = (function() {
          * @property {number|Long|null} [askElapsedMs] QueryGraphResponse askElapsedMs
          * @property {number|null} [apiVersion] QueryGraphResponse apiVersion
          * @property {Array.<atomic.CodeCaller.$Properties>|null} [callers] QueryGraphResponse callers
+         * @property {atomic.ContentSearchResult.$Properties|null} [contentResult] QueryGraphResponse contentResult
          * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
          */
 
@@ -34246,6 +46513,14 @@ $root.atomic = (function() {
          */
         QueryGraphResponse.prototype.callers = $util.emptyArray;
 
+        /**
+         * QueryGraphResponse contentResult.
+         * @member {atomic.ContentSearchResult.$Properties|null|undefined} contentResult
+         * @memberof atomic.QueryGraphResponse
+         * @instance
+         */
+        QueryGraphResponse.prototype.contentResult = null;
+
         // OneOf field names bound to virtual getters and setters
         var $oneOfFields;
 
@@ -34339,6 +46614,8 @@ $root.atomic = (function() {
             if (message.callers != null && message.callers.length)
                 for (var i = 0; i < message.callers.length; ++i)
                     $root.atomic.CodeCaller.encode(message.callers[i], writer.uint32(/* id 12, wireType 2 =*/98).fork(), _depth + 1).ldelim();
+            if (message.contentResult != null && $Object.hasOwnProperty.call(message, "contentResult"))
+                $root.atomic.ContentSearchResult.encode(message.contentResult, writer.uint32(/* id 13, wireType 2 =*/106).fork(), _depth + 1).ldelim();
             if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                 for (var i = 0; i < message.$unknowns.length; ++i)
                     writer.raw(message.$unknowns[i]);
@@ -34487,6 +46764,12 @@ $root.atomic = (function() {
                         message.callers.push($root.atomic.CodeCaller.decode(reader, reader.size(), $undefined, _depth + 1));
                         continue;
                     }
+                case 13: {
+                        if (wireType !== 2)
+                            break;
+                        message.contentResult = $root.atomic.ContentSearchResult.decode(reader, reader.size(), $undefined, _depth + 1, message.contentResult);
+                        continue;
+                    }
                 }
                 reader.skipType(wireType, _depth, tag);
                 if (!reader.discardUnknown) {
@@ -34611,6 +46894,11 @@ $root.atomic = (function() {
                         return "callers." + error;
                 }
             }
+            if (message.contentResult != null && $Object.hasOwnProperty.call(message, "contentResult")) {
+                var error = $root.atomic.ContentSearchResult.verify(message.contentResult, _depth + 1);
+                if (error)
+                    return "contentResult." + error;
+            }
             return null;
         };
 
@@ -34706,6 +46994,11 @@ $root.atomic = (function() {
                     message.callers[i] = $root.atomic.CodeCaller.fromObject(object.callers[i], _depth + 1);
                 }
             }
+            if (object.contentResult != null) {
+                if (!$util.isObject(object.contentResult))
+                    throw $TypeError(".atomic.QueryGraphResponse.contentResult: object expected");
+                message.contentResult = $root.atomic.ContentSearchResult.fromObject(object.contentResult, _depth + 1);
+            }
             return message;
         };
 
@@ -34736,6 +47029,7 @@ $root.atomic = (function() {
                 object.snapshot = null;
                 object.callsPresent = false;
                 object.apiVersion = 0;
+                object.contentResult = null;
             }
             if (message.nodes && message.nodes.length) {
                 object.nodes = $Array(message.nodes.length);
@@ -34778,6 +47072,8 @@ $root.atomic = (function() {
                 for (var j = 0; j < message.callers.length; ++j)
                     object.callers[j] = $root.atomic.CodeCaller.toObject(message.callers[j], options, _depth + 1);
             }
+            if (message.contentResult != null && $Object.hasOwnProperty.call(message, "contentResult"))
+                object.contentResult = $root.atomic.ContentSearchResult.toObject(message.contentResult, options, _depth + 1);
             return object;
         };
 
@@ -36431,6 +48727,1181 @@ $root.atomic = (function() {
         };
 
         return CodeCaller;
+    })();
+
+    atomic.ContentSearchResult = (function() {
+
+        /**
+         * Properties of a ContentSearchResult.
+         * @typedef {Object} atomic.ContentSearchResult.$Properties
+         * @property {Array.<atomic.ContentMatch.$Properties>|null} [matches] ContentSearchResult matches
+         * @property {number|Long|null} [totalMatches] ContentSearchResult totalMatches
+         * @property {Array.<atomic.ContentDirectoryFacet.$Properties>|null} [dirFacets] ContentSearchResult dirFacets
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ContentSearchResult.
+         * @memberof atomic
+         * @interface IContentSearchResult
+         * @augments atomic.ContentSearchResult.$Properties
+         * @deprecated Use atomic.ContentSearchResult.$Properties instead.
+         */
+
+        /**
+         * Shape of a ContentSearchResult.
+         * @typedef {atomic.ContentSearchResult.$Properties} atomic.ContentSearchResult.$Shape
+         */
+
+        /**
+         * Constructs a new ContentSearchResult.
+         * @memberof atomic
+         * @classdesc Represents a ContentSearchResult.
+         * @constructor
+         * @param {atomic.ContentSearchResult.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ContentSearchResult = function (properties) {
+            this.matches = [];
+            this.dirFacets = [];
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ContentSearchResult matches.
+         * @member {Array.<atomic.ContentMatch.$Properties>} matches
+         * @memberof atomic.ContentSearchResult
+         * @instance
+         */
+        ContentSearchResult.prototype.matches = $util.emptyArray;
+
+        /**
+         * ContentSearchResult totalMatches.
+         * @member {number|Long} totalMatches
+         * @memberof atomic.ContentSearchResult
+         * @instance
+         */
+        ContentSearchResult.prototype.totalMatches = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * ContentSearchResult dirFacets.
+         * @member {Array.<atomic.ContentDirectoryFacet.$Properties>} dirFacets
+         * @memberof atomic.ContentSearchResult
+         * @instance
+         */
+        ContentSearchResult.prototype.dirFacets = $util.emptyArray;
+
+        /**
+         * Creates a new ContentSearchResult instance using the specified properties.
+         * @function create
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {atomic.ContentSearchResult.$Properties=} [properties] Properties to set
+         * @returns {atomic.ContentSearchResult} ContentSearchResult instance
+         * @type {{
+         *   (properties: atomic.ContentSearchResult.$Shape): atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape;
+         *   (properties?: atomic.ContentSearchResult.$Properties): atomic.ContentSearchResult;
+         * }}
+         */
+        ContentSearchResult.create = function(properties) {
+            return new ContentSearchResult(properties);
+        };
+
+        /**
+         * Encodes the specified ContentSearchResult message. Does not implicitly {@link atomic.ContentSearchResult.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {atomic.ContentSearchResult.$Properties} message ContentSearchResult message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ContentSearchResult.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.matches != null && message.matches.length)
+                for (var i = 0; i < message.matches.length; ++i)
+                    $root.atomic.ContentMatch.encode(message.matches[i], writer.uint32(/* id 1, wireType 2 =*/10).fork(), _depth + 1).ldelim();
+            if (message.totalMatches != null && $Object.hasOwnProperty.call(message, "totalMatches") && (typeof message.totalMatches === "object" ? message.totalMatches.low || message.totalMatches.high : message.totalMatches !== 0))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.totalMatches);
+            if (message.dirFacets != null && message.dirFacets.length)
+                for (var i = 0; i < message.dirFacets.length; ++i)
+                    $root.atomic.ContentDirectoryFacet.encode(message.dirFacets[i], writer.uint32(/* id 3, wireType 2 =*/26).fork(), _depth + 1).ldelim();
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ContentSearchResult message, length delimited. Does not implicitly {@link atomic.ContentSearchResult.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {atomic.ContentSearchResult.$Properties} message ContentSearchResult message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ContentSearchResult.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ContentSearchResult message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape} ContentSearchResult
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ContentSearchResult.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ContentSearchResult();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.matches && message.matches.length))
+                            message.matches = [];
+                        message.matches.push($root.atomic.ContentMatch.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.totalMatches = value;
+                        else
+                            delete message.totalMatches;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.dirFacets && message.dirFacets.length))
+                            message.dirFacets = [];
+                        message.dirFacets.push($root.atomic.ContentDirectoryFacet.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ContentSearchResult message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape} ContentSearchResult
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ContentSearchResult.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ContentSearchResult message.
+         * @function verify
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ContentSearchResult.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.matches != null && $Object.hasOwnProperty.call(message, "matches")) {
+                if (!$Array.isArray(message.matches))
+                    return "matches: array expected";
+                for (var i = 0; i < message.matches.length; ++i) {
+                    var error = $root.atomic.ContentMatch.verify(message.matches[i], _depth + 1);
+                    if (error)
+                        return "matches." + error;
+                }
+            }
+            if (message.totalMatches != null && $Object.hasOwnProperty.call(message, "totalMatches"))
+                if (!$util.isInteger(message.totalMatches) && !(message.totalMatches && $util.isInteger(message.totalMatches.low) && $util.isInteger(message.totalMatches.high)))
+                    return "totalMatches: integer|Long expected";
+            if (message.dirFacets != null && $Object.hasOwnProperty.call(message, "dirFacets")) {
+                if (!$Array.isArray(message.dirFacets))
+                    return "dirFacets: array expected";
+                for (var i = 0; i < message.dirFacets.length; ++i) {
+                    var error = $root.atomic.ContentDirectoryFacet.verify(message.dirFacets[i], _depth + 1);
+                    if (error)
+                        return "dirFacets." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ContentSearchResult message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ContentSearchResult} ContentSearchResult
+         */
+        ContentSearchResult.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ContentSearchResult)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ContentSearchResult: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ContentSearchResult();
+            if (object.matches) {
+                if (!$Array.isArray(object.matches))
+                    throw $TypeError(".atomic.ContentSearchResult.matches: array expected");
+                message.matches = $Array(object.matches.length);
+                for (var i = 0; i < object.matches.length; ++i) {
+                    if (!$util.isObject(object.matches[i]))
+                        throw $TypeError(".atomic.ContentSearchResult.matches: object expected");
+                    message.matches[i] = $root.atomic.ContentMatch.fromObject(object.matches[i], _depth + 1);
+                }
+            }
+            if (object.totalMatches != null)
+                if (typeof object.totalMatches === "object" ? object.totalMatches.low || object.totalMatches.high : $Number(object.totalMatches) !== 0)
+                    if ($util.Long)
+                        message.totalMatches = $util.Long.fromValue(object.totalMatches, true);
+                    else if (typeof object.totalMatches === "string")
+                        message.totalMatches = $parseInt(object.totalMatches, 10);
+                    else if (typeof object.totalMatches === "number")
+                        message.totalMatches = object.totalMatches;
+                    else if (typeof object.totalMatches === "object")
+                        message.totalMatches = new $util.LongBits(object.totalMatches.low >>> 0, object.totalMatches.high >>> 0).toNumber(true);
+            if (object.dirFacets) {
+                if (!$Array.isArray(object.dirFacets))
+                    throw $TypeError(".atomic.ContentSearchResult.dirFacets: array expected");
+                message.dirFacets = $Array(object.dirFacets.length);
+                for (var i = 0; i < object.dirFacets.length; ++i) {
+                    if (!$util.isObject(object.dirFacets[i]))
+                        throw $TypeError(".atomic.ContentSearchResult.dirFacets: object expected");
+                    message.dirFacets[i] = $root.atomic.ContentDirectoryFacet.fromObject(object.dirFacets[i], _depth + 1);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ContentSearchResult message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {atomic.ContentSearchResult} message ContentSearchResult
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ContentSearchResult.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.arrays || options.defaults) {
+                object.matches = [];
+                object.dirFacets = [];
+            }
+            if (options.defaults)
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.totalMatches = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.totalMatches = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            if (message.matches && message.matches.length) {
+                object.matches = $Array(message.matches.length);
+                for (var j = 0; j < message.matches.length; ++j)
+                    object.matches[j] = $root.atomic.ContentMatch.toObject(message.matches[j], options, _depth + 1);
+            }
+            if (message.totalMatches != null && $Object.hasOwnProperty.call(message, "totalMatches"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.totalMatches = typeof message.totalMatches === "number" ? $BigInt(message.totalMatches) : $util.Long.fromBits(message.totalMatches.low >>> 0, message.totalMatches.high >>> 0, true).toBigInt();
+                else if (typeof message.totalMatches === "number")
+                    object.totalMatches = options.longs === $String ? $String(message.totalMatches) : message.totalMatches;
+                else
+                    object.totalMatches = options.longs === $String ? $util.Long.prototype.toString.call(message.totalMatches) : options.longs === $Number ? new $util.LongBits(message.totalMatches.low >>> 0, message.totalMatches.high >>> 0).toNumber(true) : message.totalMatches;
+            if (message.dirFacets && message.dirFacets.length) {
+                object.dirFacets = $Array(message.dirFacets.length);
+                for (var j = 0; j < message.dirFacets.length; ++j)
+                    object.dirFacets[j] = $root.atomic.ContentDirectoryFacet.toObject(message.dirFacets[j], options, _depth + 1);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this ContentSearchResult to JSON.
+         * @function toJSON
+         * @memberof atomic.ContentSearchResult
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ContentSearchResult.prototype.toJSON = function() {
+            return ContentSearchResult.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ContentSearchResult
+         * @function getTypeUrl
+         * @memberof atomic.ContentSearchResult
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ContentSearchResult.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ContentSearchResult";
+        };
+
+        return ContentSearchResult;
+    })();
+
+    atomic.ContentMatch = (function() {
+
+        /**
+         * Properties of a ContentMatch.
+         * @typedef {Object} atomic.ContentMatch.$Properties
+         * @property {string|null} [path] ContentMatch path
+         * @property {number|null} [lineNumber] ContentMatch lineNumber
+         * @property {string|null} [lineContent] ContentMatch lineContent
+         * @property {number|Long|null} [byteOffset] ContentMatch byteOffset
+         * @property {number|Long|null} [submatchStart] ContentMatch submatchStart
+         * @property {number|Long|null} [submatchEnd] ContentMatch submatchEnd
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ContentMatch.
+         * @memberof atomic
+         * @interface IContentMatch
+         * @augments atomic.ContentMatch.$Properties
+         * @deprecated Use atomic.ContentMatch.$Properties instead.
+         */
+
+        /**
+         * Shape of a ContentMatch.
+         * @typedef {atomic.ContentMatch.$Properties} atomic.ContentMatch.$Shape
+         */
+
+        /**
+         * Constructs a new ContentMatch.
+         * @memberof atomic
+         * @classdesc Represents a ContentMatch.
+         * @constructor
+         * @param {atomic.ContentMatch.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ContentMatch = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ContentMatch path.
+         * @member {string} path
+         * @memberof atomic.ContentMatch
+         * @instance
+         */
+        ContentMatch.prototype.path = "";
+
+        /**
+         * ContentMatch lineNumber.
+         * @member {number} lineNumber
+         * @memberof atomic.ContentMatch
+         * @instance
+         */
+        ContentMatch.prototype.lineNumber = 0;
+
+        /**
+         * ContentMatch lineContent.
+         * @member {string} lineContent
+         * @memberof atomic.ContentMatch
+         * @instance
+         */
+        ContentMatch.prototype.lineContent = "";
+
+        /**
+         * ContentMatch byteOffset.
+         * @member {number|Long} byteOffset
+         * @memberof atomic.ContentMatch
+         * @instance
+         */
+        ContentMatch.prototype.byteOffset = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * ContentMatch submatchStart.
+         * @member {number|Long} submatchStart
+         * @memberof atomic.ContentMatch
+         * @instance
+         */
+        ContentMatch.prototype.submatchStart = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * ContentMatch submatchEnd.
+         * @member {number|Long} submatchEnd
+         * @memberof atomic.ContentMatch
+         * @instance
+         */
+        ContentMatch.prototype.submatchEnd = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new ContentMatch instance using the specified properties.
+         * @function create
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {atomic.ContentMatch.$Properties=} [properties] Properties to set
+         * @returns {atomic.ContentMatch} ContentMatch instance
+         * @type {{
+         *   (properties: atomic.ContentMatch.$Shape): atomic.ContentMatch & atomic.ContentMatch.$Shape;
+         *   (properties?: atomic.ContentMatch.$Properties): atomic.ContentMatch;
+         * }}
+         */
+        ContentMatch.create = function(properties) {
+            return new ContentMatch(properties);
+        };
+
+        /**
+         * Encodes the specified ContentMatch message. Does not implicitly {@link atomic.ContentMatch.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {atomic.ContentMatch.$Properties} message ContentMatch message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ContentMatch.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path") && message.path !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.path);
+            if (message.lineNumber != null && $Object.hasOwnProperty.call(message, "lineNumber") && message.lineNumber !== 0)
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.lineNumber);
+            if (message.lineContent != null && $Object.hasOwnProperty.call(message, "lineContent") && message.lineContent !== "")
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.lineContent);
+            if (message.byteOffset != null && $Object.hasOwnProperty.call(message, "byteOffset") && (typeof message.byteOffset === "object" ? message.byteOffset.low || message.byteOffset.high : message.byteOffset !== 0))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.byteOffset);
+            if (message.submatchStart != null && $Object.hasOwnProperty.call(message, "submatchStart") && (typeof message.submatchStart === "object" ? message.submatchStart.low || message.submatchStart.high : message.submatchStart !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.submatchStart);
+            if (message.submatchEnd != null && $Object.hasOwnProperty.call(message, "submatchEnd") && (typeof message.submatchEnd === "object" ? message.submatchEnd.low || message.submatchEnd.high : message.submatchEnd !== 0))
+                writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.submatchEnd);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ContentMatch message, length delimited. Does not implicitly {@link atomic.ContentMatch.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {atomic.ContentMatch.$Properties} message ContentMatch message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ContentMatch.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ContentMatch message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ContentMatch & atomic.ContentMatch.$Shape} ContentMatch
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ContentMatch.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ContentMatch();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.path = value;
+                        else
+                            delete message.path;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 0)
+                            break;
+                        if (value = reader.uint32())
+                            message.lineNumber = value;
+                        else
+                            delete message.lineNumber;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.lineContent = value;
+                        else
+                            delete message.lineContent;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.byteOffset = value;
+                        else
+                            delete message.byteOffset;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.submatchStart = value;
+                        else
+                            delete message.submatchStart;
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.submatchEnd = value;
+                        else
+                            delete message.submatchEnd;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ContentMatch message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ContentMatch & atomic.ContentMatch.$Shape} ContentMatch
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ContentMatch.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ContentMatch message.
+         * @function verify
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ContentMatch.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path"))
+                if (!$util.isString(message.path))
+                    return "path: string expected";
+            if (message.lineNumber != null && $Object.hasOwnProperty.call(message, "lineNumber"))
+                if (!$util.isInteger(message.lineNumber))
+                    return "lineNumber: integer expected";
+            if (message.lineContent != null && $Object.hasOwnProperty.call(message, "lineContent"))
+                if (!$util.isString(message.lineContent))
+                    return "lineContent: string expected";
+            if (message.byteOffset != null && $Object.hasOwnProperty.call(message, "byteOffset"))
+                if (!$util.isInteger(message.byteOffset) && !(message.byteOffset && $util.isInteger(message.byteOffset.low) && $util.isInteger(message.byteOffset.high)))
+                    return "byteOffset: integer|Long expected";
+            if (message.submatchStart != null && $Object.hasOwnProperty.call(message, "submatchStart"))
+                if (!$util.isInteger(message.submatchStart) && !(message.submatchStart && $util.isInteger(message.submatchStart.low) && $util.isInteger(message.submatchStart.high)))
+                    return "submatchStart: integer|Long expected";
+            if (message.submatchEnd != null && $Object.hasOwnProperty.call(message, "submatchEnd"))
+                if (!$util.isInteger(message.submatchEnd) && !(message.submatchEnd && $util.isInteger(message.submatchEnd.low) && $util.isInteger(message.submatchEnd.high)))
+                    return "submatchEnd: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a ContentMatch message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ContentMatch} ContentMatch
+         */
+        ContentMatch.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ContentMatch)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ContentMatch: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ContentMatch();
+            if (object.path != null)
+                if (typeof object.path !== "string" || object.path.length)
+                    message.path = $String(object.path);
+            if (object.lineNumber != null)
+                if ($Number(object.lineNumber) !== 0)
+                    message.lineNumber = object.lineNumber >>> 0;
+            if (object.lineContent != null)
+                if (typeof object.lineContent !== "string" || object.lineContent.length)
+                    message.lineContent = $String(object.lineContent);
+            if (object.byteOffset != null)
+                if (typeof object.byteOffset === "object" ? object.byteOffset.low || object.byteOffset.high : $Number(object.byteOffset) !== 0)
+                    if ($util.Long)
+                        message.byteOffset = $util.Long.fromValue(object.byteOffset, true);
+                    else if (typeof object.byteOffset === "string")
+                        message.byteOffset = $parseInt(object.byteOffset, 10);
+                    else if (typeof object.byteOffset === "number")
+                        message.byteOffset = object.byteOffset;
+                    else if (typeof object.byteOffset === "object")
+                        message.byteOffset = new $util.LongBits(object.byteOffset.low >>> 0, object.byteOffset.high >>> 0).toNumber(true);
+            if (object.submatchStart != null)
+                if (typeof object.submatchStart === "object" ? object.submatchStart.low || object.submatchStart.high : $Number(object.submatchStart) !== 0)
+                    if ($util.Long)
+                        message.submatchStart = $util.Long.fromValue(object.submatchStart, true);
+                    else if (typeof object.submatchStart === "string")
+                        message.submatchStart = $parseInt(object.submatchStart, 10);
+                    else if (typeof object.submatchStart === "number")
+                        message.submatchStart = object.submatchStart;
+                    else if (typeof object.submatchStart === "object")
+                        message.submatchStart = new $util.LongBits(object.submatchStart.low >>> 0, object.submatchStart.high >>> 0).toNumber(true);
+            if (object.submatchEnd != null)
+                if (typeof object.submatchEnd === "object" ? object.submatchEnd.low || object.submatchEnd.high : $Number(object.submatchEnd) !== 0)
+                    if ($util.Long)
+                        message.submatchEnd = $util.Long.fromValue(object.submatchEnd, true);
+                    else if (typeof object.submatchEnd === "string")
+                        message.submatchEnd = $parseInt(object.submatchEnd, 10);
+                    else if (typeof object.submatchEnd === "number")
+                        message.submatchEnd = object.submatchEnd;
+                    else if (typeof object.submatchEnd === "object")
+                        message.submatchEnd = new $util.LongBits(object.submatchEnd.low >>> 0, object.submatchEnd.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ContentMatch message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {atomic.ContentMatch} message ContentMatch
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ContentMatch.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.path = "";
+                object.lineNumber = 0;
+                object.lineContent = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.byteOffset = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.byteOffset = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.submatchStart = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.submatchStart = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.submatchEnd = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.submatchEnd = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path"))
+                object.path = message.path;
+            if (message.lineNumber != null && $Object.hasOwnProperty.call(message, "lineNumber"))
+                object.lineNumber = message.lineNumber;
+            if (message.lineContent != null && $Object.hasOwnProperty.call(message, "lineContent"))
+                object.lineContent = message.lineContent;
+            if (message.byteOffset != null && $Object.hasOwnProperty.call(message, "byteOffset"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.byteOffset = typeof message.byteOffset === "number" ? $BigInt(message.byteOffset) : $util.Long.fromBits(message.byteOffset.low >>> 0, message.byteOffset.high >>> 0, true).toBigInt();
+                else if (typeof message.byteOffset === "number")
+                    object.byteOffset = options.longs === $String ? $String(message.byteOffset) : message.byteOffset;
+                else
+                    object.byteOffset = options.longs === $String ? $util.Long.prototype.toString.call(message.byteOffset) : options.longs === $Number ? new $util.LongBits(message.byteOffset.low >>> 0, message.byteOffset.high >>> 0).toNumber(true) : message.byteOffset;
+            if (message.submatchStart != null && $Object.hasOwnProperty.call(message, "submatchStart"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.submatchStart = typeof message.submatchStart === "number" ? $BigInt(message.submatchStart) : $util.Long.fromBits(message.submatchStart.low >>> 0, message.submatchStart.high >>> 0, true).toBigInt();
+                else if (typeof message.submatchStart === "number")
+                    object.submatchStart = options.longs === $String ? $String(message.submatchStart) : message.submatchStart;
+                else
+                    object.submatchStart = options.longs === $String ? $util.Long.prototype.toString.call(message.submatchStart) : options.longs === $Number ? new $util.LongBits(message.submatchStart.low >>> 0, message.submatchStart.high >>> 0).toNumber(true) : message.submatchStart;
+            if (message.submatchEnd != null && $Object.hasOwnProperty.call(message, "submatchEnd"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.submatchEnd = typeof message.submatchEnd === "number" ? $BigInt(message.submatchEnd) : $util.Long.fromBits(message.submatchEnd.low >>> 0, message.submatchEnd.high >>> 0, true).toBigInt();
+                else if (typeof message.submatchEnd === "number")
+                    object.submatchEnd = options.longs === $String ? $String(message.submatchEnd) : message.submatchEnd;
+                else
+                    object.submatchEnd = options.longs === $String ? $util.Long.prototype.toString.call(message.submatchEnd) : options.longs === $Number ? new $util.LongBits(message.submatchEnd.low >>> 0, message.submatchEnd.high >>> 0).toNumber(true) : message.submatchEnd;
+            return object;
+        };
+
+        /**
+         * Converts this ContentMatch to JSON.
+         * @function toJSON
+         * @memberof atomic.ContentMatch
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ContentMatch.prototype.toJSON = function() {
+            return ContentMatch.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ContentMatch
+         * @function getTypeUrl
+         * @memberof atomic.ContentMatch
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ContentMatch.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ContentMatch";
+        };
+
+        return ContentMatch;
+    })();
+
+    atomic.ContentDirectoryFacet = (function() {
+
+        /**
+         * Properties of a ContentDirectoryFacet.
+         * @typedef {Object} atomic.ContentDirectoryFacet.$Properties
+         * @property {string|null} [path] ContentDirectoryFacet path
+         * @property {number|Long|null} [count] ContentDirectoryFacet count
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a ContentDirectoryFacet.
+         * @memberof atomic
+         * @interface IContentDirectoryFacet
+         * @augments atomic.ContentDirectoryFacet.$Properties
+         * @deprecated Use atomic.ContentDirectoryFacet.$Properties instead.
+         */
+
+        /**
+         * Shape of a ContentDirectoryFacet.
+         * @typedef {atomic.ContentDirectoryFacet.$Properties} atomic.ContentDirectoryFacet.$Shape
+         */
+
+        /**
+         * Constructs a new ContentDirectoryFacet.
+         * @memberof atomic
+         * @classdesc Represents a ContentDirectoryFacet.
+         * @constructor
+         * @param {atomic.ContentDirectoryFacet.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var ContentDirectoryFacet = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * ContentDirectoryFacet path.
+         * @member {string} path
+         * @memberof atomic.ContentDirectoryFacet
+         * @instance
+         */
+        ContentDirectoryFacet.prototype.path = "";
+
+        /**
+         * ContentDirectoryFacet count.
+         * @member {number|Long} count
+         * @memberof atomic.ContentDirectoryFacet
+         * @instance
+         */
+        ContentDirectoryFacet.prototype.count = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new ContentDirectoryFacet instance using the specified properties.
+         * @function create
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {atomic.ContentDirectoryFacet.$Properties=} [properties] Properties to set
+         * @returns {atomic.ContentDirectoryFacet} ContentDirectoryFacet instance
+         * @type {{
+         *   (properties: atomic.ContentDirectoryFacet.$Shape): atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape;
+         *   (properties?: atomic.ContentDirectoryFacet.$Properties): atomic.ContentDirectoryFacet;
+         * }}
+         */
+        ContentDirectoryFacet.create = function(properties) {
+            return new ContentDirectoryFacet(properties);
+        };
+
+        /**
+         * Encodes the specified ContentDirectoryFacet message. Does not implicitly {@link atomic.ContentDirectoryFacet.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {atomic.ContentDirectoryFacet.$Properties} message ContentDirectoryFacet message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ContentDirectoryFacet.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path") && message.path !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.path);
+            if (message.count != null && $Object.hasOwnProperty.call(message, "count") && (typeof message.count === "object" ? message.count.low || message.count.high : message.count !== 0))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.count);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ContentDirectoryFacet message, length delimited. Does not implicitly {@link atomic.ContentDirectoryFacet.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {atomic.ContentDirectoryFacet.$Properties} message ContentDirectoryFacet message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ContentDirectoryFacet.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a ContentDirectoryFacet message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape} ContentDirectoryFacet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ContentDirectoryFacet.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.ContentDirectoryFacet();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.path = value;
+                        else
+                            delete message.path;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.count = value;
+                        else
+                            delete message.count;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a ContentDirectoryFacet message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape} ContentDirectoryFacet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ContentDirectoryFacet.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a ContentDirectoryFacet message.
+         * @function verify
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ContentDirectoryFacet.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path"))
+                if (!$util.isString(message.path))
+                    return "path: string expected";
+            if (message.count != null && $Object.hasOwnProperty.call(message, "count"))
+                if (!$util.isInteger(message.count) && !(message.count && $util.isInteger(message.count.low) && $util.isInteger(message.count.high)))
+                    return "count: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a ContentDirectoryFacet message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.ContentDirectoryFacet} ContentDirectoryFacet
+         */
+        ContentDirectoryFacet.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.ContentDirectoryFacet)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.ContentDirectoryFacet: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.ContentDirectoryFacet();
+            if (object.path != null)
+                if (typeof object.path !== "string" || object.path.length)
+                    message.path = $String(object.path);
+            if (object.count != null)
+                if (typeof object.count === "object" ? object.count.low || object.count.high : $Number(object.count) !== 0)
+                    if ($util.Long)
+                        message.count = $util.Long.fromValue(object.count, true);
+                    else if (typeof object.count === "string")
+                        message.count = $parseInt(object.count, 10);
+                    else if (typeof object.count === "number")
+                        message.count = object.count;
+                    else if (typeof object.count === "object")
+                        message.count = new $util.LongBits(object.count.low >>> 0, object.count.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ContentDirectoryFacet message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {atomic.ContentDirectoryFacet} message ContentDirectoryFacet
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ContentDirectoryFacet.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.path = "";
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.count = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.count = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path"))
+                object.path = message.path;
+            if (message.count != null && $Object.hasOwnProperty.call(message, "count"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.count = typeof message.count === "number" ? $BigInt(message.count) : $util.Long.fromBits(message.count.low >>> 0, message.count.high >>> 0, true).toBigInt();
+                else if (typeof message.count === "number")
+                    object.count = options.longs === $String ? $String(message.count) : message.count;
+                else
+                    object.count = options.longs === $String ? $util.Long.prototype.toString.call(message.count) : options.longs === $Number ? new $util.LongBits(message.count.low >>> 0, message.count.high >>> 0).toNumber(true) : message.count;
+            return object;
+        };
+
+        /**
+         * Converts this ContentDirectoryFacet to JSON.
+         * @function toJSON
+         * @memberof atomic.ContentDirectoryFacet
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ContentDirectoryFacet.prototype.toJSON = function() {
+            return ContentDirectoryFacet.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for ContentDirectoryFacet
+         * @function getTypeUrl
+         * @memberof atomic.ContentDirectoryFacet
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        ContentDirectoryFacet.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.ContentDirectoryFacet";
+        };
+
+        return ContentDirectoryFacet;
     })();
 
     atomic.GetProjectIdentityRequest = (function() {

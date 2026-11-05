@@ -1371,7 +1371,10 @@ export namespace atomic {
         FILE_STATUS_ADDED = 4,
 
         /** FILE_STATUS_CONFLICTED value */
-        FILE_STATUS_CONFLICTED = 5
+        FILE_STATUS_CONFLICTED = 5,
+
+        /** FILE_STATUS_PENDING_UNTRACK value */
+        FILE_STATUS_PENDING_UNTRACK = 6
     }
 
     /**
@@ -8117,6 +8120,3794 @@ export namespace atomic {
     }
 
     /**
+     * Properties of a PushChangesRequest.
+     * @deprecated Use atomic.PushChangesRequest.$Properties instead.
+     */
+    interface IPushChangesRequest extends atomic.PushChangesRequest.$Properties {
+    }
+
+    /** Represents a PushChangesRequest. */
+    class PushChangesRequest {
+
+        /**
+         * Constructs a new PushChangesRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushChangesRequest.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushChangesRequest repository. */
+        repository?: (atomic.RepositoryRef.$Properties|null);
+
+        /** PushChangesRequest meta. */
+        meta?: (atomic.RequestMeta.$Properties|null);
+
+        /** PushChangesRequest remote. */
+        remote: string;
+
+        /** PushChangesRequest views. */
+        views: string[];
+
+        /** PushChangesRequest expected. */
+        expected?: (atomic.ExpectedState.$Properties|null);
+
+        /** PushChangesRequest toView. */
+        toView?: (string|null);
+
+        /** PushChangesRequest fromView. */
+        fromView?: (string|null);
+
+        /** PushChangesRequest dryRun. */
+        dryRun: boolean;
+
+        /** PushChangesRequest force. */
+        force: boolean;
+
+        /** PushChangesRequest all. */
+        all: boolean;
+
+        /** PushChangesRequest insecure. */
+        insecure: boolean;
+
+        /** PushChangesRequest timeoutSecs. */
+        timeoutSecs: (number|Long);
+
+        /** PushChangesRequest authHeaders. */
+        authHeaders: { [k: string]: string };
+
+        /** PushChangesRequest remoteUrl. */
+        remoteUrl?: (string|null);
+
+        /** PushChangesRequest identity. */
+        identity?: (string|null);
+
+        /**
+         * Creates a new PushChangesRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushChangesRequest instance
+         */
+        static create(properties: atomic.PushChangesRequest.$Shape): atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape;
+        static create(properties?: atomic.PushChangesRequest.$Properties): atomic.PushChangesRequest;
+
+        /**
+         * Encodes the specified PushChangesRequest message. Does not implicitly {@link atomic.PushChangesRequest.verify|verify} messages.
+         * @param message PushChangesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushChangesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushChangesRequest message, length delimited. Does not implicitly {@link atomic.PushChangesRequest.verify|verify} messages.
+         * @param message PushChangesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushChangesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushChangesRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape} PushChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape;
+
+        /**
+         * Decodes a PushChangesRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape} PushChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushChangesRequest & atomic.PushChangesRequest.$Shape;
+
+        /**
+         * Verifies a PushChangesRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushChangesRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushChangesRequest
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushChangesRequest;
+
+        /**
+         * Creates a plain object from a PushChangesRequest message. Also converts values to other types if specified.
+         * @param message PushChangesRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushChangesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushChangesRequest to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushChangesRequest
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushChangesRequest {
+
+        /** Properties of a PushChangesRequest. */
+        interface $Properties {
+
+            /** PushChangesRequest repository */
+            repository?: (atomic.RepositoryRef.$Properties|null);
+
+            /** PushChangesRequest meta */
+            meta?: (atomic.RequestMeta.$Properties|null);
+
+            /** PushChangesRequest remote */
+            remote?: (string|null);
+
+            /** PushChangesRequest views */
+            views?: (string[]|null);
+
+            /** PushChangesRequest expected */
+            expected?: (atomic.ExpectedState.$Properties|null);
+
+            /** PushChangesRequest toView */
+            toView?: (string|null);
+
+            /** PushChangesRequest fromView */
+            fromView?: (string|null);
+
+            /** PushChangesRequest dryRun */
+            dryRun?: (boolean|null);
+
+            /** PushChangesRequest force */
+            force?: (boolean|null);
+
+            /** PushChangesRequest all */
+            all?: (boolean|null);
+
+            /** PushChangesRequest insecure */
+            insecure?: (boolean|null);
+
+            /** PushChangesRequest timeoutSecs */
+            timeoutSecs?: (number|Long|null);
+
+            /** PushChangesRequest authHeaders */
+            authHeaders?: ({ [k: string]: string }|null);
+
+            /** PushChangesRequest remoteUrl */
+            remoteUrl?: (string|null);
+
+            /** PushChangesRequest identity */
+            identity?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushChangesRequest. */
+        type $Shape = {
+          repository?: atomic.RepositoryRef.$Shape|null;
+          meta?: atomic.RequestMeta.$Shape|null;
+          remote?: string|null;
+          views?: string[]|null;
+          expected?: atomic.ExpectedState.$Shape|null;
+          toView?: string|null;
+          fromView?: string|null;
+          dryRun?: boolean|null;
+          force?: boolean|null;
+          all?: boolean|null;
+          insecure?: boolean|null;
+          timeoutSecs?: number|Long|null;
+          authHeaders?: { [k: string]: string }|null;
+          remoteUrl?: string|null;
+          identity?: string|null;
+          $unknowns?: Uint8Array[];
+        };
+    }
+
+    /**
+     * Properties of a PushChangesResponse.
+     * @deprecated Use atomic.PushChangesResponse.$Properties instead.
+     */
+    interface IPushChangesResponse extends atomic.PushChangesResponse.$Properties {
+    }
+
+    /** Represents a PushChangesResponse. */
+    class PushChangesResponse {
+
+        /**
+         * Constructs a new PushChangesResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushChangesResponse.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushChangesResponse pushedChanges. */
+        pushedChanges: (number|Long);
+
+        /** PushChangesResponse manifests. */
+        manifests: string[];
+
+        /** PushChangesResponse meta. */
+        meta?: (atomic.ResponseMeta.$Properties|null);
+
+        /** PushChangesResponse report. */
+        report?: (atomic.PushReport.$Properties|null);
+
+        /** PushChangesResponse conflict. */
+        conflict?: (atomic.PushConflict.$Properties|null);
+
+        /**
+         * Creates a new PushChangesResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushChangesResponse instance
+         */
+        static create(properties: atomic.PushChangesResponse.$Shape): atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape;
+        static create(properties?: atomic.PushChangesResponse.$Properties): atomic.PushChangesResponse;
+
+        /**
+         * Encodes the specified PushChangesResponse message. Does not implicitly {@link atomic.PushChangesResponse.verify|verify} messages.
+         * @param message PushChangesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushChangesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushChangesResponse message, length delimited. Does not implicitly {@link atomic.PushChangesResponse.verify|verify} messages.
+         * @param message PushChangesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushChangesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushChangesResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape} PushChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape;
+
+        /**
+         * Decodes a PushChangesResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape} PushChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushChangesResponse & atomic.PushChangesResponse.$Shape;
+
+        /**
+         * Verifies a PushChangesResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushChangesResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushChangesResponse
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushChangesResponse;
+
+        /**
+         * Creates a plain object from a PushChangesResponse message. Also converts values to other types if specified.
+         * @param message PushChangesResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushChangesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushChangesResponse to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushChangesResponse
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushChangesResponse {
+
+        /** Properties of a PushChangesResponse. */
+        interface $Properties {
+
+            /** PushChangesResponse pushedChanges */
+            pushedChanges?: (number|Long|null);
+
+            /** PushChangesResponse manifests */
+            manifests?: (string[]|null);
+
+            /** PushChangesResponse meta */
+            meta?: (atomic.ResponseMeta.$Properties|null);
+
+            /** PushChangesResponse report */
+            report?: (atomic.PushReport.$Properties|null);
+
+            /** PushChangesResponse conflict */
+            conflict?: (atomic.PushConflict.$Properties|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushChangesResponse. */
+        type $Shape = atomic.PushChangesResponse.$Properties;
+    }
+
+    /**
+     * Properties of a PushReport.
+     * @deprecated Use atomic.PushReport.$Properties instead.
+     */
+    interface IPushReport extends atomic.PushReport.$Properties {
+    }
+
+    /** Represents a PushReport. */
+    class PushReport {
+
+        /**
+         * Constructs a new PushReport.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushReport.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushReport remoteName. */
+        remoteName: string;
+
+        /** PushReport remoteUrl. */
+        remoteUrl: string;
+
+        /** PushReport views. */
+        views: atomic.PushViewReport.$Properties[];
+
+        /** PushReport totalStored. */
+        totalStored: (number|Long);
+
+        /** PushReport viewsDeclared. */
+        viewsDeclared: (number|Long);
+
+        /** PushReport attestations. */
+        attestations: atomic.PushSidecar.$Properties[];
+
+        /** PushReport provenance. */
+        provenance: atomic.PushSidecar.$Properties[];
+
+        /** PushReport tags. */
+        tags: atomic.PushTag.$Properties[];
+
+        /**
+         * Creates a new PushReport instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushReport instance
+         */
+        static create(properties: atomic.PushReport.$Shape): atomic.PushReport & atomic.PushReport.$Shape;
+        static create(properties?: atomic.PushReport.$Properties): atomic.PushReport;
+
+        /**
+         * Encodes the specified PushReport message. Does not implicitly {@link atomic.PushReport.verify|verify} messages.
+         * @param message PushReport message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushReport.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushReport message, length delimited. Does not implicitly {@link atomic.PushReport.verify|verify} messages.
+         * @param message PushReport message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushReport.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushReport message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushReport & atomic.PushReport.$Shape} PushReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushReport & atomic.PushReport.$Shape;
+
+        /**
+         * Decodes a PushReport message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushReport & atomic.PushReport.$Shape} PushReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushReport & atomic.PushReport.$Shape;
+
+        /**
+         * Verifies a PushReport message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushReport message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushReport
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushReport;
+
+        /**
+         * Creates a plain object from a PushReport message. Also converts values to other types if specified.
+         * @param message PushReport
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushReport, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushReport to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushReport
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushReport {
+
+        /** Properties of a PushReport. */
+        interface $Properties {
+
+            /** PushReport remoteName */
+            remoteName?: (string|null);
+
+            /** PushReport remoteUrl */
+            remoteUrl?: (string|null);
+
+            /** PushReport views */
+            views?: (atomic.PushViewReport.$Properties[]|null);
+
+            /** PushReport totalStored */
+            totalStored?: (number|Long|null);
+
+            /** PushReport viewsDeclared */
+            viewsDeclared?: (number|Long|null);
+
+            /** PushReport attestations */
+            attestations?: (atomic.PushSidecar.$Properties[]|null);
+
+            /** PushReport provenance */
+            provenance?: (atomic.PushSidecar.$Properties[]|null);
+
+            /** PushReport tags */
+            tags?: (atomic.PushTag.$Properties[]|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushReport. */
+        type $Shape = atomic.PushReport.$Properties;
+    }
+
+    /**
+     * Properties of a PushViewReport.
+     * @deprecated Use atomic.PushViewReport.$Properties instead.
+     */
+    interface IPushViewReport extends atomic.PushViewReport.$Properties {
+    }
+
+    /** Represents a PushViewReport. */
+    class PushViewReport {
+
+        /**
+         * Constructs a new PushViewReport.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushViewReport.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushViewReport remoteName. */
+        remoteName: string;
+
+        /** PushViewReport scope. */
+        scope: string;
+
+        /** PushViewReport parent. */
+        parent?: (string|null);
+
+        /** PushViewReport existsOnRemote. */
+        existsOnRemote: boolean;
+
+        /** PushViewReport remoteChangeCount. */
+        remoteChangeCount: (number|Long);
+
+        /** PushViewReport noop. */
+        noop: boolean;
+
+        /** PushViewReport shrink. */
+        shrink: boolean;
+
+        /** PushViewReport forced. */
+        forced: boolean;
+
+        /** PushViewReport toStore. */
+        toStore: atomic.PushChange.$Properties[];
+
+        /** PushViewReport logCount. */
+        logCount: (number|Long);
+
+        /** PushViewReport declared. */
+        declared: boolean;
+
+        /**
+         * Creates a new PushViewReport instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushViewReport instance
+         */
+        static create(properties: atomic.PushViewReport.$Shape): atomic.PushViewReport & atomic.PushViewReport.$Shape;
+        static create(properties?: atomic.PushViewReport.$Properties): atomic.PushViewReport;
+
+        /**
+         * Encodes the specified PushViewReport message. Does not implicitly {@link atomic.PushViewReport.verify|verify} messages.
+         * @param message PushViewReport message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushViewReport.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushViewReport message, length delimited. Does not implicitly {@link atomic.PushViewReport.verify|verify} messages.
+         * @param message PushViewReport message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushViewReport.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushViewReport message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushViewReport & atomic.PushViewReport.$Shape} PushViewReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushViewReport & atomic.PushViewReport.$Shape;
+
+        /**
+         * Decodes a PushViewReport message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushViewReport & atomic.PushViewReport.$Shape} PushViewReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushViewReport & atomic.PushViewReport.$Shape;
+
+        /**
+         * Verifies a PushViewReport message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushViewReport message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushViewReport
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushViewReport;
+
+        /**
+         * Creates a plain object from a PushViewReport message. Also converts values to other types if specified.
+         * @param message PushViewReport
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushViewReport, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushViewReport to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushViewReport
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushViewReport {
+
+        /** Properties of a PushViewReport. */
+        interface $Properties {
+
+            /** PushViewReport remoteName */
+            remoteName?: (string|null);
+
+            /** PushViewReport scope */
+            scope?: (string|null);
+
+            /** PushViewReport parent */
+            parent?: (string|null);
+
+            /** PushViewReport existsOnRemote */
+            existsOnRemote?: (boolean|null);
+
+            /** PushViewReport remoteChangeCount */
+            remoteChangeCount?: (number|Long|null);
+
+            /** PushViewReport noop */
+            noop?: (boolean|null);
+
+            /** PushViewReport shrink */
+            shrink?: (boolean|null);
+
+            /** PushViewReport forced */
+            forced?: (boolean|null);
+
+            /** PushViewReport toStore */
+            toStore?: (atomic.PushChange.$Properties[]|null);
+
+            /** PushViewReport logCount */
+            logCount?: (number|Long|null);
+
+            /** PushViewReport declared */
+            declared?: (boolean|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushViewReport. */
+        type $Shape = atomic.PushViewReport.$Properties;
+    }
+
+    /**
+     * Properties of a PushChange.
+     * @deprecated Use atomic.PushChange.$Properties instead.
+     */
+    interface IPushChange extends atomic.PushChange.$Properties {
+    }
+
+    /** Represents a PushChange. */
+    class PushChange {
+
+        /**
+         * Constructs a new PushChange.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushChange.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushChange hash. */
+        hash?: (atomic.Hash.$Properties|null);
+
+        /** PushChange message. */
+        message?: (string|null);
+
+        /**
+         * Creates a new PushChange instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushChange instance
+         */
+        static create(properties: atomic.PushChange.$Shape): atomic.PushChange & atomic.PushChange.$Shape;
+        static create(properties?: atomic.PushChange.$Properties): atomic.PushChange;
+
+        /**
+         * Encodes the specified PushChange message. Does not implicitly {@link atomic.PushChange.verify|verify} messages.
+         * @param message PushChange message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushChange.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushChange message, length delimited. Does not implicitly {@link atomic.PushChange.verify|verify} messages.
+         * @param message PushChange message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushChange.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushChange message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushChange & atomic.PushChange.$Shape} PushChange
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushChange & atomic.PushChange.$Shape;
+
+        /**
+         * Decodes a PushChange message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushChange & atomic.PushChange.$Shape} PushChange
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushChange & atomic.PushChange.$Shape;
+
+        /**
+         * Verifies a PushChange message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushChange message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushChange
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushChange;
+
+        /**
+         * Creates a plain object from a PushChange message. Also converts values to other types if specified.
+         * @param message PushChange
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushChange, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushChange to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushChange
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushChange {
+
+        /** Properties of a PushChange. */
+        interface $Properties {
+
+            /** PushChange hash */
+            hash?: (atomic.Hash.$Properties|null);
+
+            /** PushChange message */
+            message?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushChange. */
+        type $Shape = atomic.PushChange.$Properties;
+    }
+
+    /**
+     * Properties of a PushSidecar.
+     * @deprecated Use atomic.PushSidecar.$Properties instead.
+     */
+    interface IPushSidecar extends atomic.PushSidecar.$Properties {
+    }
+
+    /** Represents a PushSidecar. */
+    class PushSidecar {
+
+        /**
+         * Constructs a new PushSidecar.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushSidecar.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushSidecar hash. */
+        hash?: (atomic.Hash.$Properties|null);
+
+        /** PushSidecar cost. */
+        cost?: (string|null);
+
+        /** PushSidecar covered. */
+        covered: (number|Long);
+
+        /** PushSidecar nodes. */
+        nodes: (number|Long);
+
+        /** PushSidecar explained. */
+        explained: (number|Long);
+
+        /**
+         * Creates a new PushSidecar instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushSidecar instance
+         */
+        static create(properties: atomic.PushSidecar.$Shape): atomic.PushSidecar & atomic.PushSidecar.$Shape;
+        static create(properties?: atomic.PushSidecar.$Properties): atomic.PushSidecar;
+
+        /**
+         * Encodes the specified PushSidecar message. Does not implicitly {@link atomic.PushSidecar.verify|verify} messages.
+         * @param message PushSidecar message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushSidecar.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushSidecar message, length delimited. Does not implicitly {@link atomic.PushSidecar.verify|verify} messages.
+         * @param message PushSidecar message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushSidecar.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushSidecar message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushSidecar & atomic.PushSidecar.$Shape} PushSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushSidecar & atomic.PushSidecar.$Shape;
+
+        /**
+         * Decodes a PushSidecar message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushSidecar & atomic.PushSidecar.$Shape} PushSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushSidecar & atomic.PushSidecar.$Shape;
+
+        /**
+         * Verifies a PushSidecar message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushSidecar message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushSidecar
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushSidecar;
+
+        /**
+         * Creates a plain object from a PushSidecar message. Also converts values to other types if specified.
+         * @param message PushSidecar
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushSidecar, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushSidecar to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushSidecar
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushSidecar {
+
+        /** Properties of a PushSidecar. */
+        interface $Properties {
+
+            /** PushSidecar hash */
+            hash?: (atomic.Hash.$Properties|null);
+
+            /** PushSidecar cost */
+            cost?: (string|null);
+
+            /** PushSidecar covered */
+            covered?: (number|Long|null);
+
+            /** PushSidecar nodes */
+            nodes?: (number|Long|null);
+
+            /** PushSidecar explained */
+            explained?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushSidecar. */
+        type $Shape = atomic.PushSidecar.$Properties;
+    }
+
+    /**
+     * Properties of a PushTag.
+     * @deprecated Use atomic.PushTag.$Properties instead.
+     */
+    interface IPushTag extends atomic.PushTag.$Properties {
+    }
+
+    /** Represents a PushTag. */
+    class PushTag {
+
+        /**
+         * Constructs a new PushTag.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushTag.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushTag hash. */
+        hash?: (atomic.Hash.$Properties|null);
+
+        /** PushTag name. */
+        name: string;
+
+        /** PushTag kind. */
+        kind: string;
+
+        /**
+         * Creates a new PushTag instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushTag instance
+         */
+        static create(properties: atomic.PushTag.$Shape): atomic.PushTag & atomic.PushTag.$Shape;
+        static create(properties?: atomic.PushTag.$Properties): atomic.PushTag;
+
+        /**
+         * Encodes the specified PushTag message. Does not implicitly {@link atomic.PushTag.verify|verify} messages.
+         * @param message PushTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushTag.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushTag message, length delimited. Does not implicitly {@link atomic.PushTag.verify|verify} messages.
+         * @param message PushTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushTag.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushTag message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushTag & atomic.PushTag.$Shape} PushTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushTag & atomic.PushTag.$Shape;
+
+        /**
+         * Decodes a PushTag message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushTag & atomic.PushTag.$Shape} PushTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushTag & atomic.PushTag.$Shape;
+
+        /**
+         * Verifies a PushTag message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushTag message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushTag
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushTag;
+
+        /**
+         * Creates a plain object from a PushTag message. Also converts values to other types if specified.
+         * @param message PushTag
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushTag, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushTag to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushTag
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushTag {
+
+        /** Properties of a PushTag. */
+        interface $Properties {
+
+            /** PushTag hash */
+            hash?: (atomic.Hash.$Properties|null);
+
+            /** PushTag name */
+            name?: (string|null);
+
+            /** PushTag kind */
+            kind?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushTag. */
+        type $Shape = atomic.PushTag.$Properties;
+    }
+
+    /**
+     * Properties of a PushConflict.
+     * @deprecated Use atomic.PushConflict.$Properties instead.
+     */
+    interface IPushConflict extends atomic.PushConflict.$Properties {
+    }
+
+    /** Represents a PushConflict. */
+    class PushConflict {
+
+        /**
+         * Constructs a new PushConflict.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PushConflict.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PushConflict view. */
+        view: string;
+
+        /** PushConflict identityMismatch. */
+        identityMismatch: boolean;
+
+        /** PushConflict description. */
+        description: string;
+
+        /** PushConflict local. */
+        local?: (atomic.ManifestState.$Properties|null);
+
+        /** PushConflict remote. */
+        remote?: (atomic.ManifestState.$Properties|null);
+
+        /**
+         * Creates a new PushConflict instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PushConflict instance
+         */
+        static create(properties: atomic.PushConflict.$Shape): atomic.PushConflict & atomic.PushConflict.$Shape;
+        static create(properties?: atomic.PushConflict.$Properties): atomic.PushConflict;
+
+        /**
+         * Encodes the specified PushConflict message. Does not implicitly {@link atomic.PushConflict.verify|verify} messages.
+         * @param message PushConflict message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PushConflict.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PushConflict message, length delimited. Does not implicitly {@link atomic.PushConflict.verify|verify} messages.
+         * @param message PushConflict message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PushConflict.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PushConflict message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PushConflict & atomic.PushConflict.$Shape} PushConflict
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PushConflict & atomic.PushConflict.$Shape;
+
+        /**
+         * Decodes a PushConflict message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PushConflict & atomic.PushConflict.$Shape} PushConflict
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PushConflict & atomic.PushConflict.$Shape;
+
+        /**
+         * Verifies a PushConflict message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PushConflict message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PushConflict
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PushConflict;
+
+        /**
+         * Creates a plain object from a PushConflict message. Also converts values to other types if specified.
+         * @param message PushConflict
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PushConflict, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PushConflict to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PushConflict
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PushConflict {
+
+        /** Properties of a PushConflict. */
+        interface $Properties {
+
+            /** PushConflict view */
+            view?: (string|null);
+
+            /** PushConflict identityMismatch */
+            identityMismatch?: (boolean|null);
+
+            /** PushConflict description */
+            description?: (string|null);
+
+            /** PushConflict local */
+            local?: (atomic.ManifestState.$Properties|null);
+
+            /** PushConflict remote */
+            remote?: (atomic.ManifestState.$Properties|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PushConflict. */
+        type $Shape = atomic.PushConflict.$Properties;
+    }
+
+    /**
+     * Properties of a ManifestState.
+     * @deprecated Use atomic.ManifestState.$Properties instead.
+     */
+    interface IManifestState extends atomic.ManifestState.$Properties {
+    }
+
+    /** Represents a ManifestState. */
+    class ManifestState {
+
+        /**
+         * Constructs a new ManifestState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ManifestState.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ManifestState view. */
+        view: string;
+
+        /** ManifestState state. */
+        state: string;
+
+        /** ManifestState changeCount. */
+        changeCount: (number|Long);
+
+        /**
+         * Creates a new ManifestState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ManifestState instance
+         */
+        static create(properties: atomic.ManifestState.$Shape): atomic.ManifestState & atomic.ManifestState.$Shape;
+        static create(properties?: atomic.ManifestState.$Properties): atomic.ManifestState;
+
+        /**
+         * Encodes the specified ManifestState message. Does not implicitly {@link atomic.ManifestState.verify|verify} messages.
+         * @param message ManifestState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ManifestState.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ManifestState message, length delimited. Does not implicitly {@link atomic.ManifestState.verify|verify} messages.
+         * @param message ManifestState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ManifestState.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ManifestState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ManifestState & atomic.ManifestState.$Shape} ManifestState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ManifestState & atomic.ManifestState.$Shape;
+
+        /**
+         * Decodes a ManifestState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ManifestState & atomic.ManifestState.$Shape} ManifestState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ManifestState & atomic.ManifestState.$Shape;
+
+        /**
+         * Verifies a ManifestState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ManifestState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ManifestState
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ManifestState;
+
+        /**
+         * Creates a plain object from a ManifestState message. Also converts values to other types if specified.
+         * @param message ManifestState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ManifestState, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ManifestState to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ManifestState
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ManifestState {
+
+        /** Properties of a ManifestState. */
+        interface $Properties {
+
+            /** ManifestState view */
+            view?: (string|null);
+
+            /** ManifestState state */
+            state?: (string|null);
+
+            /** ManifestState changeCount */
+            changeCount?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ManifestState. */
+        type $Shape = atomic.ManifestState.$Properties;
+    }
+
+    /**
+     * Properties of a PullChangesRequest.
+     * @deprecated Use atomic.PullChangesRequest.$Properties instead.
+     */
+    interface IPullChangesRequest extends atomic.PullChangesRequest.$Properties {
+    }
+
+    /** Represents a PullChangesRequest. */
+    class PullChangesRequest {
+
+        /**
+         * Constructs a new PullChangesRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullChangesRequest.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullChangesRequest repository. */
+        repository?: (atomic.RepositoryRef.$Properties|null);
+
+        /** PullChangesRequest meta. */
+        meta?: (atomic.RequestMeta.$Properties|null);
+
+        /** PullChangesRequest remote. */
+        remote: string;
+
+        /** PullChangesRequest importSidecars. */
+        importSidecars: boolean;
+
+        /** PullChangesRequest toView. */
+        toView?: (string|null);
+
+        /** PullChangesRequest fromView. */
+        fromView?: (string|null);
+
+        /** PullChangesRequest dryRun. */
+        dryRun: boolean;
+
+        /** PullChangesRequest all. */
+        all: boolean;
+
+        /** PullChangesRequest insecure. */
+        insecure: boolean;
+
+        /** PullChangesRequest timeoutSecs. */
+        timeoutSecs: (number|Long);
+
+        /** PullChangesRequest identity. */
+        identity?: (string|null);
+
+        /** PullChangesRequest downloadOnly. */
+        downloadOnly: boolean;
+
+        /** PullChangesRequest authHeaders. */
+        authHeaders: { [k: string]: string };
+
+        /** PullChangesRequest remoteUrl. */
+        remoteUrl?: (string|null);
+
+        /**
+         * Creates a new PullChangesRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullChangesRequest instance
+         */
+        static create(properties: atomic.PullChangesRequest.$Shape): atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape;
+        static create(properties?: atomic.PullChangesRequest.$Properties): atomic.PullChangesRequest;
+
+        /**
+         * Encodes the specified PullChangesRequest message. Does not implicitly {@link atomic.PullChangesRequest.verify|verify} messages.
+         * @param message PullChangesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullChangesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullChangesRequest message, length delimited. Does not implicitly {@link atomic.PullChangesRequest.verify|verify} messages.
+         * @param message PullChangesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullChangesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullChangesRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape} PullChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape;
+
+        /**
+         * Decodes a PullChangesRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape} PullChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullChangesRequest & atomic.PullChangesRequest.$Shape;
+
+        /**
+         * Verifies a PullChangesRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullChangesRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullChangesRequest
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullChangesRequest;
+
+        /**
+         * Creates a plain object from a PullChangesRequest message. Also converts values to other types if specified.
+         * @param message PullChangesRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullChangesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullChangesRequest to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullChangesRequest
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullChangesRequest {
+
+        /** Properties of a PullChangesRequest. */
+        interface $Properties {
+
+            /** PullChangesRequest repository */
+            repository?: (atomic.RepositoryRef.$Properties|null);
+
+            /** PullChangesRequest meta */
+            meta?: (atomic.RequestMeta.$Properties|null);
+
+            /** PullChangesRequest remote */
+            remote?: (string|null);
+
+            /** PullChangesRequest importSidecars */
+            importSidecars?: (boolean|null);
+
+            /** PullChangesRequest toView */
+            toView?: (string|null);
+
+            /** PullChangesRequest fromView */
+            fromView?: (string|null);
+
+            /** PullChangesRequest dryRun */
+            dryRun?: (boolean|null);
+
+            /** PullChangesRequest all */
+            all?: (boolean|null);
+
+            /** PullChangesRequest insecure */
+            insecure?: (boolean|null);
+
+            /** PullChangesRequest timeoutSecs */
+            timeoutSecs?: (number|Long|null);
+
+            /** PullChangesRequest identity */
+            identity?: (string|null);
+
+            /** PullChangesRequest downloadOnly */
+            downloadOnly?: (boolean|null);
+
+            /** PullChangesRequest authHeaders */
+            authHeaders?: ({ [k: string]: string }|null);
+
+            /** PullChangesRequest remoteUrl */
+            remoteUrl?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullChangesRequest. */
+        type $Shape = atomic.PullChangesRequest.$Properties;
+    }
+
+    /**
+     * Properties of a PullChangesResponse.
+     * @deprecated Use atomic.PullChangesResponse.$Properties instead.
+     */
+    interface IPullChangesResponse extends atomic.PullChangesResponse.$Properties {
+    }
+
+    /** Represents a PullChangesResponse. */
+    class PullChangesResponse {
+
+        /**
+         * Constructs a new PullChangesResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullChangesResponse.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullChangesResponse appliedChanges. */
+        appliedChanges: (number|Long);
+
+        /** PullChangesResponse updatedViews. */
+        updatedViews: string[];
+
+        /** PullChangesResponse meta. */
+        meta?: (atomic.ResponseMeta.$Properties|null);
+
+        /** PullChangesResponse report. */
+        report?: (atomic.PullReport.$Properties|null);
+
+        /**
+         * Creates a new PullChangesResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullChangesResponse instance
+         */
+        static create(properties: atomic.PullChangesResponse.$Shape): atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape;
+        static create(properties?: atomic.PullChangesResponse.$Properties): atomic.PullChangesResponse;
+
+        /**
+         * Encodes the specified PullChangesResponse message. Does not implicitly {@link atomic.PullChangesResponse.verify|verify} messages.
+         * @param message PullChangesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullChangesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullChangesResponse message, length delimited. Does not implicitly {@link atomic.PullChangesResponse.verify|verify} messages.
+         * @param message PullChangesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullChangesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullChangesResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape} PullChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape;
+
+        /**
+         * Decodes a PullChangesResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape} PullChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullChangesResponse & atomic.PullChangesResponse.$Shape;
+
+        /**
+         * Verifies a PullChangesResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullChangesResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullChangesResponse
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullChangesResponse;
+
+        /**
+         * Creates a plain object from a PullChangesResponse message. Also converts values to other types if specified.
+         * @param message PullChangesResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullChangesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullChangesResponse to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullChangesResponse
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullChangesResponse {
+
+        /** Properties of a PullChangesResponse. */
+        interface $Properties {
+
+            /** PullChangesResponse appliedChanges */
+            appliedChanges?: (number|Long|null);
+
+            /** PullChangesResponse updatedViews */
+            updatedViews?: (string[]|null);
+
+            /** PullChangesResponse meta */
+            meta?: (atomic.ResponseMeta.$Properties|null);
+
+            /** PullChangesResponse report */
+            report?: (atomic.PullReport.$Properties|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullChangesResponse. */
+        type $Shape = atomic.PullChangesResponse.$Properties;
+    }
+
+    /**
+     * Properties of a PullReport.
+     * @deprecated Use atomic.PullReport.$Properties instead.
+     */
+    interface IPullReport extends atomic.PullReport.$Properties {
+    }
+
+    /** Represents a PullReport. */
+    class PullReport {
+
+        /**
+         * Constructs a new PullReport.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullReport.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullReport remoteName. */
+        remoteName: string;
+
+        /** PullReport remoteUrl. */
+        remoteUrl: string;
+
+        /** PullReport remoteView. */
+        remoteView: string;
+
+        /** PullReport localView. */
+        localView: string;
+
+        /** PullReport localViewChanges. */
+        localViewChanges: (number|Long);
+
+        /** PullReport graphObjects. */
+        graphObjects: (number|Long);
+
+        /** PullReport remoteChanges. */
+        remoteChanges: (number|Long);
+
+        /** PullReport remoteState. */
+        remoteState?: (string|null);
+
+        /** PullReport localOnly. */
+        localOnly: string[];
+
+        /** PullReport downloads. */
+        downloads: atomic.PullDownload.$Properties[];
+
+        /** PullReport changesDownloaded. */
+        changesDownloaded: (number|Long);
+
+        /** PullReport bytesTransferred. */
+        bytesTransferred: (number|Long);
+
+        /** PullReport applied. */
+        applied: boolean;
+
+        /** PullReport appliedChanges. */
+        appliedChanges: (number|Long);
+
+        /** PullReport applyErrors. */
+        applyErrors: string[];
+
+        /** PullReport sidecars. */
+        sidecars: atomic.PullSidecar.$Properties[];
+
+        /** PullReport setIdVerified. */
+        setIdVerified: boolean;
+
+        /** PullReport setIdWarning. */
+        setIdWarning?: (string|null);
+
+        /** PullReport materialized. */
+        materialized: boolean;
+
+        /** PullReport filesWritten. */
+        filesWritten: (number|Long);
+
+        /** PullReport materializeError. */
+        materializeError?: (string|null);
+
+        /** PullReport tags. */
+        tags: atomic.PullTag.$Properties[];
+
+        /** PullReport warnings. */
+        warnings: atomic.PullWarning.$Properties[];
+
+        /** PullReport localTip. */
+        localTip?: (string|null);
+
+        /** PullReport vaultBootstrapped. */
+        vaultBootstrapped: boolean;
+
+        /** PullReport reconciledViews. */
+        reconciledViews: (number|Long);
+
+        /** PullReport downloadOnly. */
+        downloadOnly: boolean;
+
+        /** PullReport changesFailed. */
+        changesFailed: (number|Long);
+
+        /**
+         * Creates a new PullReport instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullReport instance
+         */
+        static create(properties: atomic.PullReport.$Shape): atomic.PullReport & atomic.PullReport.$Shape;
+        static create(properties?: atomic.PullReport.$Properties): atomic.PullReport;
+
+        /**
+         * Encodes the specified PullReport message. Does not implicitly {@link atomic.PullReport.verify|verify} messages.
+         * @param message PullReport message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullReport.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullReport message, length delimited. Does not implicitly {@link atomic.PullReport.verify|verify} messages.
+         * @param message PullReport message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullReport.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullReport message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullReport & atomic.PullReport.$Shape} PullReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullReport & atomic.PullReport.$Shape;
+
+        /**
+         * Decodes a PullReport message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullReport & atomic.PullReport.$Shape} PullReport
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullReport & atomic.PullReport.$Shape;
+
+        /**
+         * Verifies a PullReport message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullReport message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullReport
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullReport;
+
+        /**
+         * Creates a plain object from a PullReport message. Also converts values to other types if specified.
+         * @param message PullReport
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullReport, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullReport to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullReport
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullReport {
+
+        /** Properties of a PullReport. */
+        interface $Properties {
+
+            /** PullReport remoteName */
+            remoteName?: (string|null);
+
+            /** PullReport remoteUrl */
+            remoteUrl?: (string|null);
+
+            /** PullReport remoteView */
+            remoteView?: (string|null);
+
+            /** PullReport localView */
+            localView?: (string|null);
+
+            /** PullReport localViewChanges */
+            localViewChanges?: (number|Long|null);
+
+            /** PullReport graphObjects */
+            graphObjects?: (number|Long|null);
+
+            /** PullReport remoteChanges */
+            remoteChanges?: (number|Long|null);
+
+            /** PullReport remoteState */
+            remoteState?: (string|null);
+
+            /** PullReport localOnly */
+            localOnly?: (string[]|null);
+
+            /** PullReport downloads */
+            downloads?: (atomic.PullDownload.$Properties[]|null);
+
+            /** PullReport changesDownloaded */
+            changesDownloaded?: (number|Long|null);
+
+            /** PullReport bytesTransferred */
+            bytesTransferred?: (number|Long|null);
+
+            /** PullReport applied */
+            applied?: (boolean|null);
+
+            /** PullReport appliedChanges */
+            appliedChanges?: (number|Long|null);
+
+            /** PullReport applyErrors */
+            applyErrors?: (string[]|null);
+
+            /** PullReport sidecars */
+            sidecars?: (atomic.PullSidecar.$Properties[]|null);
+
+            /** PullReport setIdVerified */
+            setIdVerified?: (boolean|null);
+
+            /** PullReport setIdWarning */
+            setIdWarning?: (string|null);
+
+            /** PullReport materialized */
+            materialized?: (boolean|null);
+
+            /** PullReport filesWritten */
+            filesWritten?: (number|Long|null);
+
+            /** PullReport materializeError */
+            materializeError?: (string|null);
+
+            /** PullReport tags */
+            tags?: (atomic.PullTag.$Properties[]|null);
+
+            /** PullReport warnings */
+            warnings?: (atomic.PullWarning.$Properties[]|null);
+
+            /** PullReport localTip */
+            localTip?: (string|null);
+
+            /** PullReport vaultBootstrapped */
+            vaultBootstrapped?: (boolean|null);
+
+            /** PullReport reconciledViews */
+            reconciledViews?: (number|Long|null);
+
+            /** PullReport downloadOnly */
+            downloadOnly?: (boolean|null);
+
+            /** PullReport changesFailed */
+            changesFailed?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullReport. */
+        type $Shape = atomic.PullReport.$Properties;
+    }
+
+    /**
+     * Properties of a PullDownload.
+     * @deprecated Use atomic.PullDownload.$Properties instead.
+     */
+    interface IPullDownload extends atomic.PullDownload.$Properties {
+    }
+
+    /** Represents a PullDownload. */
+    class PullDownload {
+
+        /**
+         * Constructs a new PullDownload.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullDownload.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullDownload hash. */
+        hash?: (atomic.Hash.$Properties|null);
+
+        /** PullDownload message. */
+        message?: (string|null);
+
+        /** PullDownload ok. */
+        ok: boolean;
+
+        /** PullDownload error. */
+        error?: (string|null);
+
+        /** PullDownload index. */
+        index: (number|Long);
+
+        /** PullDownload total. */
+        total: (number|Long);
+
+        /**
+         * Creates a new PullDownload instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullDownload instance
+         */
+        static create(properties: atomic.PullDownload.$Shape): atomic.PullDownload & atomic.PullDownload.$Shape;
+        static create(properties?: atomic.PullDownload.$Properties): atomic.PullDownload;
+
+        /**
+         * Encodes the specified PullDownload message. Does not implicitly {@link atomic.PullDownload.verify|verify} messages.
+         * @param message PullDownload message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullDownload.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullDownload message, length delimited. Does not implicitly {@link atomic.PullDownload.verify|verify} messages.
+         * @param message PullDownload message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullDownload.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullDownload message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullDownload & atomic.PullDownload.$Shape} PullDownload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullDownload & atomic.PullDownload.$Shape;
+
+        /**
+         * Decodes a PullDownload message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullDownload & atomic.PullDownload.$Shape} PullDownload
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullDownload & atomic.PullDownload.$Shape;
+
+        /**
+         * Verifies a PullDownload message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullDownload message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullDownload
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullDownload;
+
+        /**
+         * Creates a plain object from a PullDownload message. Also converts values to other types if specified.
+         * @param message PullDownload
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullDownload, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullDownload to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullDownload
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullDownload {
+
+        /** Properties of a PullDownload. */
+        interface $Properties {
+
+            /** PullDownload hash */
+            hash?: (atomic.Hash.$Properties|null);
+
+            /** PullDownload message */
+            message?: (string|null);
+
+            /** PullDownload ok */
+            ok?: (boolean|null);
+
+            /** PullDownload error */
+            error?: (string|null);
+
+            /** PullDownload index */
+            index?: (number|Long|null);
+
+            /** PullDownload total */
+            total?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullDownload. */
+        type $Shape = atomic.PullDownload.$Properties;
+    }
+
+    /**
+     * Properties of a PullSidecar.
+     * @deprecated Use atomic.PullSidecar.$Properties instead.
+     */
+    interface IPullSidecar extends atomic.PullSidecar.$Properties {
+    }
+
+    /** Represents a PullSidecar. */
+    class PullSidecar {
+
+        /**
+         * Constructs a new PullSidecar.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullSidecar.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullSidecar kind. */
+        kind: string;
+
+        /** PullSidecar count. */
+        count: (number|Long);
+
+        /** PullSidecar detail. */
+        detail?: (string|null);
+
+        /**
+         * Creates a new PullSidecar instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullSidecar instance
+         */
+        static create(properties: atomic.PullSidecar.$Shape): atomic.PullSidecar & atomic.PullSidecar.$Shape;
+        static create(properties?: atomic.PullSidecar.$Properties): atomic.PullSidecar;
+
+        /**
+         * Encodes the specified PullSidecar message. Does not implicitly {@link atomic.PullSidecar.verify|verify} messages.
+         * @param message PullSidecar message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullSidecar.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullSidecar message, length delimited. Does not implicitly {@link atomic.PullSidecar.verify|verify} messages.
+         * @param message PullSidecar message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullSidecar.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullSidecar message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullSidecar & atomic.PullSidecar.$Shape} PullSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullSidecar & atomic.PullSidecar.$Shape;
+
+        /**
+         * Decodes a PullSidecar message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullSidecar & atomic.PullSidecar.$Shape} PullSidecar
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullSidecar & atomic.PullSidecar.$Shape;
+
+        /**
+         * Verifies a PullSidecar message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullSidecar message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullSidecar
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullSidecar;
+
+        /**
+         * Creates a plain object from a PullSidecar message. Also converts values to other types if specified.
+         * @param message PullSidecar
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullSidecar, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullSidecar to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullSidecar
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullSidecar {
+
+        /** Properties of a PullSidecar. */
+        interface $Properties {
+
+            /** PullSidecar kind */
+            kind?: (string|null);
+
+            /** PullSidecar count */
+            count?: (number|Long|null);
+
+            /** PullSidecar detail */
+            detail?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullSidecar. */
+        type $Shape = atomic.PullSidecar.$Properties;
+    }
+
+    /**
+     * Properties of a PullTag.
+     * @deprecated Use atomic.PullTag.$Properties instead.
+     */
+    interface IPullTag extends atomic.PullTag.$Properties {
+    }
+
+    /** Represents a PullTag. */
+    class PullTag {
+
+        /**
+         * Constructs a new PullTag.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullTag.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullTag name. */
+        name: string;
+
+        /** PullTag kind. */
+        kind: string;
+
+        /**
+         * Creates a new PullTag instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullTag instance
+         */
+        static create(properties: atomic.PullTag.$Shape): atomic.PullTag & atomic.PullTag.$Shape;
+        static create(properties?: atomic.PullTag.$Properties): atomic.PullTag;
+
+        /**
+         * Encodes the specified PullTag message. Does not implicitly {@link atomic.PullTag.verify|verify} messages.
+         * @param message PullTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullTag.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullTag message, length delimited. Does not implicitly {@link atomic.PullTag.verify|verify} messages.
+         * @param message PullTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullTag.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullTag message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullTag & atomic.PullTag.$Shape} PullTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullTag & atomic.PullTag.$Shape;
+
+        /**
+         * Decodes a PullTag message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullTag & atomic.PullTag.$Shape} PullTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullTag & atomic.PullTag.$Shape;
+
+        /**
+         * Verifies a PullTag message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullTag message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullTag
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullTag;
+
+        /**
+         * Creates a plain object from a PullTag message. Also converts values to other types if specified.
+         * @param message PullTag
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullTag, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullTag to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullTag
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullTag {
+
+        /** Properties of a PullTag. */
+        interface $Properties {
+
+            /** PullTag name */
+            name?: (string|null);
+
+            /** PullTag kind */
+            kind?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullTag. */
+        type $Shape = atomic.PullTag.$Properties;
+    }
+
+    /**
+     * Properties of a PullWarning.
+     * @deprecated Use atomic.PullWarning.$Properties instead.
+     */
+    interface IPullWarning extends atomic.PullWarning.$Properties {
+    }
+
+    /** Represents a PullWarning. */
+    class PullWarning {
+
+        /**
+         * Constructs a new PullWarning.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PullWarning.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** PullWarning text. */
+        text: string;
+
+        /**
+         * Creates a new PullWarning instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PullWarning instance
+         */
+        static create(properties: atomic.PullWarning.$Shape): atomic.PullWarning & atomic.PullWarning.$Shape;
+        static create(properties?: atomic.PullWarning.$Properties): atomic.PullWarning;
+
+        /**
+         * Encodes the specified PullWarning message. Does not implicitly {@link atomic.PullWarning.verify|verify} messages.
+         * @param message PullWarning message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PullWarning.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PullWarning message, length delimited. Does not implicitly {@link atomic.PullWarning.verify|verify} messages.
+         * @param message PullWarning message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PullWarning.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PullWarning message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PullWarning & atomic.PullWarning.$Shape} PullWarning
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PullWarning & atomic.PullWarning.$Shape;
+
+        /**
+         * Decodes a PullWarning message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PullWarning & atomic.PullWarning.$Shape} PullWarning
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PullWarning & atomic.PullWarning.$Shape;
+
+        /**
+         * Verifies a PullWarning message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PullWarning message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PullWarning
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PullWarning;
+
+        /**
+         * Creates a plain object from a PullWarning message. Also converts values to other types if specified.
+         * @param message PullWarning
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PullWarning, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PullWarning to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PullWarning
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PullWarning {
+
+        /** Properties of a PullWarning. */
+        interface $Properties {
+
+            /** PullWarning text */
+            text?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PullWarning. */
+        type $Shape = atomic.PullWarning.$Properties;
+    }
+
+    /**
+     * Properties of a ListRemotesRequest.
+     * @deprecated Use atomic.ListRemotesRequest.$Properties instead.
+     */
+    interface IListRemotesRequest extends atomic.ListRemotesRequest.$Properties {
+    }
+
+    /** Represents a ListRemotesRequest. */
+    class ListRemotesRequest {
+
+        /**
+         * Constructs a new ListRemotesRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ListRemotesRequest.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ListRemotesRequest repository. */
+        repository?: (atomic.RepositoryRef.$Properties|null);
+
+        /**
+         * Creates a new ListRemotesRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ListRemotesRequest instance
+         */
+        static create(properties: atomic.ListRemotesRequest.$Shape): atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape;
+        static create(properties?: atomic.ListRemotesRequest.$Properties): atomic.ListRemotesRequest;
+
+        /**
+         * Encodes the specified ListRemotesRequest message. Does not implicitly {@link atomic.ListRemotesRequest.verify|verify} messages.
+         * @param message ListRemotesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ListRemotesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ListRemotesRequest message, length delimited. Does not implicitly {@link atomic.ListRemotesRequest.verify|verify} messages.
+         * @param message ListRemotesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ListRemotesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ListRemotesRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape} ListRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape;
+
+        /**
+         * Decodes a ListRemotesRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape} ListRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ListRemotesRequest & atomic.ListRemotesRequest.$Shape;
+
+        /**
+         * Verifies a ListRemotesRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ListRemotesRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ListRemotesRequest
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ListRemotesRequest;
+
+        /**
+         * Creates a plain object from a ListRemotesRequest message. Also converts values to other types if specified.
+         * @param message ListRemotesRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ListRemotesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ListRemotesRequest to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ListRemotesRequest
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ListRemotesRequest {
+
+        /** Properties of a ListRemotesRequest. */
+        interface $Properties {
+
+            /** ListRemotesRequest repository */
+            repository?: (atomic.RepositoryRef.$Properties|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ListRemotesRequest. */
+        type $Shape = atomic.ListRemotesRequest.$Properties;
+    }
+
+    /**
+     * Properties of a ListRemotesResponse.
+     * @deprecated Use atomic.ListRemotesResponse.$Properties instead.
+     */
+    interface IListRemotesResponse extends atomic.ListRemotesResponse.$Properties {
+    }
+
+    /** Represents a ListRemotesResponse. */
+    class ListRemotesResponse {
+
+        /**
+         * Constructs a new ListRemotesResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ListRemotesResponse.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ListRemotesResponse remotes. */
+        remotes: atomic.RemoteInfo.$Properties[];
+
+        /**
+         * Creates a new ListRemotesResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ListRemotesResponse instance
+         */
+        static create(properties: atomic.ListRemotesResponse.$Shape): atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape;
+        static create(properties?: atomic.ListRemotesResponse.$Properties): atomic.ListRemotesResponse;
+
+        /**
+         * Encodes the specified ListRemotesResponse message. Does not implicitly {@link atomic.ListRemotesResponse.verify|verify} messages.
+         * @param message ListRemotesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ListRemotesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ListRemotesResponse message, length delimited. Does not implicitly {@link atomic.ListRemotesResponse.verify|verify} messages.
+         * @param message ListRemotesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ListRemotesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ListRemotesResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape} ListRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape;
+
+        /**
+         * Decodes a ListRemotesResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape} ListRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ListRemotesResponse & atomic.ListRemotesResponse.$Shape;
+
+        /**
+         * Verifies a ListRemotesResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ListRemotesResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ListRemotesResponse
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ListRemotesResponse;
+
+        /**
+         * Creates a plain object from a ListRemotesResponse message. Also converts values to other types if specified.
+         * @param message ListRemotesResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ListRemotesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ListRemotesResponse to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ListRemotesResponse
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ListRemotesResponse {
+
+        /** Properties of a ListRemotesResponse. */
+        interface $Properties {
+
+            /** ListRemotesResponse remotes */
+            remotes?: (atomic.RemoteInfo.$Properties[]|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ListRemotesResponse. */
+        type $Shape = atomic.ListRemotesResponse.$Properties;
+    }
+
+    /**
+     * Properties of a RemoteInfo.
+     * @deprecated Use atomic.RemoteInfo.$Properties instead.
+     */
+    interface IRemoteInfo extends atomic.RemoteInfo.$Properties {
+    }
+
+    /** Represents a RemoteInfo. */
+    class RemoteInfo {
+
+        /**
+         * Constructs a new RemoteInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.RemoteInfo.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** RemoteInfo name. */
+        name: string;
+
+        /** RemoteInfo url. */
+        url: string;
+
+        /** RemoteInfo default. */
+        default: boolean;
+
+        /**
+         * Creates a new RemoteInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RemoteInfo instance
+         */
+        static create(properties: atomic.RemoteInfo.$Shape): atomic.RemoteInfo & atomic.RemoteInfo.$Shape;
+        static create(properties?: atomic.RemoteInfo.$Properties): atomic.RemoteInfo;
+
+        /**
+         * Encodes the specified RemoteInfo message. Does not implicitly {@link atomic.RemoteInfo.verify|verify} messages.
+         * @param message RemoteInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.RemoteInfo.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified RemoteInfo message, length delimited. Does not implicitly {@link atomic.RemoteInfo.verify|verify} messages.
+         * @param message RemoteInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.RemoteInfo.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a RemoteInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.RemoteInfo & atomic.RemoteInfo.$Shape} RemoteInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.RemoteInfo & atomic.RemoteInfo.$Shape;
+
+        /**
+         * Decodes a RemoteInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.RemoteInfo & atomic.RemoteInfo.$Shape} RemoteInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.RemoteInfo & atomic.RemoteInfo.$Shape;
+
+        /**
+         * Verifies a RemoteInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a RemoteInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns RemoteInfo
+         */
+        static fromObject(object: { [k: string]: any }): atomic.RemoteInfo;
+
+        /**
+         * Creates a plain object from a RemoteInfo message. Also converts values to other types if specified.
+         * @param message RemoteInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.RemoteInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this RemoteInfo to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for RemoteInfo
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace RemoteInfo {
+
+        /** Properties of a RemoteInfo. */
+        interface $Properties {
+
+            /** RemoteInfo name */
+            name?: (string|null);
+
+            /** RemoteInfo url */
+            url?: (string|null);
+
+            /** RemoteInfo default */
+            "default"?: (boolean|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a RemoteInfo. */
+        type $Shape = atomic.RemoteInfo.$Properties;
+    }
+
+    /**
+     * Properties of a ManageRemotesRequest.
+     * @deprecated Use atomic.ManageRemotesRequest.$Properties instead.
+     */
+    interface IManageRemotesRequest extends atomic.ManageRemotesRequest.$Properties {
+    }
+
+    /** Represents a ManageRemotesRequest. */
+    class ManageRemotesRequest {
+
+        /**
+         * Constructs a new ManageRemotesRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ManageRemotesRequest.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ManageRemotesRequest repository. */
+        repository?: (atomic.RepositoryRef.$Properties|null);
+
+        /** ManageRemotesRequest meta. */
+        meta?: (atomic.RequestMeta.$Properties|null);
+
+        /** ManageRemotesRequest action. */
+        action: atomic.RemoteAction;
+
+        /** ManageRemotesRequest name. */
+        name?: (string|null);
+
+        /** ManageRemotesRequest url. */
+        url?: (string|null);
+
+        /** ManageRemotesRequest newName. */
+        newName?: (string|null);
+
+        /** ManageRemotesRequest setDefault. */
+        setDefault: boolean;
+
+        /**
+         * Creates a new ManageRemotesRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ManageRemotesRequest instance
+         */
+        static create(properties: atomic.ManageRemotesRequest.$Shape): atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape;
+        static create(properties?: atomic.ManageRemotesRequest.$Properties): atomic.ManageRemotesRequest;
+
+        /**
+         * Encodes the specified ManageRemotesRequest message. Does not implicitly {@link atomic.ManageRemotesRequest.verify|verify} messages.
+         * @param message ManageRemotesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ManageRemotesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ManageRemotesRequest message, length delimited. Does not implicitly {@link atomic.ManageRemotesRequest.verify|verify} messages.
+         * @param message ManageRemotesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ManageRemotesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ManageRemotesRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape} ManageRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape;
+
+        /**
+         * Decodes a ManageRemotesRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape} ManageRemotesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ManageRemotesRequest & atomic.ManageRemotesRequest.$Shape;
+
+        /**
+         * Verifies a ManageRemotesRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ManageRemotesRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ManageRemotesRequest
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ManageRemotesRequest;
+
+        /**
+         * Creates a plain object from a ManageRemotesRequest message. Also converts values to other types if specified.
+         * @param message ManageRemotesRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ManageRemotesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ManageRemotesRequest to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ManageRemotesRequest
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ManageRemotesRequest {
+
+        /** Properties of a ManageRemotesRequest. */
+        interface $Properties {
+
+            /** ManageRemotesRequest repository */
+            repository?: (atomic.RepositoryRef.$Properties|null);
+
+            /** ManageRemotesRequest meta */
+            meta?: (atomic.RequestMeta.$Properties|null);
+
+            /** ManageRemotesRequest action */
+            action?: (atomic.RemoteAction|null);
+
+            /** ManageRemotesRequest name */
+            name?: (string|null);
+
+            /** ManageRemotesRequest url */
+            url?: (string|null);
+
+            /** ManageRemotesRequest newName */
+            newName?: (string|null);
+
+            /** ManageRemotesRequest setDefault */
+            setDefault?: (boolean|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ManageRemotesRequest. */
+        type $Shape = atomic.ManageRemotesRequest.$Properties;
+    }
+
+    /** RemoteAction enum. */
+    enum RemoteAction {
+
+        /** REMOTE_ACTION_UNSPECIFIED value */
+        REMOTE_ACTION_UNSPECIFIED = 0,
+
+        /** REMOTE_ACTION_ADD value */
+        REMOTE_ACTION_ADD = 1,
+
+        /** REMOTE_ACTION_REMOVE value */
+        REMOTE_ACTION_REMOVE = 2,
+
+        /** REMOTE_ACTION_RENAME value */
+        REMOTE_ACTION_RENAME = 3,
+
+        /** REMOTE_ACTION_SET_URL value */
+        REMOTE_ACTION_SET_URL = 4,
+
+        /** REMOTE_ACTION_SET_DEFAULT value */
+        REMOTE_ACTION_SET_DEFAULT = 5
+    }
+
+    /**
+     * Properties of a ManageRemotesResponse.
+     * @deprecated Use atomic.ManageRemotesResponse.$Properties instead.
+     */
+    interface IManageRemotesResponse extends atomic.ManageRemotesResponse.$Properties {
+    }
+
+    /** Represents a ManageRemotesResponse. */
+    class ManageRemotesResponse {
+
+        /**
+         * Constructs a new ManageRemotesResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ManageRemotesResponse.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ManageRemotesResponse remotes. */
+        remotes: atomic.RemoteInfo.$Properties[];
+
+        /** ManageRemotesResponse meta. */
+        meta?: (atomic.ResponseMeta.$Properties|null);
+
+        /**
+         * Creates a new ManageRemotesResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ManageRemotesResponse instance
+         */
+        static create(properties: atomic.ManageRemotesResponse.$Shape): atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape;
+        static create(properties?: atomic.ManageRemotesResponse.$Properties): atomic.ManageRemotesResponse;
+
+        /**
+         * Encodes the specified ManageRemotesResponse message. Does not implicitly {@link atomic.ManageRemotesResponse.verify|verify} messages.
+         * @param message ManageRemotesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ManageRemotesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ManageRemotesResponse message, length delimited. Does not implicitly {@link atomic.ManageRemotesResponse.verify|verify} messages.
+         * @param message ManageRemotesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ManageRemotesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ManageRemotesResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape} ManageRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape;
+
+        /**
+         * Decodes a ManageRemotesResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape} ManageRemotesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ManageRemotesResponse & atomic.ManageRemotesResponse.$Shape;
+
+        /**
+         * Verifies a ManageRemotesResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ManageRemotesResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ManageRemotesResponse
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ManageRemotesResponse;
+
+        /**
+         * Creates a plain object from a ManageRemotesResponse message. Also converts values to other types if specified.
+         * @param message ManageRemotesResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ManageRemotesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ManageRemotesResponse to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ManageRemotesResponse
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ManageRemotesResponse {
+
+        /** Properties of a ManageRemotesResponse. */
+        interface $Properties {
+
+            /** ManageRemotesResponse remotes */
+            remotes?: (atomic.RemoteInfo.$Properties[]|null);
+
+            /** ManageRemotesResponse meta */
+            meta?: (atomic.ResponseMeta.$Properties|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ManageRemotesResponse. */
+        type $Shape = atomic.ManageRemotesResponse.$Properties;
+    }
+
+    /**
+     * Properties of an InsertChangesRequest.
+     * @deprecated Use atomic.InsertChangesRequest.$Properties instead.
+     */
+    interface IInsertChangesRequest extends atomic.InsertChangesRequest.$Properties {
+    }
+
+    /** Represents an InsertChangesRequest. */
+    class InsertChangesRequest {
+
+        /**
+         * Constructs a new InsertChangesRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.InsertChangesRequest.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** InsertChangesRequest repository. */
+        repository?: (atomic.RepositoryRef.$Properties|null);
+
+        /** InsertChangesRequest meta. */
+        meta?: (atomic.RequestMeta.$Properties|null);
+
+        /** InsertChangesRequest singleChange. */
+        singleChange?: (atomic.Hash.$Properties|null);
+
+        /** InsertChangesRequest fromView. */
+        fromView?: (string|null);
+
+        /** InsertChangesRequest upToTag. */
+        upToTag?: (string|null);
+
+        /** InsertChangesRequest promoteCurrentView. */
+        promoteCurrentView?: (atomic.PromoteCurrentView.$Properties|null);
+
+        /** InsertChangesRequest changeSet. */
+        changeSet?: (atomic.ChangeSet.$Properties|null);
+
+        /** InsertChangesRequest singleRef. */
+        singleRef?: (string|null);
+
+        /** InsertChangesRequest targetView. */
+        targetView?: (string|null);
+
+        /** InsertChangesRequest allowConflicts. */
+        allowConflicts: boolean;
+
+        /** InsertChangesRequest target. */
+        target?: (atomic.ViewRef.$Properties|null);
+
+        /** InsertChangesRequest expectedSnapshot. */
+        expectedSnapshot?: (atomic.ViewSnapshot.$Properties|null);
+
+        /** InsertChangesRequest sourceSnapshot. */
+        sourceSnapshot?: (atomic.ViewSnapshot.$Properties|null);
+
+        /** InsertChangesRequest applyDependencies. */
+        applyDependencies?: (boolean|null);
+
+        /** InsertChangesRequest dryRun. */
+        dryRun?: (boolean|null);
+
+        /** InsertChangesRequest tagFromView. */
+        tagFromView?: (string|null);
+
+        /** InsertChangesRequest source. */
+        source?: ("singleChange"|"fromView"|"upToTag"|"promoteCurrentView"|"changeSet"|"singleRef");
+
+        /**
+         * Creates a new InsertChangesRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns InsertChangesRequest instance
+         */
+        static create(properties: atomic.InsertChangesRequest.$Shape): atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape;
+        static create(properties?: atomic.InsertChangesRequest.$Properties): atomic.InsertChangesRequest;
+
+        /**
+         * Encodes the specified InsertChangesRequest message. Does not implicitly {@link atomic.InsertChangesRequest.verify|verify} messages.
+         * @param message InsertChangesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.InsertChangesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified InsertChangesRequest message, length delimited. Does not implicitly {@link atomic.InsertChangesRequest.verify|verify} messages.
+         * @param message InsertChangesRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.InsertChangesRequest.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an InsertChangesRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape} InsertChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape;
+
+        /**
+         * Decodes an InsertChangesRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape} InsertChangesRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.InsertChangesRequest & atomic.InsertChangesRequest.$Shape;
+
+        /**
+         * Verifies an InsertChangesRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an InsertChangesRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns InsertChangesRequest
+         */
+        static fromObject(object: { [k: string]: any }): atomic.InsertChangesRequest;
+
+        /**
+         * Creates a plain object from an InsertChangesRequest message. Also converts values to other types if specified.
+         * @param message InsertChangesRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.InsertChangesRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this InsertChangesRequest to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for InsertChangesRequest
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace InsertChangesRequest {
+
+        /** Properties of an InsertChangesRequest. */
+        interface $Properties {
+
+            /** InsertChangesRequest repository */
+            repository?: (atomic.RepositoryRef.$Properties|null);
+
+            /** InsertChangesRequest meta */
+            meta?: (atomic.RequestMeta.$Properties|null);
+
+            /** InsertChangesRequest singleChange */
+            singleChange?: (atomic.Hash.$Properties|null);
+
+            /** InsertChangesRequest fromView */
+            fromView?: (string|null);
+
+            /** InsertChangesRequest upToTag */
+            upToTag?: (string|null);
+
+            /** InsertChangesRequest promoteCurrentView */
+            promoteCurrentView?: (atomic.PromoteCurrentView.$Properties|null);
+
+            /** InsertChangesRequest changeSet */
+            changeSet?: (atomic.ChangeSet.$Properties|null);
+
+            /** InsertChangesRequest singleRef */
+            singleRef?: (string|null);
+
+            /** InsertChangesRequest targetView */
+            targetView?: (string|null);
+
+            /** InsertChangesRequest allowConflicts */
+            allowConflicts?: (boolean|null);
+
+            /** InsertChangesRequest target */
+            target?: (atomic.ViewRef.$Properties|null);
+
+            /** InsertChangesRequest expectedSnapshot */
+            expectedSnapshot?: (atomic.ViewSnapshot.$Properties|null);
+
+            /** InsertChangesRequest sourceSnapshot */
+            sourceSnapshot?: (atomic.ViewSnapshot.$Properties|null);
+
+            /** InsertChangesRequest applyDependencies */
+            applyDependencies?: (boolean|null);
+
+            /** InsertChangesRequest dryRun */
+            dryRun?: (boolean|null);
+
+            /** InsertChangesRequest tagFromView */
+            tagFromView?: (string|null);
+
+            /** InsertChangesRequest source */
+            source?: ("singleChange"|"fromView"|"upToTag"|"promoteCurrentView"|"changeSet"|"singleRef");
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Narrowed shape of an InsertChangesRequest. */
+        type $Shape = {
+          repository?: atomic.RepositoryRef.$Shape|null;
+          meta?: atomic.RequestMeta.$Shape|null;
+          singleChange?: atomic.Hash.$Shape|null;
+          fromView?: string|null;
+          upToTag?: string|null;
+          promoteCurrentView?: atomic.PromoteCurrentView.$Shape|null;
+          changeSet?: atomic.ChangeSet.$Shape|null;
+          singleRef?: string|null;
+          targetView?: string|null;
+          allowConflicts?: boolean|null;
+          target?: atomic.ViewRef.$Shape|null;
+          expectedSnapshot?: atomic.ViewSnapshot.$Shape|null;
+          sourceSnapshot?: atomic.ViewSnapshot.$Shape|null;
+          applyDependencies?: boolean|null;
+          dryRun?: boolean|null;
+          tagFromView?: string|null;
+          $unknowns?: Uint8Array[];
+        } & (
+          ({ source?: undefined; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "singleChange"; singleChange: atomic.Hash.$Shape; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "fromView"; singleChange?: null; fromView: string; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "upToTag"; singleChange?: null; fromView?: null; upToTag: string; promoteCurrentView?: null; changeSet?: null; singleRef?: null }|{ source?: "promoteCurrentView"; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView: atomic.PromoteCurrentView.$Shape; changeSet?: null; singleRef?: null }|{ source?: "changeSet"; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet: atomic.ChangeSet.$Shape; singleRef?: null }|{ source?: "singleRef"; singleChange?: null; fromView?: null; upToTag?: null; promoteCurrentView?: null; changeSet?: null; singleRef: string })
+        );
+    }
+
+    /**
+     * Properties of a PromoteCurrentView.
+     * @deprecated Use atomic.PromoteCurrentView.$Properties instead.
+     */
+    interface IPromoteCurrentView extends atomic.PromoteCurrentView.$Properties {
+    }
+
+    /** Represents a PromoteCurrentView. */
+    class PromoteCurrentView {
+
+        /**
+         * Constructs a new PromoteCurrentView.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.PromoteCurrentView.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /**
+         * Creates a new PromoteCurrentView instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns PromoteCurrentView instance
+         */
+        static create(properties: atomic.PromoteCurrentView.$Shape): atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape;
+        static create(properties?: atomic.PromoteCurrentView.$Properties): atomic.PromoteCurrentView;
+
+        /**
+         * Encodes the specified PromoteCurrentView message. Does not implicitly {@link atomic.PromoteCurrentView.verify|verify} messages.
+         * @param message PromoteCurrentView message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.PromoteCurrentView.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified PromoteCurrentView message, length delimited. Does not implicitly {@link atomic.PromoteCurrentView.verify|verify} messages.
+         * @param message PromoteCurrentView message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.PromoteCurrentView.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a PromoteCurrentView message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape} PromoteCurrentView
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape;
+
+        /**
+         * Decodes a PromoteCurrentView message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape} PromoteCurrentView
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.PromoteCurrentView & atomic.PromoteCurrentView.$Shape;
+
+        /**
+         * Verifies a PromoteCurrentView message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a PromoteCurrentView message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns PromoteCurrentView
+         */
+        static fromObject(object: { [k: string]: any }): atomic.PromoteCurrentView;
+
+        /**
+         * Creates a plain object from a PromoteCurrentView message. Also converts values to other types if specified.
+         * @param message PromoteCurrentView
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.PromoteCurrentView, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this PromoteCurrentView to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for PromoteCurrentView
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace PromoteCurrentView {
+
+        /** Properties of a PromoteCurrentView. */
+        interface $Properties {
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a PromoteCurrentView. */
+        type $Shape = atomic.PromoteCurrentView.$Properties;
+    }
+
+    /**
+     * Properties of a ChangeSet.
+     * @deprecated Use atomic.ChangeSet.$Properties instead.
+     */
+    interface IChangeSet extends atomic.ChangeSet.$Properties {
+    }
+
+    /** Represents a ChangeSet. */
+    class ChangeSet {
+
+        /**
+         * Constructs a new ChangeSet.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ChangeSet.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ChangeSet changes. */
+        changes: string[];
+
+        /**
+         * Creates a new ChangeSet instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ChangeSet instance
+         */
+        static create(properties: atomic.ChangeSet.$Shape): atomic.ChangeSet & atomic.ChangeSet.$Shape;
+        static create(properties?: atomic.ChangeSet.$Properties): atomic.ChangeSet;
+
+        /**
+         * Encodes the specified ChangeSet message. Does not implicitly {@link atomic.ChangeSet.verify|verify} messages.
+         * @param message ChangeSet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ChangeSet.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ChangeSet message, length delimited. Does not implicitly {@link atomic.ChangeSet.verify|verify} messages.
+         * @param message ChangeSet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ChangeSet.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ChangeSet message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ChangeSet & atomic.ChangeSet.$Shape} ChangeSet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ChangeSet & atomic.ChangeSet.$Shape;
+
+        /**
+         * Decodes a ChangeSet message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ChangeSet & atomic.ChangeSet.$Shape} ChangeSet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ChangeSet & atomic.ChangeSet.$Shape;
+
+        /**
+         * Verifies a ChangeSet message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ChangeSet message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ChangeSet
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ChangeSet;
+
+        /**
+         * Creates a plain object from a ChangeSet message. Also converts values to other types if specified.
+         * @param message ChangeSet
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ChangeSet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ChangeSet to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ChangeSet
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ChangeSet {
+
+        /** Properties of a ChangeSet. */
+        interface $Properties {
+
+            /** ChangeSet changes */
+            changes?: (string[]|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ChangeSet. */
+        type $Shape = atomic.ChangeSet.$Properties;
+    }
+
+    /**
+     * Properties of an InsertChangesResponse.
+     * @deprecated Use atomic.InsertChangesResponse.$Properties instead.
+     */
+    interface IInsertChangesResponse extends atomic.InsertChangesResponse.$Properties {
+    }
+
+    /** Represents an InsertChangesResponse. */
+    class InsertChangesResponse {
+
+        /**
+         * Constructs a new InsertChangesResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.InsertChangesResponse.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** InsertChangesResponse inserted. */
+        inserted: atomic.ChangeInfo.$Properties[];
+
+        /** InsertChangesResponse conflicts. */
+        conflicts: atomic.ConflictInfo.$Properties[];
+
+        /** InsertChangesResponse resolvedSourceView. */
+        resolvedSourceView?: (string|null);
+
+        /** InsertChangesResponse resolvedTargetView. */
+        resolvedTargetView?: (string|null);
+
+        /** InsertChangesResponse bothViewsShared. */
+        bothViewsShared?: (boolean|null);
+
+        /** InsertChangesResponse resolvedChange. */
+        resolvedChange?: (atomic.Hash.$Properties|null);
+
+        /** InsertChangesResponse newState. */
+        newState?: (atomic.Hash.$Properties|null);
+
+        /** InsertChangesResponse skippedCount. */
+        skippedCount: number;
+
+        /** InsertChangesResponse filesUpdated. */
+        filesUpdated?: (number|Long|null);
+
+        /** InsertChangesResponse directoriesCreated. */
+        directoriesCreated?: (number|Long|null);
+
+        /** InsertChangesResponse hasConflicts. */
+        hasConflicts: boolean;
+
+        /** InsertChangesResponse meta. */
+        meta?: (atomic.ResponseMeta.$Properties|null);
+
+        /**
+         * Creates a new InsertChangesResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns InsertChangesResponse instance
+         */
+        static create(properties: atomic.InsertChangesResponse.$Shape): atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape;
+        static create(properties?: atomic.InsertChangesResponse.$Properties): atomic.InsertChangesResponse;
+
+        /**
+         * Encodes the specified InsertChangesResponse message. Does not implicitly {@link atomic.InsertChangesResponse.verify|verify} messages.
+         * @param message InsertChangesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.InsertChangesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified InsertChangesResponse message, length delimited. Does not implicitly {@link atomic.InsertChangesResponse.verify|verify} messages.
+         * @param message InsertChangesResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.InsertChangesResponse.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes an InsertChangesResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape} InsertChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape;
+
+        /**
+         * Decodes an InsertChangesResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape} InsertChangesResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.InsertChangesResponse & atomic.InsertChangesResponse.$Shape;
+
+        /**
+         * Verifies an InsertChangesResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an InsertChangesResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns InsertChangesResponse
+         */
+        static fromObject(object: { [k: string]: any }): atomic.InsertChangesResponse;
+
+        /**
+         * Creates a plain object from an InsertChangesResponse message. Also converts values to other types if specified.
+         * @param message InsertChangesResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.InsertChangesResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this InsertChangesResponse to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for InsertChangesResponse
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace InsertChangesResponse {
+
+        /** Properties of an InsertChangesResponse. */
+        interface $Properties {
+
+            /** InsertChangesResponse inserted */
+            inserted?: (atomic.ChangeInfo.$Properties[]|null);
+
+            /** InsertChangesResponse conflicts */
+            conflicts?: (atomic.ConflictInfo.$Properties[]|null);
+
+            /** InsertChangesResponse resolvedSourceView */
+            resolvedSourceView?: (string|null);
+
+            /** InsertChangesResponse resolvedTargetView */
+            resolvedTargetView?: (string|null);
+
+            /** InsertChangesResponse bothViewsShared */
+            bothViewsShared?: (boolean|null);
+
+            /** InsertChangesResponse resolvedChange */
+            resolvedChange?: (atomic.Hash.$Properties|null);
+
+            /** InsertChangesResponse newState */
+            newState?: (atomic.Hash.$Properties|null);
+
+            /** InsertChangesResponse skippedCount */
+            skippedCount?: (number|null);
+
+            /** InsertChangesResponse filesUpdated */
+            filesUpdated?: (number|Long|null);
+
+            /** InsertChangesResponse directoriesCreated */
+            directoriesCreated?: (number|Long|null);
+
+            /** InsertChangesResponse hasConflicts */
+            hasConflicts?: (boolean|null);
+
+            /** InsertChangesResponse meta */
+            meta?: (atomic.ResponseMeta.$Properties|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of an InsertChangesResponse. */
+        type $Shape = atomic.InsertChangesResponse.$Properties;
+    }
+
+    /**
      * Properties of a GetVaultEntryRequest.
      * @deprecated Use atomic.GetVaultEntryRequest.$Properties instead.
      */
@@ -8764,6 +12555,12 @@ export namespace atomic {
         /** ListVaultEntriesRequest toolResultPreviews. */
         toolResultPreviews: boolean;
 
+        /** ListVaultEntriesRequest sort. */
+        sort?: (atomic.VaultListSort|null);
+
+        /** ListVaultEntriesRequest reverse. */
+        reverse: boolean;
+
         /** ListVaultEntriesRequest view. */
         view?: (atomic.ViewRef.$Properties|null);
 
@@ -8884,6 +12681,12 @@ export namespace atomic {
             /** ListVaultEntriesRequest toolResultPreviews */
             toolResultPreviews?: (boolean|null);
 
+            /** ListVaultEntriesRequest sort */
+            sort?: (atomic.VaultListSort|null);
+
+            /** ListVaultEntriesRequest reverse */
+            reverse?: (boolean|null);
+
             /** ListVaultEntriesRequest view */
             view?: (atomic.ViewRef.$Properties|null);
 
@@ -8893,6 +12696,37 @@ export namespace atomic {
 
         /** Shape of a ListVaultEntriesRequest. */
         type $Shape = atomic.ListVaultEntriesRequest.$Properties;
+    }
+
+    /** VaultListSort enum. */
+    enum VaultListSort {
+
+        /** VAULT_LIST_SORT_UNSPECIFIED value */
+        VAULT_LIST_SORT_UNSPECIFIED = 0,
+
+        /** VAULT_LIST_SORT_ID value */
+        VAULT_LIST_SORT_ID = 1,
+
+        /** VAULT_LIST_SORT_UPDATED value */
+        VAULT_LIST_SORT_UPDATED = 2,
+
+        /** VAULT_LIST_SORT_TITLE value */
+        VAULT_LIST_SORT_TITLE = 3,
+
+        /** VAULT_LIST_SORT_STATUS value */
+        VAULT_LIST_SORT_STATUS = 4,
+
+        /** VAULT_LIST_SORT_KIND value */
+        VAULT_LIST_SORT_KIND = 5,
+
+        /** VAULT_LIST_SORT_ABOUT value */
+        VAULT_LIST_SORT_ABOUT = 6,
+
+        /** VAULT_LIST_SORT_ATTESTED value */
+        VAULT_LIST_SORT_ATTESTED = 7,
+
+        /** VAULT_LIST_SORT_VERIFIES value */
+        VAULT_LIST_SORT_VERIFIES = 8
     }
 
     /**
@@ -10354,6 +14188,21 @@ export namespace atomic {
         /** ContentSearchQuery paths. */
         paths: string[];
 
+        /** ContentSearchQuery pathFilter. */
+        pathFilter?: (string|null);
+
+        /** ContentSearchQuery fileType. */
+        fileType?: (string|null);
+
+        /** ContentSearchQuery excludeType. */
+        excludeType?: (string|null);
+
+        /** ContentSearchQuery caseInsensitive. */
+        caseInsensitive: boolean;
+
+        /** ContentSearchQuery maxResults. */
+        maxResults?: (number|null);
+
         /**
          * Creates a new ContentSearchQuery instance using the specified properties.
          * @param [properties] Properties to set
@@ -10443,6 +14292,21 @@ export namespace atomic {
 
             /** ContentSearchQuery paths */
             paths?: (string[]|null);
+
+            /** ContentSearchQuery pathFilter */
+            pathFilter?: (string|null);
+
+            /** ContentSearchQuery fileType */
+            fileType?: (string|null);
+
+            /** ContentSearchQuery excludeType */
+            excludeType?: (string|null);
+
+            /** ContentSearchQuery caseInsensitive */
+            caseInsensitive?: (boolean|null);
+
+            /** ContentSearchQuery maxResults */
+            maxResults?: (number|null);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
@@ -11410,6 +15274,9 @@ export namespace atomic {
         /** QueryGraphResponse callers. */
         callers: atomic.CodeCaller.$Properties[];
 
+        /** QueryGraphResponse contentResult. */
+        contentResult?: (atomic.ContentSearchResult.$Properties|null);
+
         /**
          * Creates a new QueryGraphResponse instance using the specified properties.
          * @param [properties] Properties to set
@@ -11529,6 +15396,9 @@ export namespace atomic {
 
             /** QueryGraphResponse callers */
             callers?: (atomic.CodeCaller.$Properties[]|null);
+
+            /** QueryGraphResponse contentResult */
+            contentResult?: (atomic.ContentSearchResult.$Properties|null);
 
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
@@ -12094,6 +15964,405 @@ export namespace atomic {
 
         /** Shape of a CodeCaller. */
         type $Shape = atomic.CodeCaller.$Properties;
+    }
+
+    /**
+     * Properties of a ContentSearchResult.
+     * @deprecated Use atomic.ContentSearchResult.$Properties instead.
+     */
+    interface IContentSearchResult extends atomic.ContentSearchResult.$Properties {
+    }
+
+    /** Represents a ContentSearchResult. */
+    class ContentSearchResult {
+
+        /**
+         * Constructs a new ContentSearchResult.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ContentSearchResult.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ContentSearchResult matches. */
+        matches: atomic.ContentMatch.$Properties[];
+
+        /** ContentSearchResult totalMatches. */
+        totalMatches: (number|Long);
+
+        /** ContentSearchResult dirFacets. */
+        dirFacets: atomic.ContentDirectoryFacet.$Properties[];
+
+        /**
+         * Creates a new ContentSearchResult instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ContentSearchResult instance
+         */
+        static create(properties: atomic.ContentSearchResult.$Shape): atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape;
+        static create(properties?: atomic.ContentSearchResult.$Properties): atomic.ContentSearchResult;
+
+        /**
+         * Encodes the specified ContentSearchResult message. Does not implicitly {@link atomic.ContentSearchResult.verify|verify} messages.
+         * @param message ContentSearchResult message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ContentSearchResult.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ContentSearchResult message, length delimited. Does not implicitly {@link atomic.ContentSearchResult.verify|verify} messages.
+         * @param message ContentSearchResult message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ContentSearchResult.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ContentSearchResult message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape} ContentSearchResult
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape;
+
+        /**
+         * Decodes a ContentSearchResult message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape} ContentSearchResult
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ContentSearchResult & atomic.ContentSearchResult.$Shape;
+
+        /**
+         * Verifies a ContentSearchResult message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ContentSearchResult message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ContentSearchResult
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ContentSearchResult;
+
+        /**
+         * Creates a plain object from a ContentSearchResult message. Also converts values to other types if specified.
+         * @param message ContentSearchResult
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ContentSearchResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ContentSearchResult to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ContentSearchResult
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ContentSearchResult {
+
+        /** Properties of a ContentSearchResult. */
+        interface $Properties {
+
+            /** ContentSearchResult matches */
+            matches?: (atomic.ContentMatch.$Properties[]|null);
+
+            /** ContentSearchResult totalMatches */
+            totalMatches?: (number|Long|null);
+
+            /** ContentSearchResult dirFacets */
+            dirFacets?: (atomic.ContentDirectoryFacet.$Properties[]|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ContentSearchResult. */
+        type $Shape = atomic.ContentSearchResult.$Properties;
+    }
+
+    /**
+     * Properties of a ContentMatch.
+     * @deprecated Use atomic.ContentMatch.$Properties instead.
+     */
+    interface IContentMatch extends atomic.ContentMatch.$Properties {
+    }
+
+    /** Represents a ContentMatch. */
+    class ContentMatch {
+
+        /**
+         * Constructs a new ContentMatch.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ContentMatch.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ContentMatch path. */
+        path: string;
+
+        /** ContentMatch lineNumber. */
+        lineNumber: number;
+
+        /** ContentMatch lineContent. */
+        lineContent: string;
+
+        /** ContentMatch byteOffset. */
+        byteOffset: (number|Long);
+
+        /** ContentMatch submatchStart. */
+        submatchStart: (number|Long);
+
+        /** ContentMatch submatchEnd. */
+        submatchEnd: (number|Long);
+
+        /**
+         * Creates a new ContentMatch instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ContentMatch instance
+         */
+        static create(properties: atomic.ContentMatch.$Shape): atomic.ContentMatch & atomic.ContentMatch.$Shape;
+        static create(properties?: atomic.ContentMatch.$Properties): atomic.ContentMatch;
+
+        /**
+         * Encodes the specified ContentMatch message. Does not implicitly {@link atomic.ContentMatch.verify|verify} messages.
+         * @param message ContentMatch message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ContentMatch.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ContentMatch message, length delimited. Does not implicitly {@link atomic.ContentMatch.verify|verify} messages.
+         * @param message ContentMatch message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ContentMatch.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ContentMatch message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ContentMatch & atomic.ContentMatch.$Shape} ContentMatch
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ContentMatch & atomic.ContentMatch.$Shape;
+
+        /**
+         * Decodes a ContentMatch message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ContentMatch & atomic.ContentMatch.$Shape} ContentMatch
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ContentMatch & atomic.ContentMatch.$Shape;
+
+        /**
+         * Verifies a ContentMatch message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ContentMatch message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ContentMatch
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ContentMatch;
+
+        /**
+         * Creates a plain object from a ContentMatch message. Also converts values to other types if specified.
+         * @param message ContentMatch
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ContentMatch, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ContentMatch to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ContentMatch
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ContentMatch {
+
+        /** Properties of a ContentMatch. */
+        interface $Properties {
+
+            /** ContentMatch path */
+            path?: (string|null);
+
+            /** ContentMatch lineNumber */
+            lineNumber?: (number|null);
+
+            /** ContentMatch lineContent */
+            lineContent?: (string|null);
+
+            /** ContentMatch byteOffset */
+            byteOffset?: (number|Long|null);
+
+            /** ContentMatch submatchStart */
+            submatchStart?: (number|Long|null);
+
+            /** ContentMatch submatchEnd */
+            submatchEnd?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ContentMatch. */
+        type $Shape = atomic.ContentMatch.$Properties;
+    }
+
+    /**
+     * Properties of a ContentDirectoryFacet.
+     * @deprecated Use atomic.ContentDirectoryFacet.$Properties instead.
+     */
+    interface IContentDirectoryFacet extends atomic.ContentDirectoryFacet.$Properties {
+    }
+
+    /** Represents a ContentDirectoryFacet. */
+    class ContentDirectoryFacet {
+
+        /**
+         * Constructs a new ContentDirectoryFacet.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.ContentDirectoryFacet.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** ContentDirectoryFacet path. */
+        path: string;
+
+        /** ContentDirectoryFacet count. */
+        count: (number|Long);
+
+        /**
+         * Creates a new ContentDirectoryFacet instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ContentDirectoryFacet instance
+         */
+        static create(properties: atomic.ContentDirectoryFacet.$Shape): atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape;
+        static create(properties?: atomic.ContentDirectoryFacet.$Properties): atomic.ContentDirectoryFacet;
+
+        /**
+         * Encodes the specified ContentDirectoryFacet message. Does not implicitly {@link atomic.ContentDirectoryFacet.verify|verify} messages.
+         * @param message ContentDirectoryFacet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.ContentDirectoryFacet.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ContentDirectoryFacet message, length delimited. Does not implicitly {@link atomic.ContentDirectoryFacet.verify|verify} messages.
+         * @param message ContentDirectoryFacet message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.ContentDirectoryFacet.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ContentDirectoryFacet message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape} ContentDirectoryFacet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape;
+
+        /**
+         * Decodes a ContentDirectoryFacet message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape} ContentDirectoryFacet
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.ContentDirectoryFacet & atomic.ContentDirectoryFacet.$Shape;
+
+        /**
+         * Verifies a ContentDirectoryFacet message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ContentDirectoryFacet message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ContentDirectoryFacet
+         */
+        static fromObject(object: { [k: string]: any }): atomic.ContentDirectoryFacet;
+
+        /**
+         * Creates a plain object from a ContentDirectoryFacet message. Also converts values to other types if specified.
+         * @param message ContentDirectoryFacet
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.ContentDirectoryFacet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ContentDirectoryFacet to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for ContentDirectoryFacet
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace ContentDirectoryFacet {
+
+        /** Properties of a ContentDirectoryFacet. */
+        interface $Properties {
+
+            /** ContentDirectoryFacet path */
+            path?: (string|null);
+
+            /** ContentDirectoryFacet count */
+            count?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a ContentDirectoryFacet. */
+        type $Shape = atomic.ContentDirectoryFacet.$Properties;
     }
 
     /**

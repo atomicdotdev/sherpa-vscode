@@ -49,19 +49,20 @@ export async function isRepositoryFilePath(root: string, file: string): Promise<
   };
   if (contains(file)) return true;
   let candidate = file;
+  let parent = path.dirname(candidate);
   let suffix = '';
-  for (;;) {
+  while (candidate !== parent) {
     try {
       return contains(path.join(await realpath(candidate), suffix));
     } catch (error) {
       const code = (error as NodeJS.ErrnoException).code;
       if (code !== 'ENOENT' && code !== 'ENOTDIR') throw error;
-      const parent = path.dirname(candidate);
-      if (parent === candidate) return false;
       suffix = path.join(path.basename(candidate), suffix);
       candidate = parent;
+      parent = path.dirname(candidate);
     }
   }
+  return false;
 }
 
 function identityPart(value: unknown): string {

@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 import path from 'node:path';
-import { RepositorySession, resolveRepositoryPath, statusLabels } from '../src/atomic/model.ts';
+import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { RepositorySession, resolveRepositoryPath, isRepositoryFilePath, statusLabels } from '../src/atomic/model.ts';
 
 function fixture() {
   const calls = [];
@@ -21,6 +23,38 @@ describe('Atomic version control model', () => {
     expect(resolveRepositoryPath(repo, 'src/intent.md')).toBe(path.join(repo, 'src/intent.md'));
     for (const file of ['', '.', '..', '../escape', '/absolute', 'src/../../escape']) {
       expect(() => resolveRepositoryPath(repo, file)).toThrow();
+    }
+  });
+
+  test('matches unsaved files opened through a repository alias, including missing parent directories', async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), 'atomic-editor-alias-'));
+    try {
+      const root = path.join(await realpath(directory), 'repository');
+      const alias = path.join(directory, 'alias');
+      await mkdir(root);
+      await writeFile(path.join(root, 'intent.md'), '# Intent\n');
+      await symlink(root, alias, 'junction');
+      expect(await isRepositoryFilePath(root, path.join(alias, 'intent.md'))).toBe(true);
+      expect(await isRepositoryFilePath(root, path.join(alias, 'new', 'nested', 'intent.md'))).toBe(true);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  test('does not treat a dirty file in an aliased sibling repository as owned', async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), 'atomic-editor-boundary-'));
+    try {
+      const canonical = await realpath(directory);
+      const root = path.join(canonical, 'repository');
+      const sibling = path.join(canonical, 'repository-other');
+      const alias = path.join(directory, 'alias');
+      await mkdir(root);
+      await mkdir(sibling);
+      await writeFile(path.join(sibling, 'intent.md'), '# Unrelated intent\n');
+      await symlink(sibling, alias, 'junction');
+      expect(await isRepositoryFilePath(root, path.join(alias, 'intent.md'))).toBe(false);
+    } finally {
+      await rm(directory, { recursive: true, force: true });
     }
   });
 

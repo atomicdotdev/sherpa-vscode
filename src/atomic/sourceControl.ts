@@ -2,7 +2,7 @@ import * as path from 'node:path';
 import { stat, lstat, realpath } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
-import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
+import { RepositorySession, resolveRepositoryPath, isRepositoryFilePath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
 import { displayChangeHash } from '../shared/atomicHash';
@@ -65,7 +65,8 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       if (!displayedStatus) throw new Error('Refresh Atomic status before recording.');
       await owner.session.run(async () => {
         this.requireTrusted();
-        if (this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files in this repository before recording.');
+        if (await this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files in this repository before recording.');
+        this.requireTrusted();
         await owner.session.record(message, displayedStatus);
         if (owner.scm.inputBox.value === message) owner.scm.inputBox.value = '';
         await this.update(owner);
@@ -103,7 +104,8 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       if (!name) return;
       await owner.session.run(async () => {
         this.requireTrusted();
-        if (this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files before switching views.');
+        if (await this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files before switching views.');
+        this.requireTrusted();
         // Never bypass Atomic's dirty-working-copy check.
         await owner.session.client.views.switch(name);
         await this.update(owner);
@@ -386,20 +388,23 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     this.changed.fire(undefined);
   }
 
-  private hasDirtyDocuments(owner: RepositoryUI): boolean {
-    const inRepository = (uri: vscode.Uri): boolean => {
-      if (uri.scheme !== 'file') return false;
-      try {
-        resolveRepositoryPath(owner.session.root, path.relative(owner.session.root, uri.fsPath));
-        return true;
-      } catch { return false; }
-    };
-    if (vscode.workspace.textDocuments.some((doc) => doc.isDirty && inRepository(doc.uri))) return true;
+  private async hasDirtyDocuments(owner: RepositoryUI): Promise<boolean> {
+    const paths = new Set<string>();
+    for (const doc of vscode.workspace.textDocuments) {
+      if (doc.isDirty && doc.uri.scheme === 'file') paths.add(doc.uri.fsPath);
+    }
     // File-backed custom documents can remain dirty after VS Code closes their backing TextDocument.
-    return vscode.window.tabGroups.all.some((group) => group.tabs.some((tab) => {
-      const input = tab.input;
-      return tab.isDirty && (input instanceof vscode.TabInputCustom || input instanceof vscode.TabInputText) && inRepository(input.uri);
-    }));
+    for (const group of vscode.window.tabGroups.all) {
+      for (const tab of group.tabs) {
+        const input = tab.input;
+        if (tab.isDirty && (input instanceof vscode.TabInputCustom || input instanceof vscode.TabInputText)
+          && input.uri.scheme === 'file') paths.add(input.uri.fsPath);
+      }
+    }
+    for (const file of paths) {
+      if (await isRepositoryFilePath(owner.session.root, file)) return true;
+    }
+    return false;
   }
 
   private async promptRemote(): Promise<string | undefined> {
@@ -428,12 +433,13 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       () => owner.session.run(async () => {
         this.requireTrusted();
         if (!this.isOwner(owner)) return;
-        if (workingCopyView !== undefined && this.hasDirtyDocuments(owner)) {
+        if (workingCopyView !== undefined && await this.hasDirtyDocuments(owner)) {
           const currentView = (await owner.session.client.status()).view;
           if (!workingCopyView.trim() || workingCopyView.trim() === currentView) {
             throw new Error('Save or close unsaved files before updating the working-copy view.');
           }
         }
+        this.requireTrusted();
         this.output.appendLine(`${label}: ${owner.session.root}`);
         const result = await operation();
         result.lines.forEach((line) => this.output.appendLine(line));

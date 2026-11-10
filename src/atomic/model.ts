@@ -1,4 +1,5 @@
 import * as path from 'node:path';
+import { realpath } from 'node:fs/promises';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import type { ViewSummary } from '../shared/atomicEvidence';
 
@@ -36,6 +37,31 @@ export function resolveRepositoryPath(root: string, file: string): string {
     throw new Error('Repository path escapes the workspace');
   }
   return resolved;
+}
+
+/** Match editor paths to a canonical repository root, including aliases and missing files. */
+export async function isRepositoryFilePath(root: string, file: string): Promise<boolean> {
+  const contains = (candidate: string): boolean => {
+    try {
+      resolveRepositoryPath(root, path.relative(root, candidate));
+      return true;
+    } catch { return false; }
+  };
+  if (contains(file)) return true;
+  let candidate = file;
+  let suffix = '';
+  for (;;) {
+    try {
+      return contains(path.join(await realpath(candidate), suffix));
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code !== 'ENOENT' && code !== 'ENOTDIR') throw error;
+      const parent = path.dirname(candidate);
+      if (parent === candidate) return false;
+      suffix = path.join(path.basename(candidate), suffix);
+      candidate = parent;
+    }
+  }
 }
 
 function identityPart(value: unknown): string {

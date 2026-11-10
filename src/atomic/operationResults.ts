@@ -43,7 +43,8 @@ export function pullResult(response: PullResponse): OperationResult {
 export function insertResult(response: InsertViewResponse): OperationResult {
   const lines = [`Inserted ${response.inserted.length} changes into “${response.resolvedTargetView}”; ${response.skippedCount} already present.`];
   if (response.filesUpdated != null) lines.push(`${response.filesUpdated} working-copy files updated.`);
-  const conflicts = response.conflicts.map((conflict) => conflict.path).filter(Boolean);
-  return { lines, ...(response.hasConflicts || conflicts.length
-    ? { error: `Insertion reported conflicts${conflicts.length ? `: ${conflicts.join(', ')}` : '.'}` } : {}) };
+  // Native conflict paths describe the working copy, not an inactive target.
+  const conflicts = response.filesUpdated == null ? '' : response.conflicts.map((conflict) => conflict.path).filter(Boolean).join(', ');
+  return { lines, ...(response.hasConflicts || conflicts
+    ? { error: `Insertion reported conflicts${conflicts ? `: ${conflicts}` : '.'}` } : {}) };
 }

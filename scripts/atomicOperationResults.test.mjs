@@ -45,9 +45,22 @@ test('a successful inactive-view pull distinguishes membership from working-copy
 test('insertion exposes both new and pre-existing conflicts', () => {
   for (const response of [
     { hasConflicts: true, conflicts: [] },
-    { hasConflicts: false, conflicts: [{ path: 'conflicted.txt' }] }
+    { hasConflicts: false, filesUpdated: '1', conflicts: [{ path: 'conflicted.txt' }] }
   ]) {
     const result = insertResult({ inserted: [], resolvedTargetView: 'target', skippedCount: 0, ...response });
     expect(result.error).toContain('Insertion reported conflicts');
   }
+});
+
+test('an inactive insertion does not fail because the current working copy has conflicts', () => {
+  const result = insertResult({ inserted: [], resolvedTargetView: 'inactive', skippedCount: 0,
+    hasConflicts: false, conflicts: [{ path: 'current-view-conflict.txt' }] });
+  expect(result.error).toBeUndefined();
+});
+
+test('inactive target conflicts never borrow paths from the current working copy', () => {
+  const result = insertResult({ inserted: [], resolvedTargetView: 'inactive', skippedCount: 0,
+    hasConflicts: true, conflicts: [{ path: 'current-view-conflict.txt' }] });
+  expect(result.error).toBeDefined();
+  expect(result.error).not.toContain('current-view-conflict.txt');
 });

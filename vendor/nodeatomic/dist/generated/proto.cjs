@@ -6316,6 +6316,8 @@ $root.atomic = (function() {
          * @property {atomic.Author.$Properties|null} [author] RecordRequest author
          * @property {string|null} [identityName] RecordRequest identityName
          * @property {atomic.RecordAiAuthorship.$Properties|null} [aiAuthorship] RecordRequest aiAuthorship
+         * @property {boolean|null} [skipBinary] RecordRequest skipBinary
+         * @property {number|Long|null} [maxFileSize] RecordRequest maxFileSize
          * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
          */
 
@@ -6338,6 +6340,8 @@ $root.atomic = (function() {
          *   author?: atomic.Author.$Shape|null;
          *   identityName?: string|null;
          *   aiAuthorship?: atomic.RecordAiAuthorship.$Shape|null;
+         *   skipBinary?: boolean|null;
+         *   maxFileSize?: number|Long|null;
          *   $unknowns?: Array.<Uint8Array>;
          * }} atomic.RecordRequest.$Shape
          */
@@ -6422,6 +6426,22 @@ $root.atomic = (function() {
          */
         RecordRequest.prototype.aiAuthorship = null;
 
+        /**
+         * RecordRequest skipBinary.
+         * @member {boolean|null|undefined} skipBinary
+         * @memberof atomic.RecordRequest
+         * @instance
+         */
+        RecordRequest.prototype.skipBinary = null;
+
+        /**
+         * RecordRequest maxFileSize.
+         * @member {number|Long|null|undefined} maxFileSize
+         * @memberof atomic.RecordRequest
+         * @instance
+         */
+        RecordRequest.prototype.maxFileSize = null;
+
         // OneOf field names bound to virtual getters and setters
         var $oneOfFields;
 
@@ -6446,6 +6466,18 @@ $root.atomic = (function() {
         // Virtual OneOf for proto3 optional field
         $Object.defineProperty(RecordRequest.prototype, "_ai_authorship", {
             get: $util.oneOfGetter($oneOfFields = ["aiAuthorship"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(RecordRequest.prototype, "_skip_binary", {
+            get: $util.oneOfGetter($oneOfFields = ["skipBinary"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(RecordRequest.prototype, "_max_file_size", {
+            get: $util.oneOfGetter($oneOfFields = ["maxFileSize"]),
             set: $util.oneOfSetter($oneOfFields)
         });
 
@@ -6498,6 +6530,10 @@ $root.atomic = (function() {
                 writer.uint32(/* id 7, wireType 2 =*/58).string(message.identityName);
             if (message.aiAuthorship != null && $Object.hasOwnProperty.call(message, "aiAuthorship"))
                 $root.atomic.RecordAiAuthorship.encode(message.aiAuthorship, writer.uint32(/* id 8, wireType 2 =*/66).fork(), _depth + 1).ldelim();
+            if (message.skipBinary != null && $Object.hasOwnProperty.call(message, "skipBinary"))
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.skipBinary);
+            if (message.maxFileSize != null && $Object.hasOwnProperty.call(message, "maxFileSize"))
+                writer.uint32(/* id 10, wireType 0 =*/80).uint64(message.maxFileSize);
             if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
                 for (var i = 0; i < message.$unknowns.length; ++i)
                     writer.raw(message.$unknowns[i]);
@@ -6612,6 +6648,20 @@ $root.atomic = (function() {
                         message._ai_authorship = "aiAuthorship";
                         continue;
                     }
+                case 9: {
+                        if (wireType !== 0)
+                            break;
+                        message.skipBinary = reader.bool();
+                        message._skip_binary = "skipBinary";
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 0)
+                            break;
+                        message.maxFileSize = reader.uint64();
+                        message._max_file_size = "maxFileSize";
+                        continue;
+                    }
                 }
                 reader.skipType(wireType, _depth, tag);
                 if (!reader.discardUnknown) {
@@ -6710,6 +6760,16 @@ $root.atomic = (function() {
                         return "aiAuthorship." + error;
                 }
             }
+            if (message.skipBinary != null && $Object.hasOwnProperty.call(message, "skipBinary")) {
+                properties._skip_binary = 1;
+                if (typeof message.skipBinary !== "boolean")
+                    return "skipBinary: boolean expected";
+            }
+            if (message.maxFileSize != null && $Object.hasOwnProperty.call(message, "maxFileSize")) {
+                properties._max_file_size = 1;
+                if (!$util.isInteger(message.maxFileSize) && !(message.maxFileSize && $util.isInteger(message.maxFileSize.low) && $util.isInteger(message.maxFileSize.high)))
+                    return "maxFileSize: integer|Long expected";
+            }
             return null;
         };
 
@@ -6768,6 +6828,17 @@ $root.atomic = (function() {
                     throw $TypeError(".atomic.RecordRequest.aiAuthorship: object expected");
                 message.aiAuthorship = $root.atomic.RecordAiAuthorship.fromObject(object.aiAuthorship, _depth + 1);
             }
+            if (object.skipBinary != null)
+                message.skipBinary = $Boolean(object.skipBinary);
+            if (object.maxFileSize != null)
+                if ($util.Long)
+                    message.maxFileSize = $util.Long.fromValue(object.maxFileSize, true);
+                else if (typeof object.maxFileSize === "string")
+                    message.maxFileSize = $parseInt(object.maxFileSize, 10);
+                else if (typeof object.maxFileSize === "number")
+                    message.maxFileSize = object.maxFileSize;
+                else if (typeof object.maxFileSize === "object")
+                    message.maxFileSize = new $util.LongBits(object.maxFileSize.low >>> 0, object.maxFileSize.high >>> 0).toNumber(true);
             return message;
         };
 
@@ -6814,6 +6885,15 @@ $root.atomic = (function() {
                 object.identityName = message.identityName;
             if (message.aiAuthorship != null && $Object.hasOwnProperty.call(message, "aiAuthorship"))
                 object.aiAuthorship = $root.atomic.RecordAiAuthorship.toObject(message.aiAuthorship, options, _depth + 1);
+            if (message.skipBinary != null && $Object.hasOwnProperty.call(message, "skipBinary"))
+                object.skipBinary = message.skipBinary;
+            if (message.maxFileSize != null && $Object.hasOwnProperty.call(message, "maxFileSize"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.maxFileSize = typeof message.maxFileSize === "number" ? $BigInt(message.maxFileSize) : $util.Long.fromBits(message.maxFileSize.low >>> 0, message.maxFileSize.high >>> 0, true).toBigInt();
+                else if (typeof message.maxFileSize === "number")
+                    object.maxFileSize = options.longs === $String ? $String(message.maxFileSize) : message.maxFileSize;
+                else
+                    object.maxFileSize = options.longs === $String ? $util.Long.prototype.toString.call(message.maxFileSize) : options.longs === $Number ? new $util.LongBits(message.maxFileSize.low >>> 0, message.maxFileSize.high >>> 0).toNumber(true) : message.maxFileSize;
             return object;
         };
 
@@ -7696,6 +7776,10 @@ $root.atomic = (function() {
          * @property {atomic.ChangeInfo.$Properties|null} [change] RecordResponse change
          * @property {atomic.Hash.$Properties|null} [viewMerkle] RecordResponse viewMerkle
          * @property {string|null} [view] RecordResponse view
+         * @property {atomic.RecordStatistics.$Properties|null} [statistics] RecordResponse statistics
+         * @property {Array.<string>|null} [recordedPaths] RecordResponse recordedPaths
+         * @property {Array.<string>|null} [skippedPaths] RecordResponse skippedPaths
+         * @property {Array.<atomic.RecordFileError.$Properties>|null} [fileErrors] RecordResponse fileErrors
          * @property {atomic.ResponseMeta.$Properties|null} [meta] RecordResponse meta
          * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
          */
@@ -7722,6 +7806,9 @@ $root.atomic = (function() {
          * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
          */
         var RecordResponse = function (properties) {
+            this.recordedPaths = [];
+            this.skippedPaths = [];
+            this.fileErrors = [];
             if (properties)
                 for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null && keys[i] !== "__proto__")
@@ -7753,6 +7840,38 @@ $root.atomic = (function() {
         RecordResponse.prototype.view = null;
 
         /**
+         * RecordResponse statistics.
+         * @member {atomic.RecordStatistics.$Properties|null|undefined} statistics
+         * @memberof atomic.RecordResponse
+         * @instance
+         */
+        RecordResponse.prototype.statistics = null;
+
+        /**
+         * RecordResponse recordedPaths.
+         * @member {Array.<string>} recordedPaths
+         * @memberof atomic.RecordResponse
+         * @instance
+         */
+        RecordResponse.prototype.recordedPaths = $util.emptyArray;
+
+        /**
+         * RecordResponse skippedPaths.
+         * @member {Array.<string>} skippedPaths
+         * @memberof atomic.RecordResponse
+         * @instance
+         */
+        RecordResponse.prototype.skippedPaths = $util.emptyArray;
+
+        /**
+         * RecordResponse fileErrors.
+         * @member {Array.<atomic.RecordFileError.$Properties>} fileErrors
+         * @memberof atomic.RecordResponse
+         * @instance
+         */
+        RecordResponse.prototype.fileErrors = $util.emptyArray;
+
+        /**
          * RecordResponse meta.
          * @member {atomic.ResponseMeta.$Properties|null|undefined} meta
          * @memberof atomic.RecordResponse
@@ -7772,6 +7891,12 @@ $root.atomic = (function() {
         // Virtual OneOf for proto3 optional field
         $Object.defineProperty(RecordResponse.prototype, "_view", {
             get: $util.oneOfGetter($oneOfFields = ["view"]),
+            set: $util.oneOfSetter($oneOfFields)
+        });
+
+        // Virtual OneOf for proto3 optional field
+        $Object.defineProperty(RecordResponse.prototype, "_statistics", {
+            get: $util.oneOfGetter($oneOfFields = ["statistics"]),
             set: $util.oneOfSetter($oneOfFields)
         });
 
@@ -7813,6 +7938,17 @@ $root.atomic = (function() {
                 $root.atomic.Hash.encode(message.viewMerkle, writer.uint32(/* id 2, wireType 2 =*/18).fork(), _depth + 1).ldelim();
             if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
                 writer.uint32(/* id 3, wireType 2 =*/26).string(message.view);
+            if (message.statistics != null && $Object.hasOwnProperty.call(message, "statistics"))
+                $root.atomic.RecordStatistics.encode(message.statistics, writer.uint32(/* id 4, wireType 2 =*/34).fork(), _depth + 1).ldelim();
+            if (message.recordedPaths != null && message.recordedPaths.length)
+                for (var i = 0; i < message.recordedPaths.length; ++i)
+                    writer.uint32(/* id 5, wireType 2 =*/42).string(message.recordedPaths[i]);
+            if (message.skippedPaths != null && message.skippedPaths.length)
+                for (var i = 0; i < message.skippedPaths.length; ++i)
+                    writer.uint32(/* id 6, wireType 2 =*/50).string(message.skippedPaths[i]);
+            if (message.fileErrors != null && message.fileErrors.length)
+                for (var i = 0; i < message.fileErrors.length; ++i)
+                    $root.atomic.RecordFileError.encode(message.fileErrors[i], writer.uint32(/* id 7, wireType 2 =*/58).fork(), _depth + 1).ldelim();
             if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
                 $root.atomic.ResponseMeta.encode(message.meta, writer.uint32(/* id 100, wireType 2 =*/802).fork(), _depth + 1).ldelim();
             if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
@@ -7892,6 +8028,37 @@ $root.atomic = (function() {
                         message._view = "view";
                         continue;
                     }
+                case 4: {
+                        if (wireType !== 2)
+                            break;
+                        message.statistics = $root.atomic.RecordStatistics.decode(reader, reader.size(), $undefined, _depth + 1, message.statistics);
+                        message._statistics = "statistics";
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.recordedPaths && message.recordedPaths.length))
+                            message.recordedPaths = [];
+                        message.recordedPaths.push(reader.stringVerify());
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.skippedPaths && message.skippedPaths.length))
+                            message.skippedPaths = [];
+                        message.skippedPaths.push(reader.stringVerify());
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 2)
+                            break;
+                        if (!(message.fileErrors && message.fileErrors.length))
+                            message.fileErrors = [];
+                        message.fileErrors.push($root.atomic.RecordFileError.decode(reader, reader.size(), $undefined, _depth + 1));
+                        continue;
+                    }
                 case 100: {
                         if (wireType !== 2)
                             break;
@@ -7965,6 +8132,37 @@ $root.atomic = (function() {
                 if (!$util.isString(message.view))
                     return "view: string expected";
             }
+            if (message.statistics != null && $Object.hasOwnProperty.call(message, "statistics")) {
+                properties._statistics = 1;
+                {
+                    var error = $root.atomic.RecordStatistics.verify(message.statistics, _depth + 1);
+                    if (error)
+                        return "statistics." + error;
+                }
+            }
+            if (message.recordedPaths != null && $Object.hasOwnProperty.call(message, "recordedPaths")) {
+                if (!$Array.isArray(message.recordedPaths))
+                    return "recordedPaths: array expected";
+                for (var i = 0; i < message.recordedPaths.length; ++i)
+                    if (!$util.isString(message.recordedPaths[i]))
+                        return "recordedPaths: string[] expected";
+            }
+            if (message.skippedPaths != null && $Object.hasOwnProperty.call(message, "skippedPaths")) {
+                if (!$Array.isArray(message.skippedPaths))
+                    return "skippedPaths: array expected";
+                for (var i = 0; i < message.skippedPaths.length; ++i)
+                    if (!$util.isString(message.skippedPaths[i]))
+                        return "skippedPaths: string[] expected";
+            }
+            if (message.fileErrors != null && $Object.hasOwnProperty.call(message, "fileErrors")) {
+                if (!$Array.isArray(message.fileErrors))
+                    return "fileErrors: array expected";
+                for (var i = 0; i < message.fileErrors.length; ++i) {
+                    var error = $root.atomic.RecordFileError.verify(message.fileErrors[i], _depth + 1);
+                    if (error)
+                        return "fileErrors." + error;
+                }
+            }
             if (message.meta != null && $Object.hasOwnProperty.call(message, "meta")) {
                 var error = $root.atomic.ResponseMeta.verify(message.meta, _depth + 1);
                 if (error)
@@ -8003,6 +8201,35 @@ $root.atomic = (function() {
             }
             if (object.view != null)
                 message.view = $String(object.view);
+            if (object.statistics != null) {
+                if (!$util.isObject(object.statistics))
+                    throw $TypeError(".atomic.RecordResponse.statistics: object expected");
+                message.statistics = $root.atomic.RecordStatistics.fromObject(object.statistics, _depth + 1);
+            }
+            if (object.recordedPaths) {
+                if (!$Array.isArray(object.recordedPaths))
+                    throw $TypeError(".atomic.RecordResponse.recordedPaths: array expected");
+                message.recordedPaths = $Array(object.recordedPaths.length);
+                for (var i = 0; i < object.recordedPaths.length; ++i)
+                    message.recordedPaths[i] = $String(object.recordedPaths[i]);
+            }
+            if (object.skippedPaths) {
+                if (!$Array.isArray(object.skippedPaths))
+                    throw $TypeError(".atomic.RecordResponse.skippedPaths: array expected");
+                message.skippedPaths = $Array(object.skippedPaths.length);
+                for (var i = 0; i < object.skippedPaths.length; ++i)
+                    message.skippedPaths[i] = $String(object.skippedPaths[i]);
+            }
+            if (object.fileErrors) {
+                if (!$Array.isArray(object.fileErrors))
+                    throw $TypeError(".atomic.RecordResponse.fileErrors: array expected");
+                message.fileErrors = $Array(object.fileErrors.length);
+                for (var i = 0; i < object.fileErrors.length; ++i) {
+                    if (!$util.isObject(object.fileErrors[i]))
+                        throw $TypeError(".atomic.RecordResponse.fileErrors: object expected");
+                    message.fileErrors[i] = $root.atomic.RecordFileError.fromObject(object.fileErrors[i], _depth + 1);
+                }
+            }
             if (object.meta != null) {
                 if (!$util.isObject(object.meta))
                     throw $TypeError(".atomic.RecordResponse.meta: object expected");
@@ -8028,6 +8255,11 @@ $root.atomic = (function() {
             if (_depth > $util.recursionLimit)
                 throw $Error("max depth exceeded");
             var object = {};
+            if (options.arrays || options.defaults) {
+                object.recordedPaths = [];
+                object.skippedPaths = [];
+                object.fileErrors = [];
+            }
             if (options.defaults) {
                 object.change = null;
                 object.meta = null;
@@ -8038,6 +8270,23 @@ $root.atomic = (function() {
                 object.viewMerkle = $root.atomic.Hash.toObject(message.viewMerkle, options, _depth + 1);
             if (message.view != null && $Object.hasOwnProperty.call(message, "view"))
                 object.view = message.view;
+            if (message.statistics != null && $Object.hasOwnProperty.call(message, "statistics"))
+                object.statistics = $root.atomic.RecordStatistics.toObject(message.statistics, options, _depth + 1);
+            if (message.recordedPaths && message.recordedPaths.length) {
+                object.recordedPaths = $Array(message.recordedPaths.length);
+                for (var j = 0; j < message.recordedPaths.length; ++j)
+                    object.recordedPaths[j] = message.recordedPaths[j];
+            }
+            if (message.skippedPaths && message.skippedPaths.length) {
+                object.skippedPaths = $Array(message.skippedPaths.length);
+                for (var j = 0; j < message.skippedPaths.length; ++j)
+                    object.skippedPaths[j] = message.skippedPaths[j];
+            }
+            if (message.fileErrors && message.fileErrors.length) {
+                object.fileErrors = $Array(message.fileErrors.length);
+                for (var j = 0; j < message.fileErrors.length; ++j)
+                    object.fileErrors[j] = $root.atomic.RecordFileError.toObject(message.fileErrors[j], options, _depth + 1);
+            }
             if (message.meta != null && $Object.hasOwnProperty.call(message, "meta"))
                 object.meta = $root.atomic.ResponseMeta.toObject(message.meta, options, _depth + 1);
             return object;
@@ -8723,6 +8972,1098 @@ $root.atomic = (function() {
         };
 
         return ChangeInfo;
+    })();
+
+    atomic.RecordStatistics = (function() {
+
+        /**
+         * Properties of a RecordStatistics.
+         * @typedef {Object} atomic.RecordStatistics.$Properties
+         * @property {number|Long|null} [filesRecorded] RecordStatistics filesRecorded
+         * @property {number|Long|null} [directoriesRecorded] RecordStatistics directoriesRecorded
+         * @property {number|Long|null} [hunksCreated] RecordStatistics hunksCreated
+         * @property {number|Long|null} [verticesAdded] RecordStatistics verticesAdded
+         * @property {number|Long|null} [edgesModified] RecordStatistics edgesModified
+         * @property {number|Long|null} [contentBytes] RecordStatistics contentBytes
+         * @property {number|Long|null} [linesAdded] RecordStatistics linesAdded
+         * @property {number|Long|null} [linesDeleted] RecordStatistics linesDeleted
+         * @property {number|Long|null} [linesModified] RecordStatistics linesModified
+         * @property {number|Long|null} [tokensAdded] RecordStatistics tokensAdded
+         * @property {number|Long|null} [tokensDeleted] RecordStatistics tokensDeleted
+         * @property {number|Long|null} [tokensReplaced] RecordStatistics tokensReplaced
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a RecordStatistics.
+         * @memberof atomic
+         * @interface IRecordStatistics
+         * @augments atomic.RecordStatistics.$Properties
+         * @deprecated Use atomic.RecordStatistics.$Properties instead.
+         */
+
+        /**
+         * Shape of a RecordStatistics.
+         * @typedef {atomic.RecordStatistics.$Properties} atomic.RecordStatistics.$Shape
+         */
+
+        /**
+         * Constructs a new RecordStatistics.
+         * @memberof atomic
+         * @classdesc Represents a RecordStatistics.
+         * @constructor
+         * @param {atomic.RecordStatistics.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var RecordStatistics = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * RecordStatistics filesRecorded.
+         * @member {number|Long} filesRecorded
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.filesRecorded = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics directoriesRecorded.
+         * @member {number|Long} directoriesRecorded
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.directoriesRecorded = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics hunksCreated.
+         * @member {number|Long} hunksCreated
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.hunksCreated = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics verticesAdded.
+         * @member {number|Long} verticesAdded
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.verticesAdded = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics edgesModified.
+         * @member {number|Long} edgesModified
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.edgesModified = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics contentBytes.
+         * @member {number|Long} contentBytes
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.contentBytes = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics linesAdded.
+         * @member {number|Long} linesAdded
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.linesAdded = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics linesDeleted.
+         * @member {number|Long} linesDeleted
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.linesDeleted = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics linesModified.
+         * @member {number|Long} linesModified
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.linesModified = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics tokensAdded.
+         * @member {number|Long} tokensAdded
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.tokensAdded = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics tokensDeleted.
+         * @member {number|Long} tokensDeleted
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.tokensDeleted = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * RecordStatistics tokensReplaced.
+         * @member {number|Long} tokensReplaced
+         * @memberof atomic.RecordStatistics
+         * @instance
+         */
+        RecordStatistics.prototype.tokensReplaced = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new RecordStatistics instance using the specified properties.
+         * @function create
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {atomic.RecordStatistics.$Properties=} [properties] Properties to set
+         * @returns {atomic.RecordStatistics} RecordStatistics instance
+         * @type {{
+         *   (properties: atomic.RecordStatistics.$Shape): atomic.RecordStatistics & atomic.RecordStatistics.$Shape;
+         *   (properties?: atomic.RecordStatistics.$Properties): atomic.RecordStatistics;
+         * }}
+         */
+        RecordStatistics.create = function(properties) {
+            return new RecordStatistics(properties);
+        };
+
+        /**
+         * Encodes the specified RecordStatistics message. Does not implicitly {@link atomic.RecordStatistics.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {atomic.RecordStatistics.$Properties} message RecordStatistics message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RecordStatistics.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.filesRecorded != null && $Object.hasOwnProperty.call(message, "filesRecorded") && (typeof message.filesRecorded === "object" ? message.filesRecorded.low || message.filesRecorded.high : message.filesRecorded !== 0))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.filesRecorded);
+            if (message.directoriesRecorded != null && $Object.hasOwnProperty.call(message, "directoriesRecorded") && (typeof message.directoriesRecorded === "object" ? message.directoriesRecorded.low || message.directoriesRecorded.high : message.directoriesRecorded !== 0))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.directoriesRecorded);
+            if (message.hunksCreated != null && $Object.hasOwnProperty.call(message, "hunksCreated") && (typeof message.hunksCreated === "object" ? message.hunksCreated.low || message.hunksCreated.high : message.hunksCreated !== 0))
+                writer.uint32(/* id 3, wireType 0 =*/24).uint64(message.hunksCreated);
+            if (message.verticesAdded != null && $Object.hasOwnProperty.call(message, "verticesAdded") && (typeof message.verticesAdded === "object" ? message.verticesAdded.low || message.verticesAdded.high : message.verticesAdded !== 0))
+                writer.uint32(/* id 4, wireType 0 =*/32).uint64(message.verticesAdded);
+            if (message.edgesModified != null && $Object.hasOwnProperty.call(message, "edgesModified") && (typeof message.edgesModified === "object" ? message.edgesModified.low || message.edgesModified.high : message.edgesModified !== 0))
+                writer.uint32(/* id 5, wireType 0 =*/40).uint64(message.edgesModified);
+            if (message.contentBytes != null && $Object.hasOwnProperty.call(message, "contentBytes") && (typeof message.contentBytes === "object" ? message.contentBytes.low || message.contentBytes.high : message.contentBytes !== 0))
+                writer.uint32(/* id 6, wireType 0 =*/48).uint64(message.contentBytes);
+            if (message.linesAdded != null && $Object.hasOwnProperty.call(message, "linesAdded") && (typeof message.linesAdded === "object" ? message.linesAdded.low || message.linesAdded.high : message.linesAdded !== 0))
+                writer.uint32(/* id 7, wireType 0 =*/56).uint64(message.linesAdded);
+            if (message.linesDeleted != null && $Object.hasOwnProperty.call(message, "linesDeleted") && (typeof message.linesDeleted === "object" ? message.linesDeleted.low || message.linesDeleted.high : message.linesDeleted !== 0))
+                writer.uint32(/* id 8, wireType 0 =*/64).uint64(message.linesDeleted);
+            if (message.linesModified != null && $Object.hasOwnProperty.call(message, "linesModified") && (typeof message.linesModified === "object" ? message.linesModified.low || message.linesModified.high : message.linesModified !== 0))
+                writer.uint32(/* id 9, wireType 0 =*/72).uint64(message.linesModified);
+            if (message.tokensAdded != null && $Object.hasOwnProperty.call(message, "tokensAdded") && (typeof message.tokensAdded === "object" ? message.tokensAdded.low || message.tokensAdded.high : message.tokensAdded !== 0))
+                writer.uint32(/* id 10, wireType 0 =*/80).uint64(message.tokensAdded);
+            if (message.tokensDeleted != null && $Object.hasOwnProperty.call(message, "tokensDeleted") && (typeof message.tokensDeleted === "object" ? message.tokensDeleted.low || message.tokensDeleted.high : message.tokensDeleted !== 0))
+                writer.uint32(/* id 11, wireType 0 =*/88).uint64(message.tokensDeleted);
+            if (message.tokensReplaced != null && $Object.hasOwnProperty.call(message, "tokensReplaced") && (typeof message.tokensReplaced === "object" ? message.tokensReplaced.low || message.tokensReplaced.high : message.tokensReplaced !== 0))
+                writer.uint32(/* id 12, wireType 0 =*/96).uint64(message.tokensReplaced);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RecordStatistics message, length delimited. Does not implicitly {@link atomic.RecordStatistics.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {atomic.RecordStatistics.$Properties} message RecordStatistics message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RecordStatistics.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a RecordStatistics message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.RecordStatistics & atomic.RecordStatistics.$Shape} RecordStatistics
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RecordStatistics.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.RecordStatistics();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.filesRecorded = value;
+                        else
+                            delete message.filesRecorded;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.directoriesRecorded = value;
+                        else
+                            delete message.directoriesRecorded;
+                        continue;
+                    }
+                case 3: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.hunksCreated = value;
+                        else
+                            delete message.hunksCreated;
+                        continue;
+                    }
+                case 4: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.verticesAdded = value;
+                        else
+                            delete message.verticesAdded;
+                        continue;
+                    }
+                case 5: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.edgesModified = value;
+                        else
+                            delete message.edgesModified;
+                        continue;
+                    }
+                case 6: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.contentBytes = value;
+                        else
+                            delete message.contentBytes;
+                        continue;
+                    }
+                case 7: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.linesAdded = value;
+                        else
+                            delete message.linesAdded;
+                        continue;
+                    }
+                case 8: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.linesDeleted = value;
+                        else
+                            delete message.linesDeleted;
+                        continue;
+                    }
+                case 9: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.linesModified = value;
+                        else
+                            delete message.linesModified;
+                        continue;
+                    }
+                case 10: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.tokensAdded = value;
+                        else
+                            delete message.tokensAdded;
+                        continue;
+                    }
+                case 11: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.tokensDeleted = value;
+                        else
+                            delete message.tokensDeleted;
+                        continue;
+                    }
+                case 12: {
+                        if (wireType !== 0)
+                            break;
+                        if (typeof (value = reader.uint64()) === "object" ? value.low || value.high : value !== 0)
+                            message.tokensReplaced = value;
+                        else
+                            delete message.tokensReplaced;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a RecordStatistics message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.RecordStatistics & atomic.RecordStatistics.$Shape} RecordStatistics
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RecordStatistics.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a RecordStatistics message.
+         * @function verify
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RecordStatistics.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.filesRecorded != null && $Object.hasOwnProperty.call(message, "filesRecorded"))
+                if (!$util.isInteger(message.filesRecorded) && !(message.filesRecorded && $util.isInteger(message.filesRecorded.low) && $util.isInteger(message.filesRecorded.high)))
+                    return "filesRecorded: integer|Long expected";
+            if (message.directoriesRecorded != null && $Object.hasOwnProperty.call(message, "directoriesRecorded"))
+                if (!$util.isInteger(message.directoriesRecorded) && !(message.directoriesRecorded && $util.isInteger(message.directoriesRecorded.low) && $util.isInteger(message.directoriesRecorded.high)))
+                    return "directoriesRecorded: integer|Long expected";
+            if (message.hunksCreated != null && $Object.hasOwnProperty.call(message, "hunksCreated"))
+                if (!$util.isInteger(message.hunksCreated) && !(message.hunksCreated && $util.isInteger(message.hunksCreated.low) && $util.isInteger(message.hunksCreated.high)))
+                    return "hunksCreated: integer|Long expected";
+            if (message.verticesAdded != null && $Object.hasOwnProperty.call(message, "verticesAdded"))
+                if (!$util.isInteger(message.verticesAdded) && !(message.verticesAdded && $util.isInteger(message.verticesAdded.low) && $util.isInteger(message.verticesAdded.high)))
+                    return "verticesAdded: integer|Long expected";
+            if (message.edgesModified != null && $Object.hasOwnProperty.call(message, "edgesModified"))
+                if (!$util.isInteger(message.edgesModified) && !(message.edgesModified && $util.isInteger(message.edgesModified.low) && $util.isInteger(message.edgesModified.high)))
+                    return "edgesModified: integer|Long expected";
+            if (message.contentBytes != null && $Object.hasOwnProperty.call(message, "contentBytes"))
+                if (!$util.isInteger(message.contentBytes) && !(message.contentBytes && $util.isInteger(message.contentBytes.low) && $util.isInteger(message.contentBytes.high)))
+                    return "contentBytes: integer|Long expected";
+            if (message.linesAdded != null && $Object.hasOwnProperty.call(message, "linesAdded"))
+                if (!$util.isInteger(message.linesAdded) && !(message.linesAdded && $util.isInteger(message.linesAdded.low) && $util.isInteger(message.linesAdded.high)))
+                    return "linesAdded: integer|Long expected";
+            if (message.linesDeleted != null && $Object.hasOwnProperty.call(message, "linesDeleted"))
+                if (!$util.isInteger(message.linesDeleted) && !(message.linesDeleted && $util.isInteger(message.linesDeleted.low) && $util.isInteger(message.linesDeleted.high)))
+                    return "linesDeleted: integer|Long expected";
+            if (message.linesModified != null && $Object.hasOwnProperty.call(message, "linesModified"))
+                if (!$util.isInteger(message.linesModified) && !(message.linesModified && $util.isInteger(message.linesModified.low) && $util.isInteger(message.linesModified.high)))
+                    return "linesModified: integer|Long expected";
+            if (message.tokensAdded != null && $Object.hasOwnProperty.call(message, "tokensAdded"))
+                if (!$util.isInteger(message.tokensAdded) && !(message.tokensAdded && $util.isInteger(message.tokensAdded.low) && $util.isInteger(message.tokensAdded.high)))
+                    return "tokensAdded: integer|Long expected";
+            if (message.tokensDeleted != null && $Object.hasOwnProperty.call(message, "tokensDeleted"))
+                if (!$util.isInteger(message.tokensDeleted) && !(message.tokensDeleted && $util.isInteger(message.tokensDeleted.low) && $util.isInteger(message.tokensDeleted.high)))
+                    return "tokensDeleted: integer|Long expected";
+            if (message.tokensReplaced != null && $Object.hasOwnProperty.call(message, "tokensReplaced"))
+                if (!$util.isInteger(message.tokensReplaced) && !(message.tokensReplaced && $util.isInteger(message.tokensReplaced.low) && $util.isInteger(message.tokensReplaced.high)))
+                    return "tokensReplaced: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a RecordStatistics message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.RecordStatistics} RecordStatistics
+         */
+        RecordStatistics.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.RecordStatistics)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.RecordStatistics: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.RecordStatistics();
+            if (object.filesRecorded != null)
+                if (typeof object.filesRecorded === "object" ? object.filesRecorded.low || object.filesRecorded.high : $Number(object.filesRecorded) !== 0)
+                    if ($util.Long)
+                        message.filesRecorded = $util.Long.fromValue(object.filesRecorded, true);
+                    else if (typeof object.filesRecorded === "string")
+                        message.filesRecorded = $parseInt(object.filesRecorded, 10);
+                    else if (typeof object.filesRecorded === "number")
+                        message.filesRecorded = object.filesRecorded;
+                    else if (typeof object.filesRecorded === "object")
+                        message.filesRecorded = new $util.LongBits(object.filesRecorded.low >>> 0, object.filesRecorded.high >>> 0).toNumber(true);
+            if (object.directoriesRecorded != null)
+                if (typeof object.directoriesRecorded === "object" ? object.directoriesRecorded.low || object.directoriesRecorded.high : $Number(object.directoriesRecorded) !== 0)
+                    if ($util.Long)
+                        message.directoriesRecorded = $util.Long.fromValue(object.directoriesRecorded, true);
+                    else if (typeof object.directoriesRecorded === "string")
+                        message.directoriesRecorded = $parseInt(object.directoriesRecorded, 10);
+                    else if (typeof object.directoriesRecorded === "number")
+                        message.directoriesRecorded = object.directoriesRecorded;
+                    else if (typeof object.directoriesRecorded === "object")
+                        message.directoriesRecorded = new $util.LongBits(object.directoriesRecorded.low >>> 0, object.directoriesRecorded.high >>> 0).toNumber(true);
+            if (object.hunksCreated != null)
+                if (typeof object.hunksCreated === "object" ? object.hunksCreated.low || object.hunksCreated.high : $Number(object.hunksCreated) !== 0)
+                    if ($util.Long)
+                        message.hunksCreated = $util.Long.fromValue(object.hunksCreated, true);
+                    else if (typeof object.hunksCreated === "string")
+                        message.hunksCreated = $parseInt(object.hunksCreated, 10);
+                    else if (typeof object.hunksCreated === "number")
+                        message.hunksCreated = object.hunksCreated;
+                    else if (typeof object.hunksCreated === "object")
+                        message.hunksCreated = new $util.LongBits(object.hunksCreated.low >>> 0, object.hunksCreated.high >>> 0).toNumber(true);
+            if (object.verticesAdded != null)
+                if (typeof object.verticesAdded === "object" ? object.verticesAdded.low || object.verticesAdded.high : $Number(object.verticesAdded) !== 0)
+                    if ($util.Long)
+                        message.verticesAdded = $util.Long.fromValue(object.verticesAdded, true);
+                    else if (typeof object.verticesAdded === "string")
+                        message.verticesAdded = $parseInt(object.verticesAdded, 10);
+                    else if (typeof object.verticesAdded === "number")
+                        message.verticesAdded = object.verticesAdded;
+                    else if (typeof object.verticesAdded === "object")
+                        message.verticesAdded = new $util.LongBits(object.verticesAdded.low >>> 0, object.verticesAdded.high >>> 0).toNumber(true);
+            if (object.edgesModified != null)
+                if (typeof object.edgesModified === "object" ? object.edgesModified.low || object.edgesModified.high : $Number(object.edgesModified) !== 0)
+                    if ($util.Long)
+                        message.edgesModified = $util.Long.fromValue(object.edgesModified, true);
+                    else if (typeof object.edgesModified === "string")
+                        message.edgesModified = $parseInt(object.edgesModified, 10);
+                    else if (typeof object.edgesModified === "number")
+                        message.edgesModified = object.edgesModified;
+                    else if (typeof object.edgesModified === "object")
+                        message.edgesModified = new $util.LongBits(object.edgesModified.low >>> 0, object.edgesModified.high >>> 0).toNumber(true);
+            if (object.contentBytes != null)
+                if (typeof object.contentBytes === "object" ? object.contentBytes.low || object.contentBytes.high : $Number(object.contentBytes) !== 0)
+                    if ($util.Long)
+                        message.contentBytes = $util.Long.fromValue(object.contentBytes, true);
+                    else if (typeof object.contentBytes === "string")
+                        message.contentBytes = $parseInt(object.contentBytes, 10);
+                    else if (typeof object.contentBytes === "number")
+                        message.contentBytes = object.contentBytes;
+                    else if (typeof object.contentBytes === "object")
+                        message.contentBytes = new $util.LongBits(object.contentBytes.low >>> 0, object.contentBytes.high >>> 0).toNumber(true);
+            if (object.linesAdded != null)
+                if (typeof object.linesAdded === "object" ? object.linesAdded.low || object.linesAdded.high : $Number(object.linesAdded) !== 0)
+                    if ($util.Long)
+                        message.linesAdded = $util.Long.fromValue(object.linesAdded, true);
+                    else if (typeof object.linesAdded === "string")
+                        message.linesAdded = $parseInt(object.linesAdded, 10);
+                    else if (typeof object.linesAdded === "number")
+                        message.linesAdded = object.linesAdded;
+                    else if (typeof object.linesAdded === "object")
+                        message.linesAdded = new $util.LongBits(object.linesAdded.low >>> 0, object.linesAdded.high >>> 0).toNumber(true);
+            if (object.linesDeleted != null)
+                if (typeof object.linesDeleted === "object" ? object.linesDeleted.low || object.linesDeleted.high : $Number(object.linesDeleted) !== 0)
+                    if ($util.Long)
+                        message.linesDeleted = $util.Long.fromValue(object.linesDeleted, true);
+                    else if (typeof object.linesDeleted === "string")
+                        message.linesDeleted = $parseInt(object.linesDeleted, 10);
+                    else if (typeof object.linesDeleted === "number")
+                        message.linesDeleted = object.linesDeleted;
+                    else if (typeof object.linesDeleted === "object")
+                        message.linesDeleted = new $util.LongBits(object.linesDeleted.low >>> 0, object.linesDeleted.high >>> 0).toNumber(true);
+            if (object.linesModified != null)
+                if (typeof object.linesModified === "object" ? object.linesModified.low || object.linesModified.high : $Number(object.linesModified) !== 0)
+                    if ($util.Long)
+                        message.linesModified = $util.Long.fromValue(object.linesModified, true);
+                    else if (typeof object.linesModified === "string")
+                        message.linesModified = $parseInt(object.linesModified, 10);
+                    else if (typeof object.linesModified === "number")
+                        message.linesModified = object.linesModified;
+                    else if (typeof object.linesModified === "object")
+                        message.linesModified = new $util.LongBits(object.linesModified.low >>> 0, object.linesModified.high >>> 0).toNumber(true);
+            if (object.tokensAdded != null)
+                if (typeof object.tokensAdded === "object" ? object.tokensAdded.low || object.tokensAdded.high : $Number(object.tokensAdded) !== 0)
+                    if ($util.Long)
+                        message.tokensAdded = $util.Long.fromValue(object.tokensAdded, true);
+                    else if (typeof object.tokensAdded === "string")
+                        message.tokensAdded = $parseInt(object.tokensAdded, 10);
+                    else if (typeof object.tokensAdded === "number")
+                        message.tokensAdded = object.tokensAdded;
+                    else if (typeof object.tokensAdded === "object")
+                        message.tokensAdded = new $util.LongBits(object.tokensAdded.low >>> 0, object.tokensAdded.high >>> 0).toNumber(true);
+            if (object.tokensDeleted != null)
+                if (typeof object.tokensDeleted === "object" ? object.tokensDeleted.low || object.tokensDeleted.high : $Number(object.tokensDeleted) !== 0)
+                    if ($util.Long)
+                        message.tokensDeleted = $util.Long.fromValue(object.tokensDeleted, true);
+                    else if (typeof object.tokensDeleted === "string")
+                        message.tokensDeleted = $parseInt(object.tokensDeleted, 10);
+                    else if (typeof object.tokensDeleted === "number")
+                        message.tokensDeleted = object.tokensDeleted;
+                    else if (typeof object.tokensDeleted === "object")
+                        message.tokensDeleted = new $util.LongBits(object.tokensDeleted.low >>> 0, object.tokensDeleted.high >>> 0).toNumber(true);
+            if (object.tokensReplaced != null)
+                if (typeof object.tokensReplaced === "object" ? object.tokensReplaced.low || object.tokensReplaced.high : $Number(object.tokensReplaced) !== 0)
+                    if ($util.Long)
+                        message.tokensReplaced = $util.Long.fromValue(object.tokensReplaced, true);
+                    else if (typeof object.tokensReplaced === "string")
+                        message.tokensReplaced = $parseInt(object.tokensReplaced, 10);
+                    else if (typeof object.tokensReplaced === "number")
+                        message.tokensReplaced = object.tokensReplaced;
+                    else if (typeof object.tokensReplaced === "object")
+                        message.tokensReplaced = new $util.LongBits(object.tokensReplaced.low >>> 0, object.tokensReplaced.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a RecordStatistics message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {atomic.RecordStatistics} message RecordStatistics
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        RecordStatistics.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.filesRecorded = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.filesRecorded = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.directoriesRecorded = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.directoriesRecorded = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.hunksCreated = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.hunksCreated = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.verticesAdded = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.verticesAdded = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.edgesModified = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.edgesModified = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.contentBytes = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.contentBytes = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.linesAdded = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.linesAdded = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.linesDeleted = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.linesDeleted = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.linesModified = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.linesModified = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.tokensAdded = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.tokensAdded = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.tokensDeleted = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.tokensDeleted = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.tokensReplaced = options.longs === $String ? long.toString() : options.longs === $Number ? long.toNumber() : typeof $BigInt !== "undefined" && options.longs === $BigInt ? long.toBigInt() : long;
+                } else
+                    object.tokensReplaced = options.longs === $String ? "0" : typeof $BigInt !== "undefined" && options.longs === $BigInt ? $BigInt("0") : 0;
+            }
+            if (message.filesRecorded != null && $Object.hasOwnProperty.call(message, "filesRecorded"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.filesRecorded = typeof message.filesRecorded === "number" ? $BigInt(message.filesRecorded) : $util.Long.fromBits(message.filesRecorded.low >>> 0, message.filesRecorded.high >>> 0, true).toBigInt();
+                else if (typeof message.filesRecorded === "number")
+                    object.filesRecorded = options.longs === $String ? $String(message.filesRecorded) : message.filesRecorded;
+                else
+                    object.filesRecorded = options.longs === $String ? $util.Long.prototype.toString.call(message.filesRecorded) : options.longs === $Number ? new $util.LongBits(message.filesRecorded.low >>> 0, message.filesRecorded.high >>> 0).toNumber(true) : message.filesRecorded;
+            if (message.directoriesRecorded != null && $Object.hasOwnProperty.call(message, "directoriesRecorded"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.directoriesRecorded = typeof message.directoriesRecorded === "number" ? $BigInt(message.directoriesRecorded) : $util.Long.fromBits(message.directoriesRecorded.low >>> 0, message.directoriesRecorded.high >>> 0, true).toBigInt();
+                else if (typeof message.directoriesRecorded === "number")
+                    object.directoriesRecorded = options.longs === $String ? $String(message.directoriesRecorded) : message.directoriesRecorded;
+                else
+                    object.directoriesRecorded = options.longs === $String ? $util.Long.prototype.toString.call(message.directoriesRecorded) : options.longs === $Number ? new $util.LongBits(message.directoriesRecorded.low >>> 0, message.directoriesRecorded.high >>> 0).toNumber(true) : message.directoriesRecorded;
+            if (message.hunksCreated != null && $Object.hasOwnProperty.call(message, "hunksCreated"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.hunksCreated = typeof message.hunksCreated === "number" ? $BigInt(message.hunksCreated) : $util.Long.fromBits(message.hunksCreated.low >>> 0, message.hunksCreated.high >>> 0, true).toBigInt();
+                else if (typeof message.hunksCreated === "number")
+                    object.hunksCreated = options.longs === $String ? $String(message.hunksCreated) : message.hunksCreated;
+                else
+                    object.hunksCreated = options.longs === $String ? $util.Long.prototype.toString.call(message.hunksCreated) : options.longs === $Number ? new $util.LongBits(message.hunksCreated.low >>> 0, message.hunksCreated.high >>> 0).toNumber(true) : message.hunksCreated;
+            if (message.verticesAdded != null && $Object.hasOwnProperty.call(message, "verticesAdded"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.verticesAdded = typeof message.verticesAdded === "number" ? $BigInt(message.verticesAdded) : $util.Long.fromBits(message.verticesAdded.low >>> 0, message.verticesAdded.high >>> 0, true).toBigInt();
+                else if (typeof message.verticesAdded === "number")
+                    object.verticesAdded = options.longs === $String ? $String(message.verticesAdded) : message.verticesAdded;
+                else
+                    object.verticesAdded = options.longs === $String ? $util.Long.prototype.toString.call(message.verticesAdded) : options.longs === $Number ? new $util.LongBits(message.verticesAdded.low >>> 0, message.verticesAdded.high >>> 0).toNumber(true) : message.verticesAdded;
+            if (message.edgesModified != null && $Object.hasOwnProperty.call(message, "edgesModified"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.edgesModified = typeof message.edgesModified === "number" ? $BigInt(message.edgesModified) : $util.Long.fromBits(message.edgesModified.low >>> 0, message.edgesModified.high >>> 0, true).toBigInt();
+                else if (typeof message.edgesModified === "number")
+                    object.edgesModified = options.longs === $String ? $String(message.edgesModified) : message.edgesModified;
+                else
+                    object.edgesModified = options.longs === $String ? $util.Long.prototype.toString.call(message.edgesModified) : options.longs === $Number ? new $util.LongBits(message.edgesModified.low >>> 0, message.edgesModified.high >>> 0).toNumber(true) : message.edgesModified;
+            if (message.contentBytes != null && $Object.hasOwnProperty.call(message, "contentBytes"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.contentBytes = typeof message.contentBytes === "number" ? $BigInt(message.contentBytes) : $util.Long.fromBits(message.contentBytes.low >>> 0, message.contentBytes.high >>> 0, true).toBigInt();
+                else if (typeof message.contentBytes === "number")
+                    object.contentBytes = options.longs === $String ? $String(message.contentBytes) : message.contentBytes;
+                else
+                    object.contentBytes = options.longs === $String ? $util.Long.prototype.toString.call(message.contentBytes) : options.longs === $Number ? new $util.LongBits(message.contentBytes.low >>> 0, message.contentBytes.high >>> 0).toNumber(true) : message.contentBytes;
+            if (message.linesAdded != null && $Object.hasOwnProperty.call(message, "linesAdded"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.linesAdded = typeof message.linesAdded === "number" ? $BigInt(message.linesAdded) : $util.Long.fromBits(message.linesAdded.low >>> 0, message.linesAdded.high >>> 0, true).toBigInt();
+                else if (typeof message.linesAdded === "number")
+                    object.linesAdded = options.longs === $String ? $String(message.linesAdded) : message.linesAdded;
+                else
+                    object.linesAdded = options.longs === $String ? $util.Long.prototype.toString.call(message.linesAdded) : options.longs === $Number ? new $util.LongBits(message.linesAdded.low >>> 0, message.linesAdded.high >>> 0).toNumber(true) : message.linesAdded;
+            if (message.linesDeleted != null && $Object.hasOwnProperty.call(message, "linesDeleted"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.linesDeleted = typeof message.linesDeleted === "number" ? $BigInt(message.linesDeleted) : $util.Long.fromBits(message.linesDeleted.low >>> 0, message.linesDeleted.high >>> 0, true).toBigInt();
+                else if (typeof message.linesDeleted === "number")
+                    object.linesDeleted = options.longs === $String ? $String(message.linesDeleted) : message.linesDeleted;
+                else
+                    object.linesDeleted = options.longs === $String ? $util.Long.prototype.toString.call(message.linesDeleted) : options.longs === $Number ? new $util.LongBits(message.linesDeleted.low >>> 0, message.linesDeleted.high >>> 0).toNumber(true) : message.linesDeleted;
+            if (message.linesModified != null && $Object.hasOwnProperty.call(message, "linesModified"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.linesModified = typeof message.linesModified === "number" ? $BigInt(message.linesModified) : $util.Long.fromBits(message.linesModified.low >>> 0, message.linesModified.high >>> 0, true).toBigInt();
+                else if (typeof message.linesModified === "number")
+                    object.linesModified = options.longs === $String ? $String(message.linesModified) : message.linesModified;
+                else
+                    object.linesModified = options.longs === $String ? $util.Long.prototype.toString.call(message.linesModified) : options.longs === $Number ? new $util.LongBits(message.linesModified.low >>> 0, message.linesModified.high >>> 0).toNumber(true) : message.linesModified;
+            if (message.tokensAdded != null && $Object.hasOwnProperty.call(message, "tokensAdded"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.tokensAdded = typeof message.tokensAdded === "number" ? $BigInt(message.tokensAdded) : $util.Long.fromBits(message.tokensAdded.low >>> 0, message.tokensAdded.high >>> 0, true).toBigInt();
+                else if (typeof message.tokensAdded === "number")
+                    object.tokensAdded = options.longs === $String ? $String(message.tokensAdded) : message.tokensAdded;
+                else
+                    object.tokensAdded = options.longs === $String ? $util.Long.prototype.toString.call(message.tokensAdded) : options.longs === $Number ? new $util.LongBits(message.tokensAdded.low >>> 0, message.tokensAdded.high >>> 0).toNumber(true) : message.tokensAdded;
+            if (message.tokensDeleted != null && $Object.hasOwnProperty.call(message, "tokensDeleted"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.tokensDeleted = typeof message.tokensDeleted === "number" ? $BigInt(message.tokensDeleted) : $util.Long.fromBits(message.tokensDeleted.low >>> 0, message.tokensDeleted.high >>> 0, true).toBigInt();
+                else if (typeof message.tokensDeleted === "number")
+                    object.tokensDeleted = options.longs === $String ? $String(message.tokensDeleted) : message.tokensDeleted;
+                else
+                    object.tokensDeleted = options.longs === $String ? $util.Long.prototype.toString.call(message.tokensDeleted) : options.longs === $Number ? new $util.LongBits(message.tokensDeleted.low >>> 0, message.tokensDeleted.high >>> 0).toNumber(true) : message.tokensDeleted;
+            if (message.tokensReplaced != null && $Object.hasOwnProperty.call(message, "tokensReplaced"))
+                if (typeof $BigInt !== "undefined" && options.longs === $BigInt)
+                    object.tokensReplaced = typeof message.tokensReplaced === "number" ? $BigInt(message.tokensReplaced) : $util.Long.fromBits(message.tokensReplaced.low >>> 0, message.tokensReplaced.high >>> 0, true).toBigInt();
+                else if (typeof message.tokensReplaced === "number")
+                    object.tokensReplaced = options.longs === $String ? $String(message.tokensReplaced) : message.tokensReplaced;
+                else
+                    object.tokensReplaced = options.longs === $String ? $util.Long.prototype.toString.call(message.tokensReplaced) : options.longs === $Number ? new $util.LongBits(message.tokensReplaced.low >>> 0, message.tokensReplaced.high >>> 0).toNumber(true) : message.tokensReplaced;
+            return object;
+        };
+
+        /**
+         * Converts this RecordStatistics to JSON.
+         * @function toJSON
+         * @memberof atomic.RecordStatistics
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        RecordStatistics.prototype.toJSON = function() {
+            return RecordStatistics.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for RecordStatistics
+         * @function getTypeUrl
+         * @memberof atomic.RecordStatistics
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        RecordStatistics.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.RecordStatistics";
+        };
+
+        return RecordStatistics;
+    })();
+
+    atomic.RecordFileError = (function() {
+
+        /**
+         * Properties of a RecordFileError.
+         * @typedef {Object} atomic.RecordFileError.$Properties
+         * @property {string|null} [path] RecordFileError path
+         * @property {string|null} [message] RecordFileError message
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+
+        /**
+         * Properties of a RecordFileError.
+         * @memberof atomic
+         * @interface IRecordFileError
+         * @augments atomic.RecordFileError.$Properties
+         * @deprecated Use atomic.RecordFileError.$Properties instead.
+         */
+
+        /**
+         * Shape of a RecordFileError.
+         * @typedef {atomic.RecordFileError.$Properties} atomic.RecordFileError.$Shape
+         */
+
+        /**
+         * Constructs a new RecordFileError.
+         * @memberof atomic
+         * @classdesc Represents a RecordFileError.
+         * @constructor
+         * @param {atomic.RecordFileError.$Properties=} [properties] Properties to set
+         * @property {Array.<Uint8Array>} [$unknowns] Unknown fields preserved while decoding when enabled
+         */
+        var RecordFileError = function (properties) {
+            if (properties)
+                for (var keys = $Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null && keys[i] !== "__proto__")
+                        this[keys[i]] = properties[keys[i]];
+        };
+
+        /**
+         * RecordFileError path.
+         * @member {string} path
+         * @memberof atomic.RecordFileError
+         * @instance
+         */
+        RecordFileError.prototype.path = "";
+
+        /**
+         * RecordFileError message.
+         * @member {string} message
+         * @memberof atomic.RecordFileError
+         * @instance
+         */
+        RecordFileError.prototype.message = "";
+
+        /**
+         * Creates a new RecordFileError instance using the specified properties.
+         * @function create
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {atomic.RecordFileError.$Properties=} [properties] Properties to set
+         * @returns {atomic.RecordFileError} RecordFileError instance
+         * @type {{
+         *   (properties: atomic.RecordFileError.$Shape): atomic.RecordFileError & atomic.RecordFileError.$Shape;
+         *   (properties?: atomic.RecordFileError.$Properties): atomic.RecordFileError;
+         * }}
+         */
+        RecordFileError.create = function(properties) {
+            return new RecordFileError(properties);
+        };
+
+        /**
+         * Encodes the specified RecordFileError message. Does not implicitly {@link atomic.RecordFileError.verify|verify} messages.
+         * @function encode
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {atomic.RecordFileError.$Properties} message RecordFileError message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RecordFileError.encode = function (message, writer, _depth) {
+            if (!writer)
+                writer = $Writer.create();
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path") && message.path !== "")
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.path);
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message") && message.message !== "")
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+            if (message.$unknowns != null && $Object.hasOwnProperty.call(message, "$unknowns"))
+                for (var i = 0; i < message.$unknowns.length; ++i)
+                    writer.raw(message.$unknowns[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RecordFileError message, length delimited. Does not implicitly {@link atomic.RecordFileError.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {atomic.RecordFileError.$Properties} message RecordFileError message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RecordFileError.encodeDelimited = function(message, writer) {
+            return this.encode(message, (writer || $Writer.create()).fork()).ldelim();
+        };
+
+        /**
+         * Decodes a RecordFileError message from the specified reader or buffer.
+         * @function decode
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {atomic.RecordFileError & atomic.RecordFileError.$Shape} RecordFileError
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RecordFileError.decode = function (reader, length, _end, _depth, _target) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $Reader.recursionLimit)
+                throw $Error("max depth exceeded");
+            var end, message, value;
+            if (length === $undefined)
+                end = reader.len;
+            else {
+                end = reader.pos + length;
+                if (end > reader.len)
+                    throw $RangeError("index out of range");
+                length = reader.len;
+                reader.len = end;
+            }
+            message = _target || new $root.atomic.RecordFileError();
+            while (reader.pos < end) {
+                var start = reader.pos;
+                var tag = reader.tag();
+                if (tag === _end) {
+                    _end = $undefined;
+                    break;
+                }
+                var wireType = tag & 7;
+                switch (tag >>>= 3) {
+                case 1: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.path = value;
+                        else
+                            delete message.path;
+                        continue;
+                    }
+                case 2: {
+                        if (wireType !== 2)
+                            break;
+                        if ((value = reader.stringVerify()).length)
+                            message.message = value;
+                        else
+                            delete message.message;
+                        continue;
+                    }
+                }
+                reader.skipType(wireType, _depth, tag);
+                if (!reader.discardUnknown) {
+                    $util.makeProp(message, "$unknowns", false);
+                    (message.$unknowns || (message.$unknowns = [])).push(reader.raw(start, reader.pos));
+                }
+            }
+            if (length !== $undefined) {
+                if (reader.pos !== end)
+                    throw $RangeError("index out of range");
+                reader.len = length;
+            }
+            if (_end !== $undefined)
+                throw $Error("missing end group");
+            return message;
+        };
+
+        /**
+         * Decodes a RecordFileError message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {atomic.RecordFileError & atomic.RecordFileError.$Shape} RecordFileError
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RecordFileError.decodeDelimited = function(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.size());
+        };
+
+        /**
+         * Verifies a RecordFileError message.
+         * @function verify
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RecordFileError.verify = function (message, _depth) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                return "max depth exceeded";
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path"))
+                if (!$util.isString(message.path))
+                    return "path: string expected";
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                if (!$util.isString(message.message))
+                    return "message: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a RecordFileError message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {atomic.RecordFileError} RecordFileError
+         */
+        RecordFileError.fromObject = function (object, _depth) {
+            if (object instanceof $root.atomic.RecordFileError)
+                return object;
+            if (!$util.isObject(object))
+                throw $TypeError(".atomic.RecordFileError: object expected");
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var message = new $root.atomic.RecordFileError();
+            if (object.path != null)
+                if (typeof object.path !== "string" || object.path.length)
+                    message.path = $String(object.path);
+            if (object.message != null)
+                if (typeof object.message !== "string" || object.message.length)
+                    message.message = $String(object.message);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a RecordFileError message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {atomic.RecordFileError} message RecordFileError
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        RecordFileError.toObject = function (message, options, _depth) {
+            if (!options)
+                options = {};
+            if (_depth === $undefined)
+                _depth = 0;
+            if (_depth > $util.recursionLimit)
+                throw $Error("max depth exceeded");
+            var object = {};
+            if (options.defaults) {
+                object.path = "";
+                object.message = "";
+            }
+            if (message.path != null && $Object.hasOwnProperty.call(message, "path"))
+                object.path = message.path;
+            if (message.message != null && $Object.hasOwnProperty.call(message, "message"))
+                object.message = message.message;
+            return object;
+        };
+
+        /**
+         * Converts this RecordFileError to JSON.
+         * @function toJSON
+         * @memberof atomic.RecordFileError
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        RecordFileError.prototype.toJSON = function() {
+            return RecordFileError.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the type url for RecordFileError
+         * @function getTypeUrl
+         * @memberof atomic.RecordFileError
+         * @static
+         * @param {string} [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns {string} The type url
+         */
+        RecordFileError.getTypeUrl = function(prefix) {
+            if (prefix === $undefined)
+                prefix = "type.googleapis.com";
+            return prefix + "/atomic.RecordFileError";
+        };
+
+        return RecordFileError;
     })();
 
     atomic.LogRequest = (function() {

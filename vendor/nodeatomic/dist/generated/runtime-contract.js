@@ -1,2 +1,2 @@
 // Generated from the producer's full embedded descriptor.
-export const descriptorSha256 = '6649fc0c17d66d7af594914854609ebbcfbfb81f8303e45e62794e955e4ee8a5';
+export const descriptorSha256 = '7f20692aca8ff40b81361a190672cbd4aa0d1388420c0b5e9f6fc86b8018e8dd';

@@ -9,6 +9,7 @@
 - Resolve filesystem aliases in unsaved-document guards so tickets opened through symlinked repository paths cannot bypass record, view-switch, pull, or insertion safety checks.
 - Keep inactive-view insertion results separate from unrelated current-working-copy conflict paths; retain genuine target conflict failures.
 - Refresh the native descriptor fingerprint after integrating Atomic dev's vault-evidence replay contract, retaining strict runtime compatibility checks.
+- Regenerate the vendored nodeatomic codecs, declarations, and descriptor fingerprint from published Atomic v0.22.0; document the exact compatible runtime and retain strict rejection of mismatched contracts.
 - Upgrade vulnerable production dependencies (markdown-it, mermaid, sanitize-html, katex, Puppeteer, cspell, highlight.js, Shiki) and remove unused gRPC packages; `npm audit --omit=dev` is clean.
 - Load Puppeteer 25 as an ESM runtime and make webview/graph build steps cross-platform.
 - Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata and 1.0.0 version.

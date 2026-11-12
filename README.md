@@ -10,7 +10,7 @@ This is an **extension**, not a Markdown Preview plugin. It edits existing inten
 
 Local packages are written to `releases/`. Use the version confirmed by the build and verification output; a source version bump alone does not update the installed extension.
 
-**Atomic prerequisite:** Atomic features require a compatible complete Atomic installation on the **extension host**, including its CLI, platform library, and `libatomic-runtime.json`. This is a universal JavaScript-only VSIX, not a bundled native runtime. Install the complete release archive into a versioned directory and put it on PATH, or set an absolute `ATOMIC_RUNTIME_DIR` before launching the editor. Older CLI-only installations are insufficient. For Remote SSH/WSL/containers, install Atomic remotely. Fully restart the editor after environment/runtime changes. Intent/Markdown editing does not require loading the native runtime.
+**Atomic prerequisite:** This build targets the published **Atomic v0.22.0** runtime. Atomic features require its complete installation on the **extension host**, including the CLI, platform library, and `libatomic-runtime.json`. Install it with the [official installer](https://atomic.storage/install.sh), which registers the complete runtime for discovery without PATH setup, or extract the complete [v0.22.0 release archive](https://github.com/atomicdotdev/atomic/releases/tag/v0.22.0) into a versioned directory and put it on PATH or set an absolute `ATOMIC_RUNTIME_DIR` before launching the editor. This is a universal JavaScript-only VSIX, not a bundled native runtime. Older CLI-only installations and runtimes with a different protobuf descriptor are rejected. For Remote SSH/WSL/containers, install Atomic remotely. Fully restart the editor after runtime changes. Intent/Markdown editing does not require loading the native runtime.
 
 1. In VS Code, VSCodium, or another compatible editor, open the Command Palette.
 2. Run **Extensions: Install from VSIX…** and select that file.
@@ -89,6 +89,8 @@ There is no CLI subprocess, daemon startup, socket, direct database access, or w
 ## Develop and package
 
 Build requirements: Node.js 22+/npm (for VSCE 4), Bun, and a VS Code-compatible editor. The universal nodeatomic JavaScript consumer and its generated codecs are vendored at `vendor/nodeatomic`; its NOTICE records the source revision. A clean checkout builds without a sibling repository. Refresh that directory from the nodeatomic producer when its descriptor, API, or runtime loader changes. Its compiled codecs/fingerprint are bundled, so the resulting VSIX does not need the vendor directory. Atomic Sherpa never builds Rust or searches for Atomic producer sources. Building/packaging does not require a native library unless an explicit runtime override requests the native smoke.
+
+The vendored codecs and compatibility fingerprint are generated from the published Atomic v0.22.0 library, not from a development checkout. To adopt another runtime contract, regenerate the upstream nodeatomic package against that complete release, then refresh its built package and provenance notice here. Never change only the expected fingerprint or weaken the loader's contract checks.
 
 ```sh
 npm ci

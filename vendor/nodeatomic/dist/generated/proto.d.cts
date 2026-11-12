@@ -2272,6 +2272,12 @@ export namespace atomic {
         /** RecordRequest aiAuthorship. */
         aiAuthorship?: (atomic.RecordAiAuthorship.$Properties|null);
 
+        /** RecordRequest skipBinary. */
+        skipBinary?: (boolean|null);
+
+        /** RecordRequest maxFileSize. */
+        maxFileSize?: (number|Long|null);
+
         /**
          * Creates a new RecordRequest instance using the specified properties.
          * @param [properties] Properties to set
@@ -2380,6 +2386,12 @@ export namespace atomic {
             /** RecordRequest aiAuthorship */
             aiAuthorship?: (atomic.RecordAiAuthorship.$Properties|null);
 
+            /** RecordRequest skipBinary */
+            skipBinary?: (boolean|null);
+
+            /** RecordRequest maxFileSize */
+            maxFileSize?: (number|Long|null);
+
             /** Unknown fields preserved while decoding when enabled */
             $unknowns?: Uint8Array[];
         }
@@ -2394,6 +2406,8 @@ export namespace atomic {
           author?: atomic.Author.$Shape|null;
           identityName?: string|null;
           aiAuthorship?: atomic.RecordAiAuthorship.$Shape|null;
+          skipBinary?: boolean|null;
+          maxFileSize?: number|Long|null;
           $unknowns?: Uint8Array[];
         };
     }
@@ -2708,6 +2722,18 @@ export namespace atomic {
         /** RecordResponse view. */
         view?: (string|null);
 
+        /** RecordResponse statistics. */
+        statistics?: (atomic.RecordStatistics.$Properties|null);
+
+        /** RecordResponse recordedPaths. */
+        recordedPaths: string[];
+
+        /** RecordResponse skippedPaths. */
+        skippedPaths: string[];
+
+        /** RecordResponse fileErrors. */
+        fileErrors: atomic.RecordFileError.$Properties[];
+
         /** RecordResponse meta. */
         meta?: (atomic.ResponseMeta.$Properties|null);
 
@@ -2803,6 +2829,18 @@ export namespace atomic {
 
             /** RecordResponse view */
             view?: (string|null);
+
+            /** RecordResponse statistics */
+            statistics?: (atomic.RecordStatistics.$Properties|null);
+
+            /** RecordResponse recordedPaths */
+            recordedPaths?: (string[]|null);
+
+            /** RecordResponse skippedPaths */
+            skippedPaths?: (string[]|null);
+
+            /** RecordResponse fileErrors */
+            fileErrors?: (atomic.RecordFileError.$Properties[]|null);
 
             /** RecordResponse meta */
             meta?: (atomic.ResponseMeta.$Properties|null);
@@ -2996,6 +3034,312 @@ export namespace atomic {
 
         /** Shape of a ChangeInfo. */
         type $Shape = atomic.ChangeInfo.$Properties;
+    }
+
+    /**
+     * Properties of a RecordStatistics.
+     * @deprecated Use atomic.RecordStatistics.$Properties instead.
+     */
+    interface IRecordStatistics extends atomic.RecordStatistics.$Properties {
+    }
+
+    /** Represents a RecordStatistics. */
+    class RecordStatistics {
+
+        /**
+         * Constructs a new RecordStatistics.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.RecordStatistics.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** RecordStatistics filesRecorded. */
+        filesRecorded: (number|Long);
+
+        /** RecordStatistics directoriesRecorded. */
+        directoriesRecorded: (number|Long);
+
+        /** RecordStatistics hunksCreated. */
+        hunksCreated: (number|Long);
+
+        /** RecordStatistics verticesAdded. */
+        verticesAdded: (number|Long);
+
+        /** RecordStatistics edgesModified. */
+        edgesModified: (number|Long);
+
+        /** RecordStatistics contentBytes. */
+        contentBytes: (number|Long);
+
+        /** RecordStatistics linesAdded. */
+        linesAdded: (number|Long);
+
+        /** RecordStatistics linesDeleted. */
+        linesDeleted: (number|Long);
+
+        /** RecordStatistics linesModified. */
+        linesModified: (number|Long);
+
+        /** RecordStatistics tokensAdded. */
+        tokensAdded: (number|Long);
+
+        /** RecordStatistics tokensDeleted. */
+        tokensDeleted: (number|Long);
+
+        /** RecordStatistics tokensReplaced. */
+        tokensReplaced: (number|Long);
+
+        /**
+         * Creates a new RecordStatistics instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RecordStatistics instance
+         */
+        static create(properties: atomic.RecordStatistics.$Shape): atomic.RecordStatistics & atomic.RecordStatistics.$Shape;
+        static create(properties?: atomic.RecordStatistics.$Properties): atomic.RecordStatistics;
+
+        /**
+         * Encodes the specified RecordStatistics message. Does not implicitly {@link atomic.RecordStatistics.verify|verify} messages.
+         * @param message RecordStatistics message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.RecordStatistics.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified RecordStatistics message, length delimited. Does not implicitly {@link atomic.RecordStatistics.verify|verify} messages.
+         * @param message RecordStatistics message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.RecordStatistics.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a RecordStatistics message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.RecordStatistics & atomic.RecordStatistics.$Shape} RecordStatistics
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.RecordStatistics & atomic.RecordStatistics.$Shape;
+
+        /**
+         * Decodes a RecordStatistics message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.RecordStatistics & atomic.RecordStatistics.$Shape} RecordStatistics
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.RecordStatistics & atomic.RecordStatistics.$Shape;
+
+        /**
+         * Verifies a RecordStatistics message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a RecordStatistics message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns RecordStatistics
+         */
+        static fromObject(object: { [k: string]: any }): atomic.RecordStatistics;
+
+        /**
+         * Creates a plain object from a RecordStatistics message. Also converts values to other types if specified.
+         * @param message RecordStatistics
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.RecordStatistics, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this RecordStatistics to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for RecordStatistics
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace RecordStatistics {
+
+        /** Properties of a RecordStatistics. */
+        interface $Properties {
+
+            /** RecordStatistics filesRecorded */
+            filesRecorded?: (number|Long|null);
+
+            /** RecordStatistics directoriesRecorded */
+            directoriesRecorded?: (number|Long|null);
+
+            /** RecordStatistics hunksCreated */
+            hunksCreated?: (number|Long|null);
+
+            /** RecordStatistics verticesAdded */
+            verticesAdded?: (number|Long|null);
+
+            /** RecordStatistics edgesModified */
+            edgesModified?: (number|Long|null);
+
+            /** RecordStatistics contentBytes */
+            contentBytes?: (number|Long|null);
+
+            /** RecordStatistics linesAdded */
+            linesAdded?: (number|Long|null);
+
+            /** RecordStatistics linesDeleted */
+            linesDeleted?: (number|Long|null);
+
+            /** RecordStatistics linesModified */
+            linesModified?: (number|Long|null);
+
+            /** RecordStatistics tokensAdded */
+            tokensAdded?: (number|Long|null);
+
+            /** RecordStatistics tokensDeleted */
+            tokensDeleted?: (number|Long|null);
+
+            /** RecordStatistics tokensReplaced */
+            tokensReplaced?: (number|Long|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a RecordStatistics. */
+        type $Shape = atomic.RecordStatistics.$Properties;
+    }
+
+    /**
+     * Properties of a RecordFileError.
+     * @deprecated Use atomic.RecordFileError.$Properties instead.
+     */
+    interface IRecordFileError extends atomic.RecordFileError.$Properties {
+    }
+
+    /** Represents a RecordFileError. */
+    class RecordFileError {
+
+        /**
+         * Constructs a new RecordFileError.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: atomic.RecordFileError.$Properties);
+
+        /** Unknown fields preserved while decoding when enabled */
+        $unknowns?: Uint8Array[];
+
+        /** RecordFileError path. */
+        path: string;
+
+        /** RecordFileError message. */
+        message: string;
+
+        /**
+         * Creates a new RecordFileError instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RecordFileError instance
+         */
+        static create(properties: atomic.RecordFileError.$Shape): atomic.RecordFileError & atomic.RecordFileError.$Shape;
+        static create(properties?: atomic.RecordFileError.$Properties): atomic.RecordFileError;
+
+        /**
+         * Encodes the specified RecordFileError message. Does not implicitly {@link atomic.RecordFileError.verify|verify} messages.
+         * @param message RecordFileError message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encode(message: atomic.RecordFileError.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified RecordFileError message, length delimited. Does not implicitly {@link atomic.RecordFileError.verify|verify} messages.
+         * @param message RecordFileError message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        static encodeDelimited(message: atomic.RecordFileError.$Properties, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a RecordFileError message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns {atomic.RecordFileError & atomic.RecordFileError.$Shape} RecordFileError
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): atomic.RecordFileError & atomic.RecordFileError.$Shape;
+
+        /**
+         * Decodes a RecordFileError message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns {atomic.RecordFileError & atomic.RecordFileError.$Shape} RecordFileError
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): atomic.RecordFileError & atomic.RecordFileError.$Shape;
+
+        /**
+         * Verifies a RecordFileError message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a RecordFileError message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns RecordFileError
+         */
+        static fromObject(object: { [k: string]: any }): atomic.RecordFileError;
+
+        /**
+         * Creates a plain object from a RecordFileError message. Also converts values to other types if specified.
+         * @param message RecordFileError
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        static toObject(message: atomic.RecordFileError, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this RecordFileError to JSON.
+         * @returns JSON object
+         */
+        toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the type url for RecordFileError
+         * @param [prefix] Custom type url prefix, defaults to `"type.googleapis.com"`
+         * @returns The type url
+         */
+        static getTypeUrl(prefix?: string): string;
+    }
+
+    namespace RecordFileError {
+
+        /** Properties of a RecordFileError. */
+        interface $Properties {
+
+            /** RecordFileError path */
+            path?: (string|null);
+
+            /** RecordFileError message */
+            message?: (string|null);
+
+            /** Unknown fields preserved while decoding when enabled */
+            $unknowns?: Uint8Array[];
+        }
+
+        /** Shape of a RecordFileError. */
+        type $Shape = atomic.RecordFileError.$Properties;
     }
 
     /**

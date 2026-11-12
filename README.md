@@ -120,6 +120,20 @@ For a browser-only demo after building, run `npm run preview` and open `http://1
 
 With the preview running and Chrome/Edge installed, `npm run test:browser` runs the browser smoke check. `CHROME_PATH` can select an executable; `SCREENSHOT_PATH` optionally saves a screenshot.
 
+### Prepare a future release
+
+Run the helper from a clean `release` branch. These commands bump the version; they are not needed merely to publish the already-prepared 1.0.0 package.
+
+```sh
+npm run release:prep -- patch --dry-run
+npm run release:prep -- patch
+# Review package.json, package-lock.json, and CHANGELOG.md.
+npm run release:finalize
+```
+
+Preparation synchronizes the manifest version and both lockfile version fields, then inserts release notes before the existing changelog sections. Finalization accepts either `## 1.2.3` or `## 1.2.3 - YYYY-MM-DD`, checks that all version fields match, and commits only those three release files before creating a local annotated tag. Unrelated working-tree changes are rejected. The helper prints the commands to push the `release` branch and tag; it does not push, package, or publish anything.
+
+
 ## Preservation and safety
 
 The presentation parser never serializes the whole Markdown or YAML document. Field edits preserve unrelated text, unknown attributes, evidence, quotation style, and comments. Conflicting external source changes keep the active draft and block Save rather than overwriting the changed file. Unsafe prose that would prematurely close a directive is rejected.

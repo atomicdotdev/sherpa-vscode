@@ -56,10 +56,10 @@ function bumpVersion(currentVersion, mode) {
   return mode;
 }
 
-function ensureMainBranch() {
+function ensureReleaseBranch() {
   const branch = tryGit(["symbolic-ref", "--quiet", "--short", "HEAD"]);
-  if (!branch) fail("HEAD is detached. Switch to main before running release prep.");
-  if (branch !== "main") fail(`Current branch is '${branch}'. Switch to 'main' first.`);
+  if (!branch) fail("HEAD is detached. Switch to release before running release prep.");
+  if (branch !== "release") fail(`Current branch is '${branch}'. Switch to 'release' first.`);
 }
 
 function ensureCleanTree() {
@@ -86,8 +86,13 @@ function readPackageJson() {
   return { raw, data: JSON.parse(raw) };
 }
 
-function writePackageJson(pkg) {
+function writePackageVersions(pkg, version) {
+  const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+  pkg.version = version;
+  lock.version = version;
+  lock.packages[""].version = version;
   fs.writeFileSync("package.json", `${JSON.stringify(pkg, null, 2)}\n`);
+  fs.writeFileSync("package-lock.json", `${JSON.stringify(lock, null, 2)}\n`);
 }
 
 function latestTag() {
@@ -210,16 +215,11 @@ function prependChangelog(version, items) {
 
   const changelogPath = "CHANGELOG.md";
   const current = fs.readFileSync(changelogPath, "utf8");
-  const marker = "---\n";
-  const idx = current.indexOf(marker);
-  if (idx === -1) {
-    fail("CHANGELOG.md is missing the expected '---' separator.");
-  }
-
-  const insertAt = idx + marker.length;
+  const idx = current.search(/^##[ \t]+/m);
+  const prefix = idx === -1 ? `${current.trimEnd()}\n\n` : current.slice(0, idx);
+  const suffix = idx === -1 ? "" : current.slice(idx);
   const section = formatChangelogSection(version, items);
-  const next = `${current.slice(0, insertAt)}${section}${current.slice(insertAt)}`;
-  fs.writeFileSync(changelogPath, next);
+  fs.writeFileSync(changelogPath, `${prefix}${section}${suffix}`);
 }
 
 function ensureTagDoesNotExist(tag) {
@@ -229,7 +229,8 @@ function ensureTagDoesNotExist(tag) {
 
 function ensureChangelogHasVersion(version) {
   const changelog = fs.readFileSync("CHANGELOG.md", "utf8");
-  if (!changelog.includes(`## ${version}\n`)) {
+  const heading = new RegExp(`^##[ \\t]+${version.replaceAll(".", "\\.")}(?:[ \\t]+-[ \\t]+\\d{4}-\\d{2}-\\d{2})?[ \\t]*\\r?$`, "m");
+  if (!heading.test(changelog)) {
     fail(`CHANGELOG.md does not contain a '## ${version}' section.`);
   }
 }
@@ -240,7 +241,7 @@ function ensureOnlyReleaseFilesChanged() {
     fail("No local changes found. Run prepare first.");
   }
 
-  const allowed = new Set(["package.json", "CHANGELOG.md"]);
+  const allowed = new Set(["package.json", "package-lock.json", "CHANGELOG.md"]);
   const disallowed = [];
 
   for (const line of statusLines) {
@@ -251,14 +252,14 @@ function ensureOnlyReleaseFilesChanged() {
   }
 
   if (disallowed.length > 0) {
-    console.error("ERROR: Finalize only allows local changes in package.json and CHANGELOG.md.");
+    console.error("ERROR: Finalize only allows local changes in package.json, package-lock.json and CHANGELOG.md.");
     disallowed.forEach((line) => console.error(`  ${line}`));
     process.exit(1);
   }
 }
 
 function commitAndTag(version) {
-  runGit(["add", "package.json", "CHANGELOG.md"]);
+  runGit(["add", "package.json", "package-lock.json", "CHANGELOG.md"]);
   runGit(["commit", "-m", `chore: update version to ${version}`]);
   runGit(["tag", "-a", version, "-m", `v${version}`]);
 }
@@ -290,8 +291,7 @@ function prepareRelease(versionOrBump, write) {
     process.exit(0);
   }
 
-  pkg.version = nextVersion;
-  writePackageJson(pkg);
+  writePackageVersions(pkg, nextVersion);
   prependChangelog(nextVersion, changelogItems);
 
   console.log(`Release draft prepared locally for ${nextVersion}`);
@@ -304,6 +304,10 @@ function finalizeRelease() {
 
   const { data: pkg } = readPackageJson();
   if (!pkg.version) fail("package.json is missing a version field.");
+  const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+  if (lock.version !== pkg.version || lock.packages[""].version !== pkg.version) {
+    fail("package-lock.json versions must match package.json before finalizing.");
+  }
 
   ensureTagDoesNotExist(pkg.version);
   ensureChangelogHasVersion(pkg.version);
@@ -311,13 +315,13 @@ function finalizeRelease() {
 
   console.log(`Release finalized locally for ${pkg.version}`);
   console.log("Next steps:");
-  console.log("  git push origin main");
+  console.log("  git push origin release");
   console.log(`  git push origin ${pkg.version}`);
 }
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
-  ensureMainBranch();
+  ensureReleaseBranch();
   if (args.mode === "finalize") {
     finalizeRelease();
     return;

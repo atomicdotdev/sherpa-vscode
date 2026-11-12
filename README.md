@@ -106,11 +106,16 @@ npm run test:atomic:graph
 npm run package:vsix
 # Recheck an existing archive (defaults to the current manifest's release filename).
 npm run verify:vsix
+# Check archived spell diagnostics, corrections, and imported project dictionaries.
+# Runs Node with checkout filesystem access denied; no browser/native runtime needed.
+node scripts/packagedSpellSmoke.mjs
 ```
 
 The extension build bundles only JavaScript/protobuf dependencies as `dist/nodeatomic/index.mjs`. It checks lazy import, codec access and missing-runtime rejection in **Node**, not Bun. With an explicit runtime override it additionally checks actual native dispatch; an import alone is not evidence that a library loaded. The default build does not copy, remove or overwrite native libraries. `.vscodeignore` excludes legacy `dist/native/**` and native filenames even if old build artifacts remain on disk.
 
 `package:vsix` deliberately sets no platform target. It validates the generated archive's identity/version, rejects platform-targeted manifests and native payloads, and runs the exact archived consumer from an isolated temporary directory without `node_modules`. Native dispatch is also checked when a runtime override is present. This guards against accidental sibling-checkout dependencies and stale native assets. `verify:vsix` accepts an archive path as an optional argument. Neither command publishes to the Marketplace.
+
+Spellchecking ships its JavaScript engine, package metadata, configuration, and dictionaries under `dist/spell`; these files are loaded from the installed extension rather than bundled build-machine paths. Workspace `cspell.json` imports and relative custom dictionaries remain supported. CI exercises the exact archived spell runtime in a separate Node process that cannot read the checkout. The spelling smoke accepts an optional VSIX path.
 
 **Universal packaging is not a claim of tested support on every host.** The external producer currently supplies macOS ARM64, Linux x64 glibc, and Windows x64 runtimes. Validate the same VSIX inside the actual VS Code/Electron extension host on each platform before claiming compatibility. Node-only integration tests do not establish Electron compatibility. Remote hosts need their own matching runtime. Browser preview does not exercise this panel. External Atomic installers and self-update must preserve the complete CLI/library pair; this extension does not implement those installation paths.
 

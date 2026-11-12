@@ -554,7 +554,7 @@ export function createPanelSessionController(params: PanelSessionControllerParam
   const runSpellCheck = async (generation: number): Promise<void> => {
     try {
       const diagnostics = document.textDocument
-        ? await collectMeoSpellDiagnostics(document.textDocument)
+        ? await collectMeoSpellDiagnostics(document.textDocument, context.extensionUri)
         : [];
       if (disposed || generation !== spellCheckGeneration) {
         return;
@@ -1025,7 +1025,7 @@ export function createPanelSessionController(params: PanelSessionControllerParam
         return;
       }
       case 'requestDiagnosticSuggestions': {
-        const response = await resolveDiagnosticSuggestions(document, raw);
+        const response = await resolveDiagnosticSuggestions(document, raw, context.extensionUri);
         await postToWebview(response);
         return;
       }
@@ -1407,7 +1407,8 @@ function serializeDiagnostics(document: MarkdownCustomDocument): SerializedDiagn
 
 async function resolveDiagnosticSuggestions(
   document: MarkdownCustomDocument,
-  request: RequestDiagnosticSuggestionsMessage
+  request: RequestDiagnosticSuggestionsMessage,
+  extensionUri: vscode.Uri
 ): Promise<DiagnosticSuggestionsResultMessage> {
   const emptyResponse: DiagnosticSuggestionsResultMessage = {
     type: 'diagnosticSuggestionsResult',
@@ -1465,7 +1466,7 @@ async function resolveDiagnosticSuggestions(
 
   if (suggestions.length === 0 && request.source === MEO_SPELL_DIAGNOSTIC_SOURCE) {
     const spellSuggestions = document.textDocument
-      ? await collectMeoSpellSuggestions(document.textDocument, requestedRange.from, requestedRange.to)
+      ? await collectMeoSpellSuggestions(document.textDocument, requestedRange.from, requestedRange.to, extensionUri)
       : [];
     for (const suggestion of spellSuggestions) {
       if (seen.has(suggestion)) {

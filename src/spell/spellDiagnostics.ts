@@ -1,17 +1,18 @@
 import * as vscode from 'vscode';
-import {
-  getDefaultSettings,
-  mergeSettings,
-  searchForConfig,
-  spellCheckDocument,
-  type CSpellUserSettings,
-  type ValidationIssue
-} from 'cspell-lib';
+import { pathToFileURL } from 'node:url';
+import type { ValidationIssue } from 'cspell-lib' with { 'resolution-mode': 'import' };
+import type * as SpellRuntime from './runtime.mjs' with { 'resolution-mode': 'import' };
 
 export const MEO_SPELL_DIAGNOSTIC_SOURCE = 'MEO Spell';
 
 const maxSpellCheckTextLength = 1_000_000;
 const maxSpellSuggestions = 1;
+let spellRuntime: Promise<typeof SpellRuntime> | undefined;
+
+function loadSpellRuntime(extensionUri: vscode.Uri): Promise<typeof SpellRuntime> {
+  spellRuntime ??= import(pathToFileURL(vscode.Uri.joinPath(extensionUri, 'dist', 'spell', 'runtime.mjs').fsPath).href);
+  return spellRuntime;
+}
 
 export function shouldRunMeoSpellCheck(document: vscode.TextDocument): boolean {
   if (document.uri.scheme !== 'file') {
@@ -41,21 +42,23 @@ export function hasExternalSpellDiagnostics(document: vscode.TextDocument): bool
   });
 }
 
-export async function collectMeoSpellDiagnostics(document: vscode.TextDocument): Promise<vscode.Diagnostic[]> {
+export async function collectMeoSpellDiagnostics(
+  document: vscode.TextDocument,
+  extensionUri: vscode.Uri
+): Promise<vscode.Diagnostic[]> {
   if (!shouldRunMeoSpellCheck(document) || hasExternalSpellDiagnostics(document)) {
     return [];
   }
 
   const text = document.getText().replace(/\r\n?/g, '\n');
-  const settings = await resolveCSpellSettings(document);
-  const result = await spellCheckDocument(
+  const { checkDocument } = await loadSpellRuntime(extensionUri);
+  const result = await checkDocument(
     {
       uri: document.uri.toString(),
       text,
       languageId: document.languageId || 'markdown'
     },
-    { generateSuggestions: false },
-    settings
+    false
   );
 
   if (!result.checked) {
@@ -68,26 +71,22 @@ export async function collectMeoSpellDiagnostics(document: vscode.TextDocument):
 export async function collectMeoSpellSuggestions(
   document: vscode.TextDocument,
   normalizedFrom: number,
-  normalizedTo: number
+  normalizedTo: number,
+  extensionUri: vscode.Uri
 ): Promise<string[]> {
   if (!shouldRunMeoSpellCheck(document)) {
     return [];
   }
 
   const text = document.getText().replace(/\r\n?/g, '\n');
-  const settings = await resolveCSpellSettings(document);
-  const result = await spellCheckDocument(
+  const { checkDocument } = await loadSpellRuntime(extensionUri);
+  const result = await checkDocument(
     {
       uri: document.uri.toString(),
       text,
       languageId: document.languageId || 'markdown'
     },
-    { generateSuggestions: true },
-    {
-      ...settings,
-      numSuggestions: maxSpellSuggestions,
-      suggestionsTimeout: 750
-    }
+    true
   );
 
   if (!result.checked) {
@@ -103,14 +102,6 @@ export async function collectMeoSpellSuggestions(
   });
 
   return uniqueSuggestions(issue?.suggestions ?? [], issue?.text ?? '').slice(0, maxSpellSuggestions);
-}
-
-async function resolveCSpellSettings(document: vscode.TextDocument): Promise<CSpellUserSettings> {
-  const localConfig = await searchForConfig(document.uri.fsPath);
-  if (!localConfig) {
-    return getDefaultSettings();
-  }
-  return mergeSettings(getDefaultSettings(), localConfig);
 }
 
 function uniqueSuggestions(suggestions: string[], original: string): string[] {

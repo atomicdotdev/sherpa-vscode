@@ -15,6 +15,7 @@
 - Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata and 1.0.0 version.
 - Fix release preparation on the `release` branch, synchronize and commit lockfile versions, and accept dated changelog headings without requiring a horizontal-rule separator.
 - Use an empty regular Git configuration file for release regression fixtures instead of an OS null-device path, which Git for Windows rejects.
+- Fix packaged spellchecking by shipping its JavaScript engine and dictionary/configuration dependency tree, resolving it from the installed extension, and awaiting defaults before merging project settings; verify archived diagnostics, corrections, and imported project dictionaries without checkout access.
 
 ## 0.2.12
 - Package one universal, JavaScript-only VSIX; Atomic's platform library is supplied by the separate Atomic installation on the extension host.

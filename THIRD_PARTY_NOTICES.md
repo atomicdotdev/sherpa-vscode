@@ -39,7 +39,8 @@ THIS SOFTWARE.
 
 The bundled `dist/nodeatomic/index.mjs` consumer is generated from
 [`atomicdotdev/nodeatomic`](https://github.com/atomicdotdev/nodeatomic), revision
-`6e50338c1d450cef8463113198d95c61e431a0b9`. The vendored build under
+`ac76e68d3d7facd8aefe26ef04baf3350509b115`, with generated codecs from the matching
+libatomic descriptor. The vendored build under
 `vendor/nodeatomic` is used only at build time and is excluded from the VSIX.
 
 nodeatomic is licensed under MIT OR Apache-2.0. The repository MIT license is in

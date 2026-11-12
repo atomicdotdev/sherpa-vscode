@@ -1,8 +1,9 @@
 import * as path from 'node:path';
+import { realpath } from 'node:fs/promises';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import type { ViewSummary } from '../shared/atomicEvidence';
 
-export type RepositoryClient = Pick<AtomicRepository, 'status' | 'add' | 'record' | 'log' | 'change' | 'views' | 'vault' | 'recordedFile'>;
+export type RepositoryClient = Pick<AtomicRepository, 'status' | 'add' | 'record' | 'log' | 'change' | 'views' | 'vault' | 'recordedFile' | 'push' | 'pull' | 'remotes'>;
 export type Status = Awaited<ReturnType<RepositoryClient['status']>>;
 export type History = Awaited<ReturnType<RepositoryClient['log']>>;
 export type Views = Awaited<ReturnType<RepositoryClient['views']['list']>>;
@@ -36,6 +37,32 @@ export function resolveRepositoryPath(root: string, file: string): string {
     throw new Error('Repository path escapes the workspace');
   }
   return resolved;
+}
+
+/** Match editor paths to a canonical repository root, including aliases and missing files. */
+export async function isRepositoryFilePath(root: string, file: string): Promise<boolean> {
+  const contains = (candidate: string): boolean => {
+    try {
+      resolveRepositoryPath(root, path.relative(root, candidate));
+      return true;
+    } catch { return false; }
+  };
+  if (contains(file)) return true;
+  let candidate = file;
+  let parent = path.dirname(candidate);
+  let suffix = '';
+  while (candidate !== parent) {
+    try {
+      return contains(path.join(await realpath(candidate), suffix));
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code !== 'ENOENT' && code !== 'ENOTDIR') throw error;
+      suffix = path.join(path.basename(candidate), suffix);
+      candidate = parent;
+      parent = path.dirname(candidate);
+    }
+  }
+  return false;
 }
 
 function identityPart(value: unknown): string {

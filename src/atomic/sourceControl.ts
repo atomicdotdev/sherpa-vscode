@@ -2,12 +2,11 @@ import * as path from 'node:path';
 import { stat, lstat, realpath } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
-import { RepositorySession, resolveRepositoryPath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
+import { RepositorySession, resolveRepositoryPath, isRepositoryFilePath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
 import { displayChangeHash } from '../shared/atomicHash';
-import { buildInsertViewArgs, buildPullArgs, buildPushArgs } from './syncArgs';
-import { runAtomicCli } from './syncCli';
+import { insertResult, pullResult, pushResult, type OperationResult } from './operationResults';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
 import { AtomicDiffEditor } from './diffEditor';
 import { revisionText } from './fileDiff';
@@ -66,7 +65,8 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       if (!displayedStatus) throw new Error('Refresh Atomic status before recording.');
       await owner.session.run(async () => {
         this.requireTrusted();
-        if (this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files in this repository before recording.');
+        if (await this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files in this repository before recording.');
+        this.requireTrusted();
         await owner.session.record(message, displayedStatus);
         if (owner.scm.inputBox.value === message) owner.scm.inputBox.value = '';
         await this.update(owner);
@@ -104,7 +104,8 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       if (!name) return;
       await owner.session.run(async () => {
         this.requireTrusted();
-        if (this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files before switching views.');
+        if (await this.hasDirtyDocuments(owner)) throw new Error('Save or close unsaved files before switching views.');
+        this.requireTrusted();
         // Never bypass Atomic's dirty-working-copy check.
         await owner.session.client.views.switch(name);
         await this.update(owner);
@@ -189,7 +190,9 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       if (toView === undefined) return;
       const remote = await this.promptRemote();
       if (remote === undefined) return;
-      await this.runSync(owner, 'Push view', buildPushArgs({ remote, fromView, toView }));
+      await this.runOperation(owner, 'Push view', async () => pushResult(await owner.session.client.push({
+        remote: remote.trim(), fromView: fromView.trim() || undefined, toView: toView.trim() || undefined
+      })));
     });
     command('pull', async (node?: Node) => {
       const owner = node?.owner ?? await this.pick();
@@ -200,7 +203,9 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       if (fromView === undefined) return;
       const toView = await this.pickView(owner, 'Local view to pull into', owner.session.status?.view);
       if (toView === undefined) return;
-      await this.runSync(owner, 'Pull view', buildPullArgs({ remote, fromView, toView }));
+      await this.runOperation(owner, 'Pull view', async () => pullResult(await owner.session.client.pull({
+        remote: remote.trim(), fromView: fromView.trim() || undefined, toView: toView.trim() || undefined
+      })), toView);
     });
     command('insertView', async (node?: Node) => {
       const owner = node?.owner ?? await this.pick();
@@ -216,7 +221,8 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         'Insert View'
       );
       if (confirmed !== 'Insert View') return;
-      await this.runSync(owner, 'Insert view', buildInsertViewArgs(source, target));
+      await this.runOperation(owner, 'Insert view', async () =>
+        insertResult(await owner.session.client.views.insert(source, target)), target);
     });
     command('addRemote', async (node?: Node) => {
       const owner = node?.owner ?? await this.pick();
@@ -227,7 +233,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       const url = await vscode.window.showInputBox({ prompt: 'Remote URL (for example an atomic.storage project URL)',
         placeHolder: 'https://atomic.storage/…', validateInput: (value) => value.trim() ? undefined : 'A remote URL is required' });
       if (url === undefined) return;
-      await this.runSync(owner, 'Add remote', ['remote', 'add', name.trim(), url.trim()]);
+      await this.runOperation(owner, 'Add remote', async () => {
+        await owner.session.client.remotes.add(name.trim(), url.trim());
+        return { lines: [`Added remote “${name.trim()}”.`] };
+      });
     });
     void this.discover();
   }
@@ -379,20 +388,23 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     this.changed.fire(undefined);
   }
 
-  private hasDirtyDocuments(owner: RepositoryUI): boolean {
-    const inRepository = (uri: vscode.Uri): boolean => {
-      if (uri.scheme !== 'file') return false;
-      try {
-        resolveRepositoryPath(owner.session.root, path.relative(owner.session.root, uri.fsPath));
-        return true;
-      } catch { return false; }
-    };
-    if (vscode.workspace.textDocuments.some((doc) => doc.isDirty && inRepository(doc.uri))) return true;
+  private async hasDirtyDocuments(owner: RepositoryUI): Promise<boolean> {
+    const paths = new Set<string>();
+    for (const doc of vscode.workspace.textDocuments) {
+      if (doc.isDirty && doc.uri.scheme === 'file') paths.add(doc.uri.fsPath);
+    }
     // File-backed custom documents can remain dirty after VS Code closes their backing TextDocument.
-    return vscode.window.tabGroups.all.some((group) => group.tabs.some((tab) => {
-      const input = tab.input;
-      return tab.isDirty && (input instanceof vscode.TabInputCustom || input instanceof vscode.TabInputText) && inRepository(input.uri);
-    }));
+    for (const group of vscode.window.tabGroups.all) {
+      for (const tab of group.tabs) {
+        const input = tab.input;
+        if (tab.isDirty && (input instanceof vscode.TabInputCustom || input instanceof vscode.TabInputText)
+          && input.uri.scheme === 'file') paths.add(input.uri.fsPath);
+      }
+    }
+    for (const file of paths) {
+      if (await isRepositoryFilePath(owner.session.root, file)) return true;
+    }
+    return false;
   }
 
   private async promptRemote(): Promise<string | undefined> {
@@ -413,18 +425,28 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     return picked;
   }
 
-  private async runSync(owner: RepositoryUI, label: string, args: string[]): Promise<void> {
+  private async runOperation(owner: RepositoryUI, label: string,
+    operation: () => Promise<OperationResult>, workingCopyView?: string): Promise<void> {
     this.requireTrusted();
-    this.output.appendLine(`atomic ${args.join(' ')}`);
     await vscode.window.withProgress(
       { location: vscode.ProgressLocation.Notification, title: `Atomic: ${label}`, cancellable: false },
-      async () => {
-        const result = await owner.session.run(() => runAtomicCli(args, { cwd: owner.session.root }));
-        if (result.stdout.trim()) this.output.appendLine(result.stdout.trim());
-        if (result.stderr.trim()) this.output.appendLine(result.stderr.trim());
-      }
+      () => owner.session.run(async () => {
+        this.requireTrusted();
+        if (!this.isOwner(owner)) return;
+        if (workingCopyView !== undefined && await this.hasDirtyDocuments(owner)) {
+          const currentView = (await owner.session.client.status()).view;
+          if (!workingCopyView.trim() || workingCopyView.trim() === currentView) {
+            throw new Error('Save or close unsaved files before updating the working-copy view.');
+          }
+        }
+        this.requireTrusted();
+        this.output.appendLine(`${label}: ${owner.session.root}`);
+        const result = await operation();
+        result.lines.forEach((line) => this.output.appendLine(line));
+        await this.update(owner);
+        if (result.error) throw new Error(result.error);
+      })
     );
-    await this.update(owner);
   }
 
   private async pick(source?: vscode.SourceControl): Promise<RepositoryUI | undefined> {

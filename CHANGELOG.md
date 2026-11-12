@@ -5,7 +5,11 @@
 - Rename command, setting, and custom-editor IDs from `catalyst*` to `sherpa*` for the public release.
 - Fix blast-radius hop counting, webview message validation, evidence refresh/state, SCM path isolation, oversized-blame handling, and export/editor regressions from review intents 1–14.
 - Remove inherited Git editor integration; Atomic remains the SCM provider.
-- Add Atomic push, pull, insert-view, and add-remote commands through the installed Atomic CLI.
+- Route Atomic push, pull, insert-view, and remote registration through nodeatomic and the in-process native service; remove the CLI subprocess bridge. Share Rust authentication with the CLI, surface structured failure reports, and protect unsaved current-view buffers.
+- Resolve filesystem aliases in unsaved-document guards so tickets opened through symlinked repository paths cannot bypass record, view-switch, pull, or insertion safety checks.
+- Keep inactive-view insertion results separate from unrelated current-working-copy conflict paths; retain genuine target conflict failures.
+- Refresh the native descriptor fingerprint after integrating Atomic dev's vault-evidence replay contract, retaining strict runtime compatibility checks.
+- Regenerate the vendored nodeatomic codecs, declarations, and descriptor fingerprint from published Atomic v0.22.0; document the exact compatible runtime and retain strict rejection of mismatched contracts.
 - Upgrade vulnerable production dependencies (markdown-it, mermaid, sanitize-html, katex, Puppeteer, cspell, highlight.js, Shiki) and remove unused gRPC packages; `npm audit --omit=dev` is clean.
 - Load Puppeteer 25 as an ESM runtime and make webview/graph build steps cross-platform.
 - Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata and 1.0.0 version.

@@ -1,1 +1,1 @@
-export declare const descriptorSha256 = "8e034a5fd37a1891d99b29d26a5839111c0081c587534876b2144db71d88cce2";
+export declare const descriptorSha256 = "7f20692aca8ff40b81361a190672cbd4aa0d1388420c0b5e9f6fc86b8018e8dd";

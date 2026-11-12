@@ -56,6 +56,9 @@ jobs:
       - name: Verify packaged VSIX
         run: node scripts/verify-universal-vsix.mjs
 
+      - name: Smoke packaged spelling without checkout access
+        run: node scripts/packagedSpellSmoke.mjs
+
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=low
 

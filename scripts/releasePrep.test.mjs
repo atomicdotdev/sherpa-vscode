@@ -1,7 +1,7 @@
 import { expect, test } from 'bun:test';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { devNull, tmpdir } from 'node:os';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,10 +9,13 @@ const helper = fileURLToPath(new URL('./release-prep.mjs', import.meta.url));
 const releaseFiles = ['package.json', 'package-lock.json', 'CHANGELOG.md'];
 
 function withRepository(run, branch = 'release') {
-  const root = mkdtempSync(join(tmpdir(), 'sherpa-release-prep-'));
+  const directory = mkdtempSync(join(tmpdir(), 'sherpa-release-prep-'));
+  const root = join(directory, 'repository');
+  // Git for Windows needs a regular config file, outside the worktree to keep it clean.
+  const globalConfig = join(directory, 'gitconfig');
   const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')));
   Object.assign(env, {
-    GIT_CONFIG_GLOBAL: devNull,
+    GIT_CONFIG_GLOBAL: globalConfig,
     GIT_CONFIG_NOSYSTEM: '1',
     GIT_AUTHOR_NAME: 'Release test',
     GIT_AUTHOR_EMAIL: 'release-test@example.invalid',
@@ -28,6 +31,8 @@ function withRepository(run, branch = 'release') {
     cwd: root, env, encoding: 'utf8', timeout: 15_000,
   });
   try {
+    mkdirSync(root);
+    writeFileSync(globalConfig, '');
     git('init', '-b', branch);
     git('config', 'core.autocrlf', 'false');
     writeJson('package.json', { name: 'release-fixture', version: '1.0.0' });
@@ -43,7 +48,7 @@ function withRepository(run, branch = 'release') {
     git('commit', '-m', 'fix: preserve release metadata');
     return run({ git, read, write, json, writeJson, invoke });
   } finally {
-    rmSync(root, { recursive: true, force: true });
+    rmSync(directory, { recursive: true, force: true });
   }
 }
 

@@ -20,7 +20,7 @@ Local packages are written to `releases/`. Use the version confirmed by the buil
 
 **Do not choose Markdown Preview.** It is the editor's generic read-only Markdown renderer and cannot display Atomic ticket fields.
 
-The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code API 1.97+. Editor commands, settings, and custom-editor IDs use the `sherpaIntent.*` namespace; version-control commands use `sherpaAtomic.*`. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
+The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code 1.101.0+. Editor commands, settings, and custom-editor IDs use the `sherpaIntent.*` namespace; version-control commands use `sherpaAtomic.*`. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
 
 ## Ticket layout
 
@@ -95,6 +95,8 @@ There is no CLI subprocess, daemon startup, socket, direct database access, or w
 ## Develop and package
 
 Build requirements: Node.js 22+/npm (for VSCE 4), Bun, and a VS Code-compatible editor. The universal nodeatomic JavaScript consumer and its generated codecs are vendored at `vendor/nodeatomic`; its NOTICE records the source revision. A clean checkout builds without a sibling repository. Refresh that directory from the nodeatomic producer when its descriptor, API, or runtime loader changes. Its compiled codecs/fingerprint are bundled, so the resulting VSIX does not need the vendor directory. Atomic Sherpa never builds Rust or searches for Atomic producer sources. Building/packaging does not require a native library unless an explicit runtime override requests the native smoke.
+
+The minimum editor, VS Code 1.101.0, bundles Electron 35.5.1 and Node 22.15.1. Puppeteer 25 requires Node 22.12+; VS Code 1.100.x still uses Node 20 and is not supported. Keep Puppeteer's separate ESM export bundle. Packaged HTML/PDF export commands were verified in the actual VS Code 1.101.0 extension host on macOS ARM64 with Chrome, including Mermaid, inline/block math, highlighting, and embedded local images. Windows/Linux minimum-version extension-host validation remains required.
 
 The vendored codecs and compatibility fingerprint are generated from the published Atomic v0.22.0 library, not from a development checkout. To adopt another runtime contract, regenerate the upstream nodeatomic package against that complete release, then refresh its built package and provenance notice here. Never change only the expected fingerprint or weaken the loader's contract checks.
 

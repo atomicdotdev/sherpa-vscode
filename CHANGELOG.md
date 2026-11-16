@@ -17,6 +17,7 @@
 - Use an empty regular Git configuration file for release regression fixtures instead of an OS null-device path, which Git for Windows rejects.
 - Remove the built-in spellchecker, bundled cspell dependencies, spelling toolbar/setting, and background checks; retain external diagnostics and replacement quick fixes from optional extensions such as Code Spell Checker.
 - Raise the minimum VS Code version to 1.101.0 (Node 22.15.1) for Puppeteer 25's Node 22.12+ requirement; retain the ESM export runtime and verify packaged HTML/PDF commands in that minimum editor on macOS ARM64.
+- Add a script-free Atomic installation guide, available from the Command Palette, history/view toolbar, and missing/incompatible-runtime warnings. Link to Atomic’s official instructions, identify the extension host, and provide refresh/diagnostics without installing or downloading Atomic.
 
 ## 0.2.12
 - Package one universal, JavaScript-only VSIX; Atomic's platform library is supplied by the separate Atomic installation on the extension host.

@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import { RepositorySession, resolveRepositoryPath, isRepositoryFilePath, statusIdentity, statusLabels, summarizeView, viewTreeDescription, partitionRepositoryFiles, type History } from './model';
 import { describeAtomicError, type AtomicIssue } from './errors';
 import { AtomicGraphPanel } from './graphPanel';
+import { AtomicInstallGuide } from './installGuide';
 import { displayChangeHash } from '../shared/atomicHash';
 import { insertResult, pullResult, pushResult, type OperationResult } from './operationResults';
 import type { AtomicRepository } from 'nodeatomic' with { 'resolution-mode': 'import' };
@@ -40,9 +41,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
   private discoveryIssue?: AtomicIssue;
   private readonly output = vscode.window.createOutputChannel('Atomic Version Control');
   private readonly diffs = new AtomicDiffEditor();
+  private readonly installGuide = new AtomicInstallGuide();
 
   constructor(private readonly context: vscode.ExtensionContext) {
-    this.disposables.push(this.output, this.diffs,
+    this.disposables.push(this.output, this.diffs, this.installGuide,
       vscode.window.registerTreeDataProvider('sherpaAtomic.repository', this),
       vscode.workspace.onDidChangeWorkspaceFolders(() => { void this.discover(); }),
       vscode.workspace.onDidGrantWorkspaceTrust(() => { void this.discover(); })
@@ -52,6 +54,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
         handler(...args).catch((error) => this.report(error))));
     };
     command('showOutput', async () => { this.output.show(true); });
+    command('installGuide', async () => { this.installGuide.show(); });
     command('refresh', async () => {
       await this.discover();
       // A failure in one repository must not prevent the other repositories from refreshing.
@@ -341,7 +344,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       owner.scm.count = 0;
       owner.issue = describeAtomicError(error);
       owner.scm.inputBox.enabled = false;
-      owner.scm.statusBarCommands = [{ command: 'sherpaAtomic.showOutput', title: `$(warning) ${owner.issue.title}`,
+      owner.scm.statusBarCommands = [{ command: this.recoveryCommand(owner.issue), title: `$(warning) ${owner.issue.title}`,
         tooltip: `${owner.issue.detail}\n\n${owner.issue.recovery}` }];
       owner.session.status = undefined;
       owner.session.history = undefined;
@@ -458,6 +461,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     return item?.owner;
   }
 
+  private recoveryCommand(issue: AtomicIssue): string {
+    return issue.requiresRuntimeSetup ? 'sherpaAtomic.installGuide' : 'sherpaAtomic.showOutput';
+  }
+
   getTreeItem(node: Node): vscode.TreeItem { return node; }
 
   getChildren(node?: Node): Node[] | Promise<Node[]> {
@@ -466,7 +473,7 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
     if (!this.repositories.size) {
       const issue = this.discoveryIssue;
       return [{ label: this.message, tooltip: issue ? `${issue.detail}\n\n${issue.recovery}` : this.message,
-        ...(issue ? { iconPath: new vscode.ThemeIcon('warning'), command: { command: 'sherpaAtomic.showOutput', title: 'Show Recovery Guidance' } } : {}) }];
+        ...(issue ? { iconPath: new vscode.ThemeIcon('warning'), command: { command: this.recoveryCommand(issue), title: 'Show Recovery Guidance' } } : {}) }];
     }
     return [...this.repositories.values()].map((owner) => {
       const status = owner.session.status;
@@ -476,9 +483,9 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
           tooltip: `${owner.session.root}\n\n${issue.detail}\n\n${issue.recovery}`, owner,
           iconPath: new vscode.ThemeIcon('warning'), collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
           children: [
-            { label: issue.title, tooltip: issue.detail, command: { command: 'sherpaAtomic.showOutput', title: 'Show Backend Error' } },
+            { label: issue.title, tooltip: issue.detail, command: { command: this.recoveryCommand(issue), title: 'Show Recovery Guidance' } },
             { label: issue.requiresUpgrade ? 'Back up, then run atomic doctor repair-native-indexes' : 'Show recovery guidance',
-              tooltip: issue.recovery, command: { command: 'sherpaAtomic.showOutput', title: 'Show Recovery Guidance' } },
+              tooltip: issue.recovery, command: { command: this.recoveryCommand(issue), title: 'Show Recovery Guidance' } },
             { label: 'Refresh after resolving the error', command: { command: 'sherpaAtomic.refresh', title: 'Refresh' } }
           ] };
       }

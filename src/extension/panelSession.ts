@@ -8,12 +8,10 @@ import {
   EXTENSION_CONFIG_SECTION,
   LINE_NUMBERS_SETTING_KEY,
   CONTENT_MAX_WIDTH_SETTING_KEY,
-  SPELL_CHECK_SETTING_KEY,
   getReadOnlyEnabled,
   setReadOnlyEnabled,
   getContentMaxWidthEnabled,
   getLineNumbersEnabled,
-  getSpellCheckEnabled,
   getOutlinePosition,
   getOutlineVisible,
   getRememberPositionLines,
@@ -33,12 +31,6 @@ import type { ThemeSettings } from '../shared/themeDefaults';
 import type { RawVscodeTheme } from '../shared/vscodeTheme';
 import type { OutlinePosition } from '../shared/extensionConfig';
 import { cspellReplacementEdit } from '../spell/cspellCodeActions';
-import {
-  collectMeoSpellDiagnostics,
-  collectMeoSpellSuggestions,
-  hasExternalSpellDiagnostics,
-  MEO_SPELL_DIAGNOSTIC_SOURCE
-} from '../spell/spellDiagnostics';
 
 export type EditorMode = 'live' | 'source';
 export type ExportFormat = 'html' | 'pdf';
@@ -56,7 +48,6 @@ type InitMessage = {
   mode: EditorMode;
   lineNumbers: boolean;
   readOnly: boolean;
-  spellCheckEnabled: boolean;
   contentMaxWidthEnabled: boolean;
   vimMode: boolean;
   vimKeybindings: VimKeybinding[];
@@ -176,11 +167,6 @@ type SetLineNumbersMessage = {
   enabled?: boolean;
 };
 
-type SetSpellCheckMessage = {
-  type: 'setSpellCheck';
-  enabled: boolean;
-};
-
 type SetOutlineVisibleMessage = {
   type: 'setOutlineVisible';
   visible: boolean;
@@ -284,7 +270,6 @@ type WebviewMessage =
   | DraftChangedMessage
   | SetModeMessage
   | SetLineNumbersMessage
-  | SetSpellCheckMessage
   | SetOutlineVisibleMessage
   | SetContentMaxWidthMessage
   | SetReadOnlyMessage
@@ -326,7 +311,6 @@ type PanelSessionControllerParams = {
   document: MarkdownCustomDocument;
   documentUri: vscode.Uri;
   context: vscode.ExtensionContext;
-  spellDiagnosticCollection: vscode.DiagnosticCollection;
   agentReviewHandoff: AgentReviewHandoffController;
   onExportDocument: (session: PanelSession, format: ExportFormat) => Promise<void>;
   getFindOptions: () => FindOptions;
@@ -346,7 +330,6 @@ export type PanelSession = {
   prepareSave: () => Promise<boolean>;
   requestExportSnapshot: () => Promise<{ text: string; environment?: ExportStyleEnvironment }>;
   rejectPendingExportSnapshots: (reason: Error) => void;
-  refreshSpellDiagnostics: () => void;
 };
 
 export type PanelSessionController = {
@@ -361,7 +344,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     document,
     documentUri,
     context,
-    spellDiagnosticCollection,
     agentReviewHandoff,
     onExportDocument,
     getFindOptions,
@@ -389,8 +371,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
   let lastSavedRememberedLine: number | null = null;
   let lastSavedRememberedLineOffset = 0;
   let disposed = false;
-  let spellCheckGeneration = 0;
-  let pendingSpellCheckTimer: ReturnType<typeof setTimeout> | null = null;
   const workspaceRoot = vscode.workspace.getWorkspaceFolder(document.uri)?.uri.fsPath;
   const pendingExportSnapshots = new Map<string, PendingExportSnapshot>();
 
@@ -525,7 +505,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
       mode,
       lineNumbers: getLineNumbersEnabled(context),
       readOnly: getReadOnlyEnabled(),
-      spellCheckEnabled: getSpellCheckEnabled(),
       contentMaxWidthEnabled: getContentMaxWidthEnabled(context),
       vimMode: getVimModeEnabled(context),
       vimKeybindings: getVimKeybindings(),
@@ -549,36 +528,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
       diagnostics: serializeDiagnostics(document)
     };
     return postToWebview(message);
-  };
-
-  const runSpellCheck = async (generation: number): Promise<void> => {
-    try {
-      const diagnostics = document.textDocument
-        ? await collectMeoSpellDiagnostics(document.textDocument)
-        : [];
-      if (disposed || generation !== spellCheckGeneration) {
-        return;
-      }
-      spellDiagnosticCollection.set(document.uri, diagnostics);
-    } catch (error) {
-      if (!disposed) {
-        console.error('[MEO panelSession] spellCheck', error);
-      }
-      spellDiagnosticCollection.delete(document.uri);
-    }
-  };
-
-  const scheduleSpellCheck = (delayMs = 350): void => {
-    spellCheckGeneration += 1;
-    const generation = spellCheckGeneration;
-    if (pendingSpellCheckTimer !== null) {
-      clearTimeout(pendingSpellCheckTimer);
-      pendingSpellCheckTimer = null;
-    }
-    pendingSpellCheckTimer = setTimeout(() => {
-      pendingSpellCheckTimer = null;
-      runBackground(runSpellCheck(generation), 'spellCheck');
-    }, delayMs);
   };
 
   const sendDocChanged = async (): Promise<boolean> => {
@@ -864,8 +813,7 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     ensureInitDelivered,
     prepareSave,
     requestExportSnapshot,
-    rejectPendingExportSnapshots,
-    refreshSpellDiagnostics: () => scheduleSpellCheck(0),
+    rejectPendingExportSnapshots
   };
 
   const handleMessage = async (raw: WebviewMessage): Promise<void> => {
@@ -877,7 +825,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
         webviewReady = true;
         await ensureInitDelivered();
         await flushPendingRevealSelection();
-        scheduleSpellCheck(0);
         return;
       case 'setMode':
         mode = raw.mode;
@@ -892,11 +839,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
           .update(LINE_NUMBERS_SETTING_KEY, visible, vscode.ConfigurationTarget.Global);
         return;
       }
-      case 'setSpellCheck':
-        await vscode.workspace
-          .getConfiguration(EXTENSION_CONFIG_SECTION)
-          .update(SPELL_CHECK_SETTING_KEY, raw.enabled === true, vscode.ConfigurationTarget.Global);
-        return;
       case 'setOutlineVisible':
         await setOutlineVisible(raw.visible);
         return;
@@ -1046,8 +988,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
       return;
     }
 
-    scheduleSpellCheck();
-
     if (isApplyingOwnChange) {
       return;
     }
@@ -1066,7 +1006,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     if (document.isSynchronized) {
       return;
     }
-    scheduleSpellCheck();
     if (isApplyingOwnChange && kind === 'edit') {
       return;
     }
@@ -1075,23 +1014,9 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     }), 'sendDocChanged');
   });
 
-  const documentSaveSubscription = vscode.workspace.onDidSaveTextDocument((savedDocument) => {
-    if (savedDocument.uri.toString() !== documentKey) {
-      return;
-    }
-  });
-
   const diagnosticsSubscription = vscode.languages.onDidChangeDiagnostics((event) => {
     if (!event.uris.some((uri) => uri.toString() === documentKey)) {
       return;
-    }
-    if (document.textDocument && hasExternalSpellDiagnostics(document.textDocument)) {
-      spellCheckGeneration += 1;
-      if (pendingSpellCheckTimer !== null) {
-        clearTimeout(pendingSpellCheckTimer);
-        pendingSpellCheckTimer = null;
-      }
-      spellDiagnosticCollection.delete(document.uri);
     }
     runBackground(sendDiagnosticsChanged(), 'sendDiagnosticsChanged');
   });
@@ -1135,12 +1060,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
       return;
     }
     disposed = true;
-    spellCheckGeneration += 1;
-    if (pendingSpellCheckTimer !== null) {
-      clearTimeout(pendingSpellCheckTimer);
-      pendingSpellCheckTimer = null;
-    }
-    spellDiagnosticCollection.delete(document.uri);
 
     runBackground(enqueue(async () => {
       try {
@@ -1155,7 +1074,6 @@ export function createPanelSessionController(params: PanelSessionControllerParam
     messageSubscription.dispose();
     documentChangeSubscription.dispose();
     localChangeSubscription.dispose();
-    documentSaveSubscription.dispose();
     diagnosticsSubscription.dispose();
     textEditorSelectionSubscription.dispose();
     activeTextEditorSubscription.dispose();
@@ -1457,22 +1375,6 @@ async function resolveDiagnosticSuggestions(
       }
       seen.add(replacement);
       suggestions.push(replacement);
-      if (suggestions.length >= MAX_DIAGNOSTIC_SUGGESTIONS) {
-        break;
-      }
-    }
-  }
-
-  if (suggestions.length === 0 && request.source === MEO_SPELL_DIAGNOSTIC_SOURCE) {
-    const spellSuggestions = document.textDocument
-      ? await collectMeoSpellSuggestions(document.textDocument, requestedRange.from, requestedRange.to)
-      : [];
-    for (const suggestion of spellSuggestions) {
-      if (seen.has(suggestion)) {
-        continue;
-      }
-      seen.add(suggestion);
-      suggestions.push(suggestion);
       if (suggestions.length >= MAX_DIAGNOSTIC_SUGGESTIONS) {
         break;
       }

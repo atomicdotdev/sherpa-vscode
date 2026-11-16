@@ -353,12 +353,6 @@
           "order": 4,
           "description": "Show line numbers."
         },
-        "sherpaIntent.spellCheck.enabled": {
-          "type": "boolean",
-          "default": true,
-          "order": 6,
-          "description": "Show built-in spelling diagnostics in Atomic Sherpa when no external spell checker diagnostics are available."
-        },
         "sherpaIntent.vimMode.enabled": {
           "type": "boolean",
           "default": false,
@@ -971,7 +965,6 @@
     "@lezer/highlight": "^1.2.5",
     "@replit/codemirror-vim": "^6.4.0",
     "@types/vscode": "^1.109.0",
-    "cspell-lib": "^10.4.0",
     "d3-drag": "3.0.0",
     "d3-force": "3.0.0",
     "d3-selection": "3.0.0",

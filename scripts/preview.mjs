@@ -10,7 +10,7 @@ const init = {
   type: 'init', text, version: 1, diagnostics: [], theme: defaultThemeSettings,
   mode: 'live', outlinePosition: 'right', outlineVisible: false,
   lineNumbers: false, readOnly: false, gitChangesGutter: false,
-  gitDiffLineHighlights: false, spellCheckEnabled: false,
+  gitDiffLineHighlights: false,
   contentMaxWidthEnabled: true, vimMode: false, vimKeybindings: [], vimLeader: '\\',
   keymap: [], findOptions: { wholeWord: false, caseSensitive: false }
 };

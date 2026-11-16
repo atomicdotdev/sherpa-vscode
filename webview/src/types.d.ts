@@ -12,7 +12,6 @@ type WebviewMessage =
   | { type: 'draftChanged'; text: string | null }
   | { type: 'setMode'; mode: 'live' | 'source' }
   | { type: 'setLineNumbers'; visible: boolean }
-  | { type: 'setSpellCheck'; enabled: boolean }
   | { type: 'setContentMaxWidth'; enabled: boolean }
   | { type: 'setReadOnly'; enabled: boolean }
   | { type: 'setOutlineVisible'; visible: boolean }
@@ -38,7 +37,7 @@ type VimKeybinding = {
 };
 
 type ExtensionMessage =
-  | { type: 'init'; text: string; version: number; diagnostics: EditorDiagnostic[]; theme: ThemeSettings; mode: 'live' | 'source'; outlinePosition: 'left' | 'right'; outlineVisible: boolean; lineNumbers: boolean; readOnly: boolean; spellCheckEnabled: boolean; contentMaxWidthEnabled: boolean; vimMode: boolean; vimKeybindings: VimKeybinding[]; vimLeader: string; keymap?: Array<{ key: string; command: string }>; findOptions: { wholeWord: boolean; caseSensitive: boolean }; restoreTopLine?: number; restoreTopLineOffset?: number }
+  | { type: 'init'; text: string; version: number; diagnostics: EditorDiagnostic[]; theme: ThemeSettings; mode: 'live' | 'source'; outlinePosition: 'left' | 'right'; outlineVisible: boolean; lineNumbers: boolean; readOnly: boolean; contentMaxWidthEnabled: boolean; vimMode: boolean; vimKeybindings: VimKeybinding[]; vimLeader: string; keymap?: Array<{ key: string; command: string }>; findOptions: { wholeWord: boolean; caseSensitive: boolean }; restoreTopLine?: number; restoreTopLineOffset?: number }
   | { type: 'docChanged'; text: string; version: number }
   | { type: 'applied'; version: number }
   | { type: 'appliedFailed'; text?: string; version?: number }
@@ -49,7 +48,6 @@ type ExtensionMessage =
   | { type: 'outlinePositionChanged'; position: 'left' | 'right' }
   | { type: 'outlineVisibilityChanged'; visible: boolean }
   | { type: 'lineNumbersChanged'; enabled: boolean }
-  | { type: 'spellCheckChanged'; enabled: boolean }
   | { type: 'contentMaxWidthChanged'; enabled: boolean }
   | { type: 'readOnlyChanged'; enabled: boolean }
   | { type: 'toggleReadOnly' }

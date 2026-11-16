@@ -10,11 +10,12 @@
 - Keep inactive-view insertion results separate from unrelated current-working-copy conflict paths; retain genuine target conflict failures.
 - Refresh the native descriptor fingerprint after integrating Atomic dev's vault-evidence replay contract, retaining strict runtime compatibility checks.
 - Regenerate the vendored nodeatomic codecs, declarations, and descriptor fingerprint from published Atomic v0.22.0; document the exact compatible runtime and retain strict rejection of mismatched contracts.
-- Upgrade vulnerable production dependencies (markdown-it, mermaid, sanitize-html, katex, Puppeteer, cspell, highlight.js, Shiki) and remove unused gRPC packages; `npm audit --omit=dev` is clean.
+- Upgrade vulnerable production dependencies (markdown-it, mermaid, sanitize-html, katex, Puppeteer, highlight.js, Shiki) and remove unused gRPC packages; `npm audit --omit=dev` is clean.
 - Load Puppeteer 25 as an ESM runtime and make webview/graph build steps cross-platform.
 - Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata and 1.0.0 version.
 - Fix release preparation on the `release` branch, synchronize and commit lockfile versions, and accept dated changelog headings without requiring a horizontal-rule separator.
 - Use an empty regular Git configuration file for release regression fixtures instead of an OS null-device path, which Git for Windows rejects.
+- Remove the built-in spellchecker, bundled cspell dependencies, spelling toolbar/setting, and background checks; retain external diagnostics and replacement quick fixes from optional extensions such as Code Spell Checker.
 
 ## 0.2.12
 - Package one universal, JavaScript-only VSIX; Atomic's platform library is supplied by the separate Atomic installation on the extension host.

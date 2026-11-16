@@ -33,7 +33,6 @@ import {
   VIM_MODE_SETTING_KEY,
   CODE_BLOCKS_VSCODE_THEME_SETTING_KEY,
   CONTENT_MAX_WIDTH_SETTING_KEY,
-  SPELL_CHECK_SETTING_KEY,
   READ_ONLY_SETTING_KEY,
   getReadOnlyEnabled,
   setReadOnlyEnabled,
@@ -48,7 +47,6 @@ import {
   getOutlinePosition,
   getOutlineVisible,
   getContentMaxWidthEnabled,
-  getSpellCheckEnabled,
   getThemeSettings,
   getVimKeybindings,
   getVimLeaderKey,
@@ -516,7 +514,6 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
   private readonly activePanels = new Set<vscode.WebviewPanel>();
   private readonly panelSessions = new Map<vscode.WebviewPanel, PanelSession>();
   private readonly customDocuments = new Map<string, MarkdownCustomDocument>();
-  private readonly spellDiagnosticCollection = vscode.languages.createDiagnosticCollection('meo-spell');
   private readonly customDocumentChangeEmitter = new vscode.EventEmitter<
     vscode.CustomDocumentContentChangeEvent<MarkdownCustomDocument>
   >();
@@ -527,7 +524,7 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
     private readonly context: vscode.ExtensionContext,
     private readonly agentReviewHandoff: AgentReviewHandoffController
   ) {
-    this.context.subscriptions.push(this.spellDiagnosticCollection, this.customDocumentChangeEmitter);
+    this.context.subscriptions.push(this.customDocumentChangeEmitter);
     this.context.subscriptions.push(
       vscode.workspace.onDidChangeTextDocument((event) => {
         if (event.contentChanges.length === 0) {
@@ -716,18 +713,6 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       this.broadcast({ type: 'themeChanged', theme: getThemeSettings(), codeTheme: getCodeBlockVscodeTheme() });
     }
 
-    if (
-      event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${SPELL_CHECK_SETTING_KEY}`) ||
-      event.affectsConfiguration('cSpell')
-    ) {
-      if (event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${SPELL_CHECK_SETTING_KEY}`)) {
-        this.broadcast({ type: 'spellCheckChanged', enabled: getSpellCheckEnabled() });
-      }
-      for (const session of this.panelSessions.values()) {
-        session.refreshSpellDiagnostics();
-      }
-    }
-
     if (event.affectsConfiguration(`${EXTENSION_CONFIG_SECTION}.${CODE_BLOCKS_VSCODE_THEME_SETTING_KEY}`)) {
       this.broadcast({
         type: 'shikiCodeBlocksChanged',
@@ -787,7 +772,6 @@ class MarkdownWebviewProvider implements vscode.CustomEditorProvider<MarkdownCus
       document,
       documentUri,
       context: this.context,
-      spellDiagnosticCollection: this.spellDiagnosticCollection,
       agentReviewHandoff: this.agentReviewHandoff,
       onExportDocument: (session, format) => this.exportSessionDocument(session, format),
       getFindOptions: () => this.getFindOptions(),

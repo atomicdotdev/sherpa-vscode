@@ -1,4 +1,4 @@
-import { createElement, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, List, ListOrdered, ListTodo, ListTree, Hash, Code, Terminal, Quote, Minus, Table2, Link, Brackets, Image, Bold, Italic, Strikethrough, Search, Share, PanelLeftRightDashed, SpellCheck2, PencilOff } from 'lucide';
+import { createElement, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, List, ListOrdered, ListTodo, ListTree, Hash, Code, Terminal, Quote, Minus, Table2, Link, Brackets, Image, Bold, Italic, Strikethrough, Search, Share, PanelLeftRightDashed, PencilOff } from 'lucide';
 import { setImageSrcResolver, initializeImageHandling, resolveImageSrc, settleImageSrcRequest, handleSavedImagePath, handleImagePaste } from './helpers/images';
 import { createOutlineController } from './helpers/outline';
 import { normalizeWikiTarget, replaceWikiLinkStatuses, initializeWikiLinkHandling, collectWikiLinkTargets, requestWikiLinkStatuses, scheduleWikiLinkStatusRefresh, setWikiLinkRefreshContext, cancelPendingWikiStatusRefresh, handleResolvedWikiLinks } from './helpers/wikiLinks';
@@ -155,7 +155,6 @@ let userKeymapKeys = new Set<string>();
 
 let lineNumbersVisible = true;
 let readOnlyEnabled = false;
-let spellCheckEnabled = true;
 let contentMaxWidthEnabled = false;
 
 const CONTENT_MAX_WIDTH_ENABLED_VALUE = '800px';
@@ -183,23 +182,10 @@ lineNumbersBtn.dataset.action = 'lineNumbers';
 lineNumbersBtn.title = 'Hide Line Numbers';
 lineNumbersBtn.appendChild(createElement(Hash, { width: 18, height: 18 }));
 
-const spellCheckBtn = document.createElement('button');
-spellCheckBtn.type = 'button';
-spellCheckBtn.className = 'format-button toggle-button is-active';
-spellCheckBtn.dataset.action = 'spellCheck';
-spellCheckBtn.title = 'Disable Spellcheck';
-spellCheckBtn.appendChild(createElement(SpellCheck2, { width: 18, height: 18 }));
-
 const updateLineNumbersUI = () => {
   lineNumbersBtn.classList.toggle('is-active', lineNumbersVisible);
   lineNumbersBtn.setAttribute('aria-pressed', lineNumbersVisible ? 'true' : 'false');
   lineNumbersBtn.title = lineNumbersVisible ? 'Hide Line Numbers' : 'Show Line Numbers';
-};
-
-const updateSpellCheckUI = () => {
-  spellCheckBtn.classList.toggle('is-active', spellCheckEnabled);
-  spellCheckBtn.setAttribute('aria-pressed', spellCheckEnabled ? 'true' : 'false');
-  spellCheckBtn.title = spellCheckEnabled ? 'Disable Spellcheck' : 'Enable Spellcheck';
 };
 
 const updateContentMaxWidthUI = () => {
@@ -257,18 +243,6 @@ const setReadOnlyEnabled = (enabled: boolean, { post = true } = {}) => {
   updateModeUI();
   if (post && changed) {
     vscode.postMessage({ type: 'setReadOnly', enabled: readOnlyEnabled });
-  }
-};
-
-const setSpellCheckEnabled = (enabled, { post = true } = {}) => {
-  const nextEnabled = enabled !== false;
-  const changed = nextEnabled !== spellCheckEnabled;
-  if (changed) {
-    spellCheckEnabled = nextEnabled;
-  }
-  updateSpellCheckUI();
-  if (post && changed) {
-    vscode.postMessage({ type: 'setSpellCheck', enabled: spellCheckEnabled });
   }
 };
 
@@ -333,10 +307,6 @@ const syncKeymapBindings = (bindings: NormalizedKeymapBinding[]) => {
 
 const toggleLineNumbers = () => {
   setLineNumbersVisible(!lineNumbersVisible);
-};
-
-const toggleSpellCheck = () => {
-  setSpellCheckEnabled(!spellCheckEnabled);
 };
 
 const separator = document.createElement('div');
@@ -509,7 +479,7 @@ const exportWrapper = document.createElement('div');
 exportWrapper.className = 'export-wrapper';
 exportWrapper.append(exportBtn, exportDropdownWrapper);
 
-rightGroup.append(findToggleBtn, contentMaxWidthBtn, outlineBtn, lineNumbersBtn, spellCheckBtn, exportWrapper);
+rightGroup.append(findToggleBtn, contentMaxWidthBtn, outlineBtn, lineNumbersBtn, exportWrapper);
 
 const modeGroup = document.createElement('div');
 modeGroup.className = 'mode-group';
@@ -1515,9 +1485,6 @@ const handleInit = (message: any) => {
   if (typeof message.readOnly === 'boolean') {
     setReadOnlyEnabled(message.readOnly, { post: false });
   }
-  if (typeof message.spellCheckEnabled === 'boolean') {
-    setSpellCheckEnabled(message.spellCheckEnabled, { post: false });
-  }
   if (typeof message.vimMode === 'boolean') {
     setVimModeEnabled(message.vimMode);
   }
@@ -1809,11 +1776,6 @@ window.addEventListener('message', (event) => {
 
   if (message.type === 'lineNumbersChanged') {
     setLineNumbersVisible(message.enabled, { post: false });
-    return;
-  }
-
-  if (message.type === 'spellCheckChanged') {
-    setSpellCheckEnabled(message.enabled, { post: false });
     return;
   }
 
@@ -2170,7 +2132,6 @@ contentMaxWidthBtn.addEventListener('click', () => {
   setContentMaxWidthEnabled(!contentMaxWidthEnabled);
 });
 lineNumbersBtn.addEventListener('click', toggleLineNumbers);
-spellCheckBtn.addEventListener('click', toggleSpellCheck);
 
 persistUiState();
 vscode.postMessage({ type: 'setMode', mode: currentMode });

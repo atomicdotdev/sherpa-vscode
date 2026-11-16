@@ -16,7 +16,6 @@ import { getActiveVscodeRawTheme, type RawVscodeTheme } from './vscodeTheme';
 export const EXTENSION_CONFIG_SECTION = 'sherpaIntent';
 export const LINE_NUMBERS_SETTING_KEY = 'lineNumbers.visible';
 export const READ_ONLY_SETTING_KEY = 'readOnly';
-export const SPELL_CHECK_SETTING_KEY = 'spellCheck.enabled';
 export const VIM_MODE_BEHAVIOR_SETTING_KEY = 'vimMode.behavior';
 export const VIM_MODE_SETTING_KEY = 'vimMode.enabled';
 export const CODE_BLOCKS_VSCODE_THEME_SETTING_KEY = 'codeBlocks.useVscodeTheme';
@@ -66,10 +65,6 @@ export function getReadOnlyEnabled(): boolean {
 export async function setReadOnlyEnabled(enabled: boolean): Promise<void> {
   await vscode.workspace.getConfiguration(EXTENSION_CONFIG_SECTION)
     .update(READ_ONLY_SETTING_KEY, enabled, vscode.ConfigurationTarget.Global);
-}
-
-export function getSpellCheckEnabled(): boolean {
-  return vscode.workspace.getConfiguration(EXTENSION_CONFIG_SECTION).get<boolean>(SPELL_CHECK_SETTING_KEY, true);
 }
 
 export function getKeymapBindings(): NormalizedKeymapBinding[] {

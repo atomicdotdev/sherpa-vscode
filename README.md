@@ -36,6 +36,12 @@ Recognized intents require YAML `entry_type: intent`. Metadata that is managed b
 
 Status suggestions are editing conveniences, not a schema. Setting a criterion to `met` does not manufacture evidence or establish conformance. The validation/attestation panel explicitly says **not checked**: no signature or SHACL result is inferred from author fields or hashes.
 
+## Optional spellchecking
+
+Sherpa does not bundle a spellchecker. For spelling diagnostics and replacement suggestions, optionally install [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) in VS Code. No separate cspell CLI installation is needed. Sherpa displays diagnostics and supported replacement quick fixes supplied by installed extensions in its ticket/source editor.
+
+Configure spelling through the external extension; Sherpa has no spelling setting or toolbar toggle. Editing, saving, and Atomic features do not require a spelling extension.
+
 ## Atomic version control
 
 Open a **trusted, local filesystem** workspace in an Atomic repository, then open **Source Control**:

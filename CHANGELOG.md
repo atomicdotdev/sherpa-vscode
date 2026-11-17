@@ -1,6 +1,7 @@
 # Atomic Sherpa
 
-## 1.0.0 - 2026-11-05
+## 0.0.1 - 2026-11-16
+- First GitHub release of Atomic Sherpa under `atomicdotdev/sherpa-vscode`.
 - Rename the extension to Atomic Sherpa (`atomic-sherpa`) and use the backpack artwork as its icon.
 - Rename command, setting, and custom-editor IDs from `catalyst*` to `sherpa*` for the public release.
 - Fix blast-radius hop counting, webview message validation, evidence refresh/state, SCM path isolation, oversized-blame handling, and export/editor regressions from review intents 1–14.
@@ -12,7 +13,7 @@
 - Regenerate the vendored nodeatomic codecs, declarations, and descriptor fingerprint from published Atomic v0.22.0; document the exact compatible runtime and retain strict rejection of mismatched contracts.
 - Upgrade vulnerable production dependencies (markdown-it, mermaid, sanitize-html, katex, Puppeteer, highlight.js, Shiki) and remove unused gRPC packages; `npm audit --omit=dev` is clean.
 - Load Puppeteer 25 as an ESM runtime and make webview/graph build steps cross-platform.
-- Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata and 1.0.0 version.
+- Add CI for typecheck, tests, build, universal VSIX packaging, and production audit; set the public `atomicdotdev` publisher metadata.
 - Fix release preparation on the `release` branch, synchronize and commit lockfile versions, and accept dated changelog headings without requiring a horizontal-rule separator.
 - Use an empty regular Git configuration file for release regression fixtures instead of an OS null-device path, which Git for Windows rejects.
 - Remove the built-in spellchecker, bundled cspell dependencies, spelling toolbar/setting, and background checks; retain external diagnostics and replacement quick fixes from optional extensions such as Code Spell Checker.

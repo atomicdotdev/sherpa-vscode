@@ -1,7 +1,7 @@
 Vendored nodeatomic JavaScript consumer and generated protobuf codecs.
 
 Source: https://github.com/atomicdotdev/nodeatomic
-Source revision: fd91a76bcbef416b8114ab9885d462c5a2783dff
+Source revision: ec31722a1237f42147f4eba3b172e4455b19271f
 Generated codecs/fingerprint use the published Atomic v0.22.0 descriptor.
 Native producer revision: 61d8040ed25508ca00b778ae01d7c32499f1cab3
 License: MIT OR Apache-2.0

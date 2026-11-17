@@ -13,7 +13,7 @@ import { AtomicDiffEditor } from './diffEditor';
 import { revisionText } from './fileDiff';
 import type { Status } from './model';
 
-type Consumer = { openRepository(root: string): Promise<AtomicRepository> };
+type Consumer = { openRepository(root: string): Promise<AtomicRepository>; resolveRuntime(): unknown };
 type Resource = vscode.SourceControlResourceState & { atomicPath: string; owner: RepositoryUI };
 type RepositoryUI = {
   session: RepositorySession;
@@ -272,18 +272,20 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
 
   private async discover(): Promise<void> {
     if (this.disposed || this.connecting) return;
+    this.discoveryIssue = undefined;
     if (!vscode.workspace.isTrusted) {
       this.message = 'Trust this workspace to enable Atomic version control.';
       this.changed.fire(undefined);
       return;
     }
     this.connecting = true;
-    this.discoveryIssue = undefined;
     this.message = 'Open a local Atomic repository workspace to see history and views.';
     try {
       const roots = new Set<string>();
+      let hasLocalWorkspace = false;
       for (const folder of vscode.workspace.workspaceFolders ?? []) {
         if (folder.uri.scheme !== 'file') continue;
+        hasLocalWorkspace = true;
         let root = folder.uri.fsPath;
         while (true) {
           if (await stat(path.join(root, '.atomic')).then((s) => s.isDirectory(), () => false)) {
@@ -299,6 +301,9 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
       for (const [root, owner] of this.repositories) {
         if (!roots.has(root)) { this.disposeRepository(owner); this.repositories.delete(root); }
       }
+      // Fresh/Git-only workspaces still need installation guidance. Discovery
+      // reads metadata only; defer native loading/validation until repository use.
+      if (!roots.size && hasLocalWorkspace) (await this.loadConsumer()).resolveRuntime();
       for (const root of roots) {
         if (this.repositories.has(root)) continue;
         try {
@@ -328,6 +333,10 @@ class AtomicSourceControl implements vscode.TreeDataProvider<Node>, vscode.Dispo
           this.output.appendLine(`${root}: ${this.discoveryIssue.detail}\n${this.discoveryIssue.recovery}`);
         }
       }
+    } catch (error) {
+      this.discoveryIssue = describeAtomicError(error);
+      this.message = this.discoveryIssue.title;
+      this.output.appendLine(`${this.discoveryIssue.detail}\n${this.discoveryIssue.recovery}`);
     } finally {
       this.connecting = false;
       this.changed.fire(undefined);

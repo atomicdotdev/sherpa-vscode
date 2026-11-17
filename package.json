@@ -74,6 +74,11 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "sherpaAtomic.installGuide",
+        "title": "Atomic: Installation Guide",
+        "icon": "$(book)"
+      },
+      {
         "command": "sherpaAtomic.record",
         "title": "Atomic: Record Tracked Changes",
         "icon": "$(check)"
@@ -213,6 +218,11 @@
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "sherpaAtomic.installGuide",
+          "when": "view == sherpaAtomic.repository",
+          "group": "navigation"
+        },
         {
           "command": "sherpaAtomic.refresh",
           "when": "view == sherpaAtomic.repository",

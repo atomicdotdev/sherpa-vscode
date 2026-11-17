@@ -8,6 +8,8 @@ This is an **extension**, not a Markdown Preview plugin. It edits existing inten
 
 ## Install in your existing editor
 
+Download the VSIX and its `SHA256SUMS` file from [GitHub Releases](https://github.com/atomicdotdev/sherpa-vscode/releases).
+
 Local packages are written to `releases/`. Use the version confirmed by the build and verification output; a source version bump alone does not update the installed extension.
 
 **Atomic prerequisite:** This build targets the published **Atomic v0.22.0** runtime. Follow [Atomic’s official installation instructions](https://docs.atomic.dev/getting-started/installation) for your platform and install the complete [compatible v0.22.0 release](https://github.com/atomicdotdev/atomic/releases/tag/v0.22.0) on the **extension host**, including its CLI, platform library, and `libatomic-runtime.json`. The official installer registers the installation for discovery; manual archives can use PATH or an absolute `ATOMIC_RUNTIME_DIR`. Older CLI-only installations and different native contracts are rejected. For Remote SSH/WSL/containers, install Atomic remotely. Fully restart the editor after installation or updates. Sherpa does not bundle, download, install, update, or repair Atomic. Intent/Markdown editing does not require Atomic.
@@ -132,7 +134,7 @@ With the preview running and Chrome/Edge installed, `npm run test:browser` runs 
 
 ### Prepare a future release
 
-Run the helper from a clean `release` branch. These commands bump the version; they are not needed merely to publish the already-prepared 1.0.0 package.
+Run the helper from a clean `release` branch. These commands prepare a new version; publishing an existing verified VSIX does not require another version bump.
 
 ```sh
 npm run release:prep -- patch --dry-run

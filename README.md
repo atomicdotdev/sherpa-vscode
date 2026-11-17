@@ -16,6 +16,8 @@ Local packages are written to `releases/`. Use the version confirmed by the buil
 
 **Setup help:** Run **Atomic: Installation Guide**, use the book button in **Atomic History & Views**, or click a missing/incompatible Atomic warning. The read-only guide identifies the extension host, links to the official instructions, and offers **Refresh Atomic** and **View diagnostics**. It does not run an installer or terminal commands. Repository-upgrade and other backend errors still open diagnostics rather than installation guidance.
 
+Trusted local workspaces show **Install Atomic to enable version control** when Atomic is missing, even before `atomic init` or in a Git-only project. This startup check reads installation metadata without loading native code or running the CLI. Opening an Atomic repository still performs full native integrity and contract validation. Untrusted, virtual-only, and empty workspaces do not probe the local installation.
+
 1. In VS Code, VSCodium, or another compatible editor, open the Command Palette.
 2. Run **Extensions: Install from VSIX…** and select that file.
 3. Reload the editor window if prompted.

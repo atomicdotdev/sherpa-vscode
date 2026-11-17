@@ -1,5 +1,8 @@
 # Atomic Sherpa
 
+## Unreleased
+- Detect missing Atomic installations in trusted local workspaces before repository initialization, including Git-only projects, and link the warning to the installation guide. Reuse nodeatomic's metadata-only discovery without native loading or CLI execution; retain trust gating and full validation for existing Atomic repositories.
+
 ## 0.0.1 - 2026-11-16
 - First GitHub release of Atomic Sherpa under `atomicdotdev/sherpa-vscode`.
 - Rename the extension to Atomic Sherpa (`atomic-sherpa`) and use the backpack artwork as its icon.

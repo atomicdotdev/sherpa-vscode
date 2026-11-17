@@ -930,7 +930,7 @@
   "scripts": {
     "install:all": "npm ci",
     "test": "bun test scripts/",
-    "test:atomic": "bun test scripts/atomicIntent.test.mjs scripts/atomicIntentView.test.mjs scripts/atomicSourceControl.test.mjs scripts/atomicErrors.test.mjs scripts/atomicEvidence.test.mjs scripts/atomicDraftView.test.mjs scripts/atomicChangeMetadata.test.mjs scripts/atomicBlastRadius.test.mjs scripts/atomicFileDiff.test.mjs scripts/atomicPlanContext.test.mjs",
+    "test:atomic": "bun test scripts/atomicIntent.test.mjs scripts/atomicIntentView.test.mjs scripts/atomicSourceControl.test.mjs scripts/atomicDiscovery.test.mjs scripts/atomicErrors.test.mjs scripts/atomicEvidence.test.mjs scripts/atomicDraftView.test.mjs scripts/atomicChangeMetadata.test.mjs scripts/atomicBlastRadius.test.mjs scripts/atomicFileDiff.test.mjs scripts/atomicPlanContext.test.mjs",
     "test:atomic:graph": "bun run build:extension:graph && bun scripts/atomicViewHostSmoke.mjs && bun scripts/atomicDiffHostSmoke.mjs && bun scripts/atomicGraphSmoke.mjs",
     "test:atomic:native": "bun run build:extension:atomic && node scripts/atomicNativeSmoke.mjs",
     "test:atomic:runtime": "node scripts/atomicRuntimeSmoke.mjs --native",

@@ -2,7 +2,7 @@
   "name": "atomic-sherpa",
   "displayName": "Atomic Sherpa",
   "description": "Connect intent to source code with Atomic: edit intent tickets, manage Draft and Shared views, inspect change history, and explore code blast radius.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "atomicdotdev",
   "license": "MIT",
   "icon": "backpack.png",

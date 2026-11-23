@@ -1,5 +1,9 @@
 # Atomic Sherpa
 
+## Unreleased
+- Add a dedicated Intents Activity Bar view grouped by workspace folder, with title/ID search, declared-status filtering, priority/path tooltips, ticket opening, and automatic refresh. Browse current workspace files without an Atomic installation or repository; include hidden/Git-ignored vault entries, keep malformed metadata visible, and isolate nested folders, dependencies, VCS internals, and external symlinks.
+- Share intent YAML metadata parsing between the ticket editor and workspace browser, preserving the existing source-editing and validation boundaries.
+
 ## 0.0.2 - 2026-11-16
 - Detect missing Atomic installations in trusted local workspaces before repository initialization, including Git-only projects, and link the warning to the installation guide. Reuse nodeatomic's metadata-only discovery without native loading or CLI execution; retain trust gating and full validation for existing Atomic repositories.
 

@@ -5,6 +5,7 @@ import remarkFrontmatter from 'remark-frontmatter';
 import { isScalar, parseDocument as parseYamlDocument } from 'yaml';
 import type { Root, RootContent } from 'mdast';
 import type { ContainerDirective, LeafDirective } from 'mdast-util-directive';
+import { parseIntentMetadata } from '../../../src/shared/intentMetadata';
 
 // This is a presentation index, not Atomic's canonical lifting or validation.
 // Never stringify this tree: all edits address the original source directly.
@@ -108,20 +109,16 @@ export function parseAtomicIntent(source: string): AtomicIntentDocument {
   const metadataFrom = source.indexOf('\n', frontmatter.position!.start.offset!) + 1;
   const metadataTo = source.lastIndexOf('\n', frontmatter.position!.end.offset! - 1) + 1;
   const metadataSource = source.slice(metadataFrom, metadataTo);
-  const metadata = parseYamlDocument(metadataSource);
-  if (metadata.errors.length || metadata.get('entry_type') !== 'intent') {
+  const metadata = parseIntentMetadata(metadataSource);
+  if (!metadata) {
     return result;
   }
   result.isIntent = true;
   result.metadataFrom = metadataFrom;
   result.metadataSource = metadataSource;
-  for (const field of ['title', 'id', 'status', 'priority', 'project', 'author', 'created_by', 'uid', 'view', 'created_at', 'updated_at', 'content_hash']) {
-    const value = metadata.get(field);
-    result.metadata[field] = typeof value === 'string' ? value : '';
-  }
+  result.metadata = metadata;
   for (const field of ['title', 'id', 'status'] as const) {
-    const value = metadata.get(field);
-    result[field] = typeof value === 'string' ? value : '';
+    result[field] = metadata[field];
   }
 
   function collect(nodes: RootContent[], parentFrom?: number): void {

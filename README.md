@@ -1,6 +1,6 @@
 # Atomic Sherpa
 
-Connect **intent to source code** in VS Code-compatible editors: edit Atomic intent tickets, review source changes and history, manage **Draft and Shared views**, and explore the **blast radius** of code changes through file, caller, and importer relationships.
+Connect **intent to source code** in VS Code-compatible editors: browse workspace intents, edit Atomic intent tickets, review source changes and history, manage **Draft and Shared views**, and explore the **blast radius** of code changes through file, caller, and importer relationships.
 
 The intent editor is built on the MIT-licensed [Markdown Editor Optimized (MEO)](https://github.com/vadimmelnicuk/meo) foundation.
 
@@ -27,6 +27,18 @@ Trusted local workspaces show **Install Atomic to enable version control** when 
 **Do not choose Markdown Preview.** It is the editor's generic read-only Markdown renderer and cannot display Atomic ticket fields.
 
 The extension package is `atomic-sherpa` (extension ID `atomicdotdev.atomic-sherpa`) and requires VS Code 1.101.0+. Editor commands, settings, and custom-editor IDs use the `sherpaIntent.*` namespace; version-control commands use `sherpaAtomic.*`. These do not collide with the original MEO extension. Ordinary Markdown keeps its current editor unless you explicitly choose Atomic Sherpa Intent Editor.
+
+## Workspace Intents
+
+Open **Intents** in the Activity Bar to browse the current working-copy files across all workspace folders. Browsing and ticket editing do **not** require Atomic to be installed or the workspace to have an Atomic repository.
+
+- **Workspace projects:** each workspace folder gets a group. Nested workspace folders own their own files; the YAML `project` field is shown in the tooltip, not used to move files between groups.
+- **Discovery:** `intent.md` and `*.intent.md` files are included, including hidden or Git-ignored `.vault` entries and files hidden by `files.exclude`. Dependency and VCS paths inside `node_modules`, `.git`, and `.atomic`, and local symlinks resolving outside their workspace folder, are excluded.
+- **Search and filters:** use the search button for literal, case-insensitive title/ID matching, and the filter button for the document's declared status. Custom statuses remain selectable; missing statuses appear as **Unspecified**. Both filters combine. **Atomic Intents: Clear Filters** restores all rows; an empty search or **All statuses** clears the corresponding filter.
+- **Open tickets:** click an intent to open the existing Atomic Intent Ticket editor. Rows show title, ID, and declared status; hover for priority and source path. Missing, malformed, or unreadable metadata leaves a warning row with its path rather than silently hiding the file.
+- **Refresh:** saved file creations, changes, moves, deletions, and workspace-folder additions/removals refresh automatically. Use **Atomic Intents: Refresh** to rescan manually.
+
+This is a read-only browser of workspace files, not a historical view index, intent validator, or attestation result. It does not create, delete, migrate, or record intents; the ticket editor remains responsible for explicit edits.
 
 ## Ticket layout
 

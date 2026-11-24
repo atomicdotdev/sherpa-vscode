@@ -2,6 +2,7 @@ import * as path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import * as vscode from 'vscode';
 import { registerAtomicSourceControl } from './atomic/sourceControl';
+import { registerIntentExplorer } from './intents/explorer';
 import {
   AGENT_REVIEW_FILE_OVERRIDE_CLEANUP_DELAY_MS,
   AGENT_REVIEW_POST_REOPEN_DEDUP_DELAY_MS,
@@ -133,6 +134,7 @@ let exportRuntimeModulePromise: Promise<ExportRuntimeModule> | null = null;
 
 export function activate(context: vscode.ExtensionContext): void {
   registerAtomicSourceControl(context);
+  registerIntentExplorer(context);
   void vscode.commands.executeCommand('setContext', ACTIVE_EDITOR_CONTEXT_KEY, false);
   const useAsDefault = vscode.workspace.getConfiguration(EXTENSION_CONFIG_SECTION).get<boolean>('useAsDefault', false);
   void syncEditorAssociations(useAsDefault);

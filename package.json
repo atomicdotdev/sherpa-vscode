@@ -73,6 +73,7 @@
     "commands": [
       { "command": "sherpaIntents.search", "title": "Atomic Intents: Search by Title or ID", "icon": "$(search)" },
       { "command": "sherpaIntents.filterStatus", "title": "Atomic Intents: Filter by Declared Status", "icon": "$(filter)" },
+      { "command": "sherpaIntents.sort", "title": "Atomic Intents: Sort Intents", "icon": "$(sort-precedence)" },
       { "command": "sherpaIntents.clearFilters", "title": "Atomic Intents: Clear Filters", "icon": "$(clear-all)" },
       { "command": "sherpaIntents.refresh", "title": "Atomic Intents: Refresh", "icon": "$(refresh)" },
       {
@@ -232,7 +233,8 @@
       "view/title": [
         { "command": "sherpaIntents.search", "when": "view == sherpaIntents.list", "group": "navigation@1" },
         { "command": "sherpaIntents.filterStatus", "when": "view == sherpaIntents.list", "group": "navigation@2" },
-        { "command": "sherpaIntents.refresh", "when": "view == sherpaIntents.list", "group": "navigation@3" },
+        { "command": "sherpaIntents.sort", "when": "view == sherpaIntents.list", "group": "navigation@3" },
+        { "command": "sherpaIntents.refresh", "when": "view == sherpaIntents.list", "group": "navigation@4" },
         { "command": "sherpaIntents.clearFilters", "when": "view == sherpaIntents.list", "group": "1_filters" },
         {
           "command": "sherpaAtomic.installGuide",

@@ -11,13 +11,52 @@ const STATUS_ICONS: Record<string, string> = {
   'needs-review': 'eye', done: 'check',
 };
 
+type SortField = 'title' | 'id' | 'status' | 'priority' | 'created' | 'updated';
+type IntentSortOption = vscode.QuickPickItem & { id: string; field: SortField; direction: 1 | -1 };
+const INTENT_SORT_OPTIONS: readonly IntentSortOption[] = [
+  { id: 'title-asc', label: 'Title: A → Z', field: 'title', direction: 1 },
+  { id: 'title-desc', label: 'Title: Z → A', field: 'title', direction: -1 },
+  { id: 'id-asc', label: 'ID: A → Z', field: 'id', direction: 1 },
+  { id: 'id-desc', label: 'ID: Z → A', field: 'id', direction: -1 },
+  { id: 'status-asc', label: 'Status: A → Z', field: 'status', direction: 1 },
+  { id: 'status-desc', label: 'Status: Z → A', field: 'status', direction: -1 },
+  { id: 'priority-asc', label: 'Priority: Low → High', field: 'priority', direction: 1 },
+  { id: 'priority-desc', label: 'Priority: High → Low', field: 'priority', direction: -1 },
+  { id: 'created-asc', label: 'Created: Oldest first', field: 'created', direction: 1 },
+  { id: 'created-desc', label: 'Created: Newest first', field: 'created', direction: -1 },
+  { id: 'updated-asc', label: 'Updated: Oldest first', field: 'updated', direction: 1 },
+  { id: 'updated-desc', label: 'Updated: Newest first', field: 'updated', direction: -1 },
+];
+const SORT_STATE_KEY = 'sherpaIntents.sort';
+const collator = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true });
+
+function compareText(a: string, b: string, direction: number): number {
+  if (!a || !b) return a ? -1 : b ? 1 : 0;
+  return direction * collator.compare(a, b);
+}
+
+function compareDate(a: number | undefined, b: number | undefined, direction: number): number {
+  if (a === undefined || b === undefined) return a === undefined ? b === undefined ? 0 : 1 : -1;
+  return direction * (a - b);
+}
+
+function parseDate(value: string): number | undefined {
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : undefined;
+}
+
 type Intent = {
   uri: vscode.Uri;
   relativePath: string;
   title: string;
+  sortTitle: string;
   id: string;
   status: string;
   priority: string;
+  priorityKey: string;
+  priorityRank: number;
+  createdAt?: number;
+  updatedAt?: number;
   declaredProject: string;
   issue?: string;
 };
@@ -41,12 +80,45 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
   private foldedQuery = '';
   private status?: string;
 
-  constructor() {
+  private sortOption: IntentSortOption;
+  private readonly compareIntents = (a: Intent, b: Intent): number => {
+    const { field, direction } = this.sortOption;
+    let order = 0;
+    switch (field) {
+      case 'title': order = compareText(a.sortTitle, b.sortTitle, direction); break;
+      case 'id': order = compareText(a.id, b.id, direction); break;
+      case 'status': order = compareText(a.status, b.status, direction); break;
+      case 'created': order = compareDate(a.createdAt, b.createdAt, direction); break;
+      case 'updated': order = compareDate(a.updatedAt, b.updatedAt, direction); break;
+      case 'priority':
+        // Known priorities reverse together; custom and missing values stay in trailing groups.
+        if (a.priorityRank < 3 && b.priorityRank < 3) order = direction * (a.priorityRank - b.priorityRank);
+        else order = a.priorityRank - b.priorityRank || compareText(a.priorityKey, b.priorityKey, direction);
+        break;
+    }
+    return order || compareText(a.sortTitle, b.sortTitle, 1) || collator.compare(a.relativePath, b.relativePath) ||
+      (a.relativePath < b.relativePath ? -1 : a.relativePath > b.relativePath ? 1 : 0);
+  };
+
+  constructor(private readonly context: vscode.ExtensionContext) {
+    const savedSort = context.workspaceState.get<string>(SORT_STATE_KEY);
+    this.sortOption = INTENT_SORT_OPTIONS.find((option) => option.id === savedSort) ?? INTENT_SORT_OPTIONS[0];
     this.view = vscode.window.createTreeView('sherpaIntents.list', { treeDataProvider: this, showCollapseAll: true });
     this.subscriptions.push(this.view,
       this.view.onDidChangeVisibility(({ visible }) => { if (visible && this.dirty) void this.refresh(); }),
       vscode.workspace.onDidChangeWorkspaceFolders(() => { this.watchProjects(); this.scheduleRefresh(); }),
       vscode.commands.registerCommand('sherpaIntents.refresh', () => this.refresh()),
+      vscode.commands.registerCommand('sherpaIntents.sort', async () => {
+        const options = INTENT_SORT_OPTIONS.map((option) => ({ ...option,
+          description: option.id === this.sortOption.id ? 'Current sort' : undefined }));
+        const option = await vscode.window.showQuickPick(options, { title: 'Sort Workspace Intents',
+          placeHolder: this.sortOption.label });
+        if (!option || this.disposed) return;
+        this.sortOption = option;
+        this.sortProjects();
+        this.publish();
+        await this.context.workspaceState.update(SORT_STATE_KEY, option.id);
+      }),
       vscode.commands.registerCommand('sherpaIntents.search', async () => {
         const query = await vscode.window.showInputBox({ title: 'Search Workspace Intents',
           prompt: 'Match an intent title or ID. Leave empty to clear the search.', value: this.query });
@@ -115,6 +187,7 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
     }
     if (this.disposed || scan.token.isCancellationRequested) return;
     this.projects = projects;
+    this.sortProjects();
     this.dirty = false;
     this.publish();
   }
@@ -141,7 +214,6 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
       const readers: Promise<void>[] = [];
       for (let index = 0; index < Math.min(8, files.length); index++) readers.push(read());
       await Promise.all(readers);
-      project.intents.sort((a, b) => a.title.localeCompare(b.title) || a.relativePath.localeCompare(b.relativePath));
     } catch (error) {
       if (!token.isCancellationRequested) project.issue = error instanceof Error ? error.message : String(error);
     }
@@ -150,7 +222,8 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
 
   private async readIntent(uri: vscode.Uri, relativePath: string, canonicalRoot: string | undefined,
     token: vscode.CancellationToken): Promise<Intent | undefined> {
-    const intent: Intent = { uri, relativePath, title: relativePath, id: '', status: '', priority: '', declaredProject: '' };
+    const intent: Intent = { uri, relativePath, title: relativePath, sortTitle: '', id: '', status: '', priority: '',
+      priorityKey: '', priorityRank: 4, declaredProject: '' };
     try {
       if (canonicalRoot !== undefined) {
         const resolved = await realpath(uri.fsPath);
@@ -168,15 +241,25 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
         intent.issue = 'Missing or invalid intent metadata. Open the file to inspect its source.';
       } else {
         intent.title = metadata.title || relativePath;
+        intent.sortTitle = metadata.title;
         intent.id = metadata.id;
         intent.status = metadata.status;
         intent.priority = metadata.priority;
+        intent.priorityKey = metadata.priority.trim().toLowerCase();
+        intent.priorityRank = intent.priorityKey === 'low' ? 0 : intent.priorityKey === 'medium' ? 1 :
+          intent.priorityKey === 'high' ? 2 : intent.priorityKey ? 3 : 4;
+        intent.createdAt = parseDate(metadata.created_at);
+        intent.updatedAt = parseDate(metadata.updated_at);
         intent.declaredProject = metadata.project;
       }
     } catch (error) {
       intent.issue = `Unable to read intent: ${error instanceof Error ? error.message : String(error)}`;
     }
     return intent;
+  }
+
+  private sortProjects(): void {
+    for (const project of this.projects) project.intents.sort(this.compareIntents);
   }
 
   private matches(intent: Intent): boolean {
@@ -192,7 +275,7 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
       if (this.matches(intent)) visible++;
     }
     const filtered = this.query !== '' || this.status !== undefined;
-    this.view.description = filtered ? `${visible} of ${total}` : String(total);
+    this.view.description = `${filtered ? `${visible} of ${total}` : total} · ${this.sortOption.label}`;
     const filters: string[] = [];
     if (this.query) filters.push(`Title/ID: ${this.query}`);
     if (this.status !== undefined) filters.push(`Declared status: ${this.status || 'Unspecified'}`);
@@ -248,5 +331,5 @@ class IntentExplorer implements vscode.TreeDataProvider<Node>, vscode.Disposable
 }
 
 export function registerIntentExplorer(context: vscode.ExtensionContext): void {
-  context.subscriptions.push(new IntentExplorer());
+  context.subscriptions.push(new IntentExplorer(context));
 }

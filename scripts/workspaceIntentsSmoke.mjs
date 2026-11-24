@@ -99,6 +99,15 @@ const metadataReads = [];
 const inputAnswers = [];
 const statusAnswers = [];
 const statusMenus = [];
+const sortAnswers = [];
+const workspaceValues = new Map();
+const workspaceState = {
+  keys: () => [...workspaceValues.keys()],
+  get: (key, fallback) => workspaceValues.has(key) ? workspaceValues.get(key) : fallback,
+  async update(key, value) {
+    if (value === undefined) workspaceValues.delete(key); else workspaceValues.set(key, value);
+  },
+};
 const opened = [];
 const subscriptions = [];
 const folder = (path, index) => ({ uri: Uri.file(path), name: basename(path), index });
@@ -224,11 +233,13 @@ mock.module('vscode', () => ({
       assert.ok(inputAnswers.length, 'Unexpected search prompt');
       return inputAnswers.shift();
     },
-    async showQuickPick(items) {
+    async showQuickPick(items, prompt = {}) {
       const options = await items;
-      statusMenus.push(options);
-      assert.ok(statusAnswers.length, 'Unexpected status prompt');
-      const answer = statusAnswers.shift();
+      const sorting = options.some((item) => item.id === 'title-asc');
+      const answers = sorting ? sortAnswers : statusAnswers;
+      if (!sorting) statusMenus.push(options);
+      assert.ok(answers.length, `Unexpected ${prompt.title ?? 'QuickPick'} prompt`);
+      const answer = answers.shift();
       return answer === undefined ? undefined : answer(options);
     },
     createOutputChannel: () => ({ appendLine() {}, show() {}, dispose() {} }),
@@ -284,6 +295,16 @@ async function chooseStatus(status) {
   });
   await run('sherpaIntents.filterStatus');
 }
+async function chooseSort(id) {
+  let selected;
+  sortAnswers.push((items) => {
+    selected = items.find((item) => item.id === id);
+    assert.ok(selected, `Missing sort choice: ${id}`);
+    return selected;
+  });
+  await run('sherpaIntents.sort');
+  assert.ok(String(treeView.description).includes(selected.label), 'The view exposes the active sort choice');
+}
 async function eventually(predicate, message) {
   const deadline = Date.now() + 4_000;
   do {
@@ -318,8 +339,8 @@ async function put(path, content) {
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, content);
 }
-function markdown({ id, title, status, priority } = {}) {
-  const fields = { entry_type: 'intent', id, title, status, priority };
+function markdown({ id, title, status, priority, created_at, updated_at } = {}) {
+  const fields = { entry_type: 'intent', id, title, status, priority, created_at, updated_at };
   return `---\n${Object.entries(fields).filter(([, value]) => value !== undefined)
     .map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join('\n')}\n---\n\nIntent body.\n`;
 }
@@ -346,6 +367,14 @@ function disposeExtension() {
   if (disposed) return;
   disposed = true;
   for (const subscription of [...subscriptions].reverse()) subscription.dispose();
+}
+function startExtension(registerIntentExplorer) {
+  treeSubscription?.dispose();
+  subscriptions.length = 0;
+  disposed = false;
+  registerIntentExplorer({ subscriptions, workspaceState, extensionPath: root, extensionUri: Uri.file(root) });
+  assert.ok(provider, 'Explorer must expose its provider through createTreeView');
+  treeSubscription = provider.onDidChangeTreeData(() => { treeChanges++; });
 }
 
 try {
@@ -376,9 +405,7 @@ try {
   if (process.platform !== 'win32') await symlink(externalFile, join(projectA, 'external.intent.md'), 'file');
 
   const { registerIntentExplorer } = await import('../src/intents/explorer.ts');
-  registerIntentExplorer({ subscriptions, extensionPath: root, extensionUri: Uri.file(root) });
-  assert.ok(provider, 'Explorer must expose its provider through createTreeView');
-  treeSubscription = provider.onDidChangeTreeData(() => { treeChanges++; });
+  startExtension(registerIntentExplorer);
   await refresh();
   let state = await snapshot();
   assert.deepEqual(paths(state), initialPaths, 'Discover all candidates, but no dependencies, VCS files, symlinks outside, or duplicates');
@@ -524,7 +551,138 @@ try {
     assert.equal(treeChanges, changesAtDispose);
   } finally { disposalBarrier.release(); }
 
-  console.log('Workspace Intents passed: filesystem ownership, malformed metadata, literal filters, live refresh, editor command, empty workspaces, stale scans and disposal.');
+  const sortingProject = join(root, 'zeta-sorting');
+  const untitledProject = join(root, 'alpha-sorting');
+  const sortingEmpty = join(root, 'empty-sorting');
+  const earlier = '2025-01-02T00:30:00+02:00';
+  const later = '2025-01-01T23:00:00Z';
+  // Creation order, source paths, title order, and timestamps deliberately disagree.
+  // In particular, earlier sorts after later lexically but precedes it in real time.
+  const sortingFixtures = {
+    low: { file: '01-low.intent.md', title: 'Zulu 10', id: 'ID-10', status: 'in_progress', priority: ' LOW ',
+      created_at: earlier, updated_at: later },
+    custom10: { file: '02-custom.intent.md', title: 'Charlie custom', id: 'ID-21', status: 'constructor', priority: 'CUSTOM-10',
+      created_at: '2025-01-02T00:00:00Z', updated_at: '2025-01-02T00:00:00Z' },
+    tieZ: { file: 'ties/item-10.intent.md', title: 'Same title', id: 'ID-2', status: 'done', priority: 'high',
+      created_at: later, updated_at: earlier },
+    blank: { file: '03-blank.intent.md', title: 'Delta blank', id: '', status: '', priority: '', created_at: '', updated_at: '' },
+    medium: { file: '04-medium.intent.md', title: 'Alpha 10', id: 'ID-3', status: 'done', priority: 'mEdIuM',
+      created_at: '1970-01-01T00:00:00Z', updated_at: '2025-01-03T00:00:00Z' },
+    invalid: { file: '05-invalid.intent.md', title: 'Foxtrot invalid', id: 'ID-4', status: 'in_progress',
+      created_at: 'not-a-created-date', updated_at: 'not-an-updated-date' },
+    alpha: { file: '06-alpha.intent.md', title: 'alpha 2', id: 'ID-2', status: 'backlog', priority: 'HIGH',
+      created_at: later, updated_at: earlier },
+    missing: { file: '07-missing.intent.md', title: 'Echo missing' },
+    tieA: { file: 'ties/item-2.intent.md', title: 'same TITLE', id: 'id-2', status: 'DONE', priority: ' high ',
+      created_at: later, updated_at: earlier },
+    custom2: { file: '08-custom.intent.md', title: 'Bravo custom', id: 'ID-20', status: 'Awaiting dragons', priority: 'Custom-2',
+      created_at: '2025-01-03T00:00:00Z', updated_at: '1970-01-01T00:00:00Z' },
+  };
+  const sortingSources = new Map();
+  for (const fixture of Object.values(sortingFixtures)) {
+    fixture.path = join(sortingProject, fixture.file);
+    const source = markdown(fixture);
+    sortingSources.set(fixture.path, source);
+    await put(fixture.path, source);
+  }
+  const untitledFiles = {
+    missing: join(untitledProject, 'a-untitled.intent.md'),
+    blank: join(untitledProject, 'b-blank.intent.md'),
+    titled: join(untitledProject, 'z-titled.intent.md'),
+  };
+  await put(untitledFiles.missing, markdown({ id: 'no-title' }));
+  await put(untitledFiles.blank, markdown({ id: 'blank-title', title: '' }));
+  await put(untitledFiles.titled, markdown({ id: 'titled', title: 'Zulu title' }));
+  await mkdir(sortingEmpty, { recursive: true });
+  workspace.workspaceFolders = [sortingProject, sortingEmpty, untitledProject].map(folder);
+  startExtension(registerIntentExplorer);
+  await refresh();
+
+  const titleAscending = ['alpha', 'medium', 'custom2', 'custom10', 'blank', 'missing', 'invalid', 'tieA', 'tieZ', 'low'];
+  const expectSorting = async (expected, message) => {
+    const current = await snapshot();
+    assert.deepEqual(current.groups.map((group) => group.label), ['zeta-sorting', 'empty-sorting', 'alpha-sorting'],
+      'Sorting must preserve workspace folder order and empty groups');
+    assert.deepEqual(current.groups[0].rows.map((row) => row.path), expected.map((key) => sortingFixtures[key].path), message);
+    return current;
+  };
+  state = await expectSorting(titleAscending, 'Default title ordering is case-insensitive and natural-numeric, with stable source-path ties');
+  assert.deepEqual(state.groups[2].rows.map((row) => row.path), [untitledFiles.titled, untitledFiles.missing, untitledFiles.blank],
+    'Empty and absent declared titles follow titled entries, despite keeping their displayed source-path fallback');
+  assert.equal(state.rows.find((row) => row.path === untitledFiles.missing).label, 'a-untitled.intent.md');
+  assert.equal(state.rows.find((row) => row.path === untitledFiles.blank).label, 'b-blank.intent.md');
+  assert.ok(String(state.rows.find((row) => row.path === sortingFixtures.low.path).item.tooltip).includes('Priority:  LOW '),
+    'Priority comparison normalization must not rewrite the displayed declared value');
+  assert.ok(String(state.rows.find((row) => row.path === sortingFixtures.custom10.path).item.tooltip).includes('Priority: CUSTOM-10'),
+    'Custom priorities remain visible with their original declared spelling');
+
+  const readsBeforeSorting = metadataReads.length;
+  const scansBeforeSorting = findFilesCalls;
+  const expectedSorts = [
+    ['title-asc', titleAscending],
+    ['title-desc', ['low', 'tieA', 'tieZ', 'invalid', 'missing', 'blank', 'custom10', 'custom2', 'medium', 'alpha']],
+    ['id-asc', ['alpha', 'tieA', 'tieZ', 'medium', 'invalid', 'low', 'custom2', 'custom10', 'blank', 'missing']],
+    ['id-desc', ['custom10', 'custom2', 'low', 'invalid', 'medium', 'alpha', 'tieA', 'tieZ', 'blank', 'missing']],
+    ['status-asc', ['custom2', 'alpha', 'custom10', 'medium', 'tieA', 'tieZ', 'invalid', 'low', 'blank', 'missing']],
+    ['status-desc', ['invalid', 'low', 'medium', 'tieA', 'tieZ', 'custom10', 'alpha', 'custom2', 'blank', 'missing']],
+    ['priority-asc', ['low', 'medium', 'alpha', 'tieA', 'tieZ', 'custom2', 'custom10', 'blank', 'missing', 'invalid']],
+    ['priority-desc', ['alpha', 'tieA', 'tieZ', 'medium', 'low', 'custom10', 'custom2', 'blank', 'missing', 'invalid']],
+    ['created-asc', ['medium', 'low', 'alpha', 'tieA', 'tieZ', 'custom10', 'custom2', 'blank', 'missing', 'invalid']],
+    ['created-desc', ['custom2', 'custom10', 'alpha', 'tieA', 'tieZ', 'low', 'medium', 'blank', 'missing', 'invalid']],
+    ['updated-asc', ['custom2', 'alpha', 'tieA', 'tieZ', 'low', 'custom10', 'medium', 'blank', 'missing', 'invalid']],
+    ['updated-desc', ['medium', 'custom10', 'low', 'alpha', 'tieA', 'tieZ', 'custom2', 'blank', 'missing', 'invalid']],
+  ];
+  for (const [id, expected] of expectedSorts) {
+    await chooseSort(id);
+    state = await expectSorting(expected, `${id}: compare declared values, keep absent/invalid values last, and break ties title/source ascending`);
+    if (id === 'title-desc') {
+      assert.deepEqual(state.groups[2].rows.map((row) => row.path), [untitledFiles.titled, untitledFiles.missing, untitledFiles.blank],
+        'Missing declared titles stay last in descending order, not reversed with their displayed fallback paths');
+    }
+  }
+  const updatedDescending = expectedSorts.at(-1)[1];
+  sortAnswers.push(undefined);
+  await run('sherpaIntents.sort');
+  await expectSorting(updatedDescending, 'Cancelling Sort preserves the rendered order');
+
+  await search('ID-2');
+  assert.deepEqual((await snapshot()).rows.map((row) => row.path),
+    ['custom10', 'alpha', 'tieA', 'tieZ', 'custom2'].map((key) => sortingFixtures[key].path),
+    'Search retains the selected relative order instead of reverting to title order');
+  await chooseStatus('done');
+  assert.deepEqual((await snapshot()).rows.map((row) => row.path), [sortingFixtures.tieZ.path],
+    'Exact declared-status filtering still combines with search while sorted');
+  await run('sherpaIntents.clearFilters');
+  await expectSorting(updatedDescending, 'Clear Filters restores all rows without resetting their selected sort');
+  await chooseStatus('done');
+  assert.deepEqual((await snapshot()).rows.map((row) => row.path), [sortingFixtures.medium.path, sortingFixtures.tieZ.path],
+    'Status-only filtering retains the selected timestamp order');
+  await run('sherpaIntents.clearFilters');
+  assert.equal(metadataReads.length, readsBeforeSorting, 'Sorting, cancellation, and filter-only changes must not reread intent files');
+  assert.equal(findFilesCalls, scansBeforeSorting, 'Sorting and filtering use the cached discovery result');
+  for (const [path, source] of sortingSources) {
+    assert.equal(await readFile(path, 'utf8'), source, 'Sort selections never modify source metadata, including priority capitalization');
+  }
+
+  await watched('change', sortingFixtures.low.path, () => put(sortingFixtures.low.path,
+    markdown({ ...sortingFixtures.low, updated_at: '2025-01-04T00:00:00Z' })),
+    (current) => current.groups.find((group) => group.label === 'zeta-sorting')?.rows[0]?.path === sortingFixtures.low.path);
+  const refreshedDescending = ['low', 'medium', 'custom10', 'alpha', 'tieA', 'tieZ', 'custom2', 'blank', 'missing', 'invalid'];
+  await expectSorting(refreshedDescending, 'Refreshing changed date metadata reorders the cached index using the active sort');
+  await refresh();
+  await expectSorting(refreshedDescending, 'An explicit refresh also retains the active choice');
+
+  disposeExtension();
+  startExtension(registerIntentExplorer);
+  await refresh();
+  await expectSorting(refreshedDescending, 'A newly registered provider restores the saved choice before rendering refreshed files');
+  disposeExtension();
+  await workspaceState.update('sherpaIntents.sort', 'obsolete-sort-id');
+  startExtension(registerIntentExplorer);
+  await refresh();
+  await expectSorting(titleAscending, 'An invalid persisted option falls back to natural title ascending');
+
+  console.log('Workspace Intents passed: filesystem ownership, malformed metadata, literal filters, live refresh, editor command, empty workspaces, stale scans, disposal, persisted sorting, declared priorities/statuses, timestamp ordering and stable ties.');
 } finally {
   treeSubscription?.dispose();
   disposeExtension();
